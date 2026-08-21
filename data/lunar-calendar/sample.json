@@ -1,0 +1,26 @@
+[
+  {
+    "solarDate": "2026-02-17",
+    "lunarYear": 2026,
+    "lunarMonth": 1,
+    "lunarDay": 1,
+    "isLeapMonth": false,
+    "dayPillarRef": "임술(壬戌)"
+  },
+  {
+    "solarDate": "2026-02-04",
+    "lunarYear": 2025,
+    "lunarMonth": 12,
+    "lunarDay": 17,
+    "isLeapMonth": false,
+    "dayPillarRef": "기유(己酉)"
+  },
+  {
+    "solarDate": "1961-08-10",
+    "lunarYear": 1961,
+    "lunarMonth": 6,
+    "lunarDay": 29,
+    "isLeapMonth": false,
+    "dayPillarRef": "을해(乙亥)"
+  }
+]

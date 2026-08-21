@@ -1,0 +1,12 @@
+[
+  { "id": "reunion.bigeob.gang.v1", "category": "reunion", "pattern": "bigeob.gang", "version": 1, "text": "다시 연락한다면 먼저 움직이는 쪽이 유리한 흐름이에요. 자존심보다 마음이 이끄는 대로 솔직하게 다가가 보세요." },
+  { "id": "reunion.bigeob.yak.v1", "category": "reunion", "pattern": "bigeob.yak", "version": 1, "text": "상대가 다시 다가올 여지를 만들어두는 편이 잘 맞아요. 조급하게 매달리기보다 자연스러운 여지를 남겨두세요." },
+  { "id": "reunion.siksang.gang.v1", "category": "reunion", "pattern": "siksang.gang", "version": 1, "text": "가벼운 안부와 솔직한 감정 표현이 관계를 다시 이어줄 수 있어요. 너무 무겁게 접근하지 않는 게 좋아요." },
+  { "id": "reunion.siksang.yak.v1", "category": "reunion", "pattern": "siksang.yak", "version": 1, "text": "속마음을 조금씩 드러내는 편이 관계 회복에 도움이 돼요. 오해가 쌓이지 않도록 솔직한 대화가 필요해요." },
+  { "id": "reunion.jaeseong.gang.v1", "category": "reunion", "pattern": "jaeseong.gang", "version": 1, "text": "관계를 다시 시작할 현실적인 조건이 갖춰지는 시기일 수 있어요. 함께할 미래를 구체적으로 이야기해보세요." },
+  { "id": "reunion.jaeseong.yak.v1", "category": "reunion", "pattern": "jaeseong.yak", "version": 1, "text": "천천히 신뢰를 다시 쌓아가는 방식이 잘 맞아요. 급하게 결론 내리지 않아도 괜찮아요." },
+  { "id": "reunion.gwanseong.gang.v1", "category": "reunion", "pattern": "gwanseong.gang", "version": 1, "text": "관계를 되돌리는 데 책임감 있는 태도가 마음을 움직일 수 있어요. 진지한 사과나 약속이 열쇠가 될 수 있어요." },
+  { "id": "reunion.gwanseong.yak.v1", "category": "reunion", "pattern": "gwanseong.yak", "version": 1, "text": "정해진 틀보다 유연하게 관계를 다시 정의해보는 게 도움이 돼요." },
+  { "id": "reunion.inseong.gang.v1", "category": "reunion", "pattern": "inseong.gang", "version": 1, "text": "먼저 스스로의 마음을 정리하는 시간이 필요해요. 준비가 됐을 때 자연스럽게 기회가 찾아올 수 있어요." },
+  { "id": "reunion.inseong.yak.v1", "category": "reunion", "pattern": "inseong.yak", "version": 1, "text": "누군가의 조언이나 주변의 도움이 재회의 계기가 될 수 있어요. 혼자 고민하지 말고 이야기를 나눠보세요." }
+]

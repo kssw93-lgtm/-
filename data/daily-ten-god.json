@@ -1,0 +1,12 @@
+{
+  "bigyeon": { "label": "비견", "oneliner": "내 힘으로 밀고 나가기 좋은 날", "loveTag": "솔직한 대화", "moneyTag": "직접 발로 뛰는 수확", "baseScore": 66 },
+  "geopjae": { "label": "겁재", "oneliner": "경쟁 속에서 승부욕이 오르는 날", "loveTag": "은근한 신경전", "moneyTag": "충동적인 지출 주의", "baseScore": 58 },
+  "siksin": { "label": "식신", "oneliner": "여유롭게 즐기기 좋은 날", "loveTag": "편안한 데이트", "moneyTag": "꾸준한 수입원", "baseScore": 79 },
+  "sanggwan": { "label": "상관", "oneliner": "재능을 마음껏 펼치는 날", "loveTag": "설레는 새 인연", "moneyTag": "아이디어로 버는 날", "baseScore": 70 },
+  "jeongjae": { "label": "정재", "oneliner": "차곡차곡 안정감을 쌓는 날", "loveTag": "믿음이 쌓이는 대화", "moneyTag": "계획적인 관리", "baseScore": 78 },
+  "pyeonjae": { "label": "편재", "oneliner": "생각지 못한 기회가 스치는 날", "loveTag": "즉흥적인 만남", "moneyTag": "뜻밖의 수입 가능성", "baseScore": 72 },
+  "jeonggwan": { "label": "정관", "oneliner": "책임감 있게 인정받는 날", "loveTag": "진지한 이야기", "moneyTag": "안정적인 흐름", "baseScore": 76 },
+  "pyeongwan": { "label": "편관", "oneliner": "긴장되지만 돌파구가 보이는 날", "loveTag": "감정 기복 주의", "moneyTag": "무리한 투자 주의", "baseScore": 57 },
+  "jeongin": { "label": "정인", "oneliner": "배우고 채우기 좋은 날", "loveTag": "차분한 스킨십", "moneyTag": "문서·계약 운", "baseScore": 74 },
+  "pyeonin": { "label": "편인", "oneliner": "혼자만의 시간이 필요한 날", "loveTag": "생각이 많아지는 날", "moneyTag": "지출보다 정리", "baseScore": 61 }
+}

@@ -1,0 +1,362 @@
+[
+  {
+    "index": 0,
+    "stem": "jia",
+    "branch": "zi",
+    "hanja": "甲子"
+  },
+  {
+    "index": 1,
+    "stem": "yi",
+    "branch": "chou",
+    "hanja": "乙丑"
+  },
+  {
+    "index": 2,
+    "stem": "bing",
+    "branch": "yin",
+    "hanja": "丙寅"
+  },
+  {
+    "index": 3,
+    "stem": "ding",
+    "branch": "mao",
+    "hanja": "丁卯"
+  },
+  {
+    "index": 4,
+    "stem": "wu",
+    "branch": "chen",
+    "hanja": "戊辰"
+  },
+  {
+    "index": 5,
+    "stem": "ji",
+    "branch": "si",
+    "hanja": "己巳"
+  },
+  {
+    "index": 6,
+    "stem": "geng",
+    "branch": "wu",
+    "hanja": "庚午"
+  },
+  {
+    "index": 7,
+    "stem": "xin",
+    "branch": "wei",
+    "hanja": "辛未"
+  },
+  {
+    "index": 8,
+    "stem": "ren",
+    "branch": "shen",
+    "hanja": "壬申"
+  },
+  {
+    "index": 9,
+    "stem": "gui",
+    "branch": "you",
+    "hanja": "癸酉"
+  },
+  {
+    "index": 10,
+    "stem": "jia",
+    "branch": "xu",
+    "hanja": "甲戌"
+  },
+  {
+    "index": 11,
+    "stem": "yi",
+    "branch": "hai",
+    "hanja": "乙亥"
+  },
+  {
+    "index": 12,
+    "stem": "bing",
+    "branch": "zi",
+    "hanja": "丙子"
+  },
+  {
+    "index": 13,
+    "stem": "ding",
+    "branch": "chou",
+    "hanja": "丁丑"
+  },
+  {
+    "index": 14,
+    "stem": "wu",
+    "branch": "yin",
+    "hanja": "戊寅"
+  },
+  {
+    "index": 15,
+    "stem": "ji",
+    "branch": "mao",
+    "hanja": "己卯"
+  },
+  {
+    "index": 16,
+    "stem": "geng",
+    "branch": "chen",
+    "hanja": "庚辰"
+  },
+  {
+    "index": 17,
+    "stem": "xin",
+    "branch": "si",
+    "hanja": "辛巳"
+  },
+  {
+    "index": 18,
+    "stem": "ren",
+    "branch": "wu",
+    "hanja": "壬午"
+  },
+  {
+    "index": 19,
+    "stem": "gui",
+    "branch": "wei",
+    "hanja": "癸未"
+  },
+  {
+    "index": 20,
+    "stem": "jia",
+    "branch": "shen",
+    "hanja": "甲申"
+  },
+  {
+    "index": 21,
+    "stem": "yi",
+    "branch": "you",
+    "hanja": "乙酉"
+  },
+  {
+    "index": 22,
+    "stem": "bing",
+    "branch": "xu",
+    "hanja": "丙戌"
+  },
+  {
+    "index": 23,
+    "stem": "ding",
+    "branch": "hai",
+    "hanja": "丁亥"
+  },
+  {
+    "index": 24,
+    "stem": "wu",
+    "branch": "zi",
+    "hanja": "戊子"
+  },
+  {
+    "index": 25,
+    "stem": "ji",
+    "branch": "chou",
+    "hanja": "己丑"
+  },
+  {
+    "index": 26,
+    "stem": "geng",
+    "branch": "yin",
+    "hanja": "庚寅"
+  },
+  {
+    "index": 27,
+    "stem": "xin",
+    "branch": "mao",
+    "hanja": "辛卯"
+  },
+  {
+    "index": 28,
+    "stem": "ren",
+    "branch": "chen",
+    "hanja": "壬辰"
+  },
+  {
+    "index": 29,
+    "stem": "gui",
+    "branch": "si",
+    "hanja": "癸巳"
+  },
+  {
+    "index": 30,
+    "stem": "jia",
+    "branch": "wu",
+    "hanja": "甲午"
+  },
+  {
+    "index": 31,
+    "stem": "yi",
+    "branch": "wei",
+    "hanja": "乙未"
+  },
+  {
+    "index": 32,
+    "stem": "bing",
+    "branch": "shen",
+    "hanja": "丙申"
+  },
+  {
+    "index": 33,
+    "stem": "ding",
+    "branch": "you",
+    "hanja": "丁酉"
+  },
+  {
+    "index": 34,
+    "stem": "wu",
+    "branch": "xu",
+    "hanja": "戊戌"
+  },
+  {
+    "index": 35,
+    "stem": "ji",
+    "branch": "hai",
+    "hanja": "己亥"
+  },
+  {
+    "index": 36,
+    "stem": "geng",
+    "branch": "zi",
+    "hanja": "庚子"
+  },
+  {
+    "index": 37,
+    "stem": "xin",
+    "branch": "chou",
+    "hanja": "辛丑"
+  },
+  {
+    "index": 38,
+    "stem": "ren",
+    "branch": "yin",
+    "hanja": "壬寅"
+  },
+  {
+    "index": 39,
+    "stem": "gui",
+    "branch": "mao",
+    "hanja": "癸卯"
+  },
+  {
+    "index": 40,
+    "stem": "jia",
+    "branch": "chen",
+    "hanja": "甲辰"
+  },
+  {
+    "index": 41,
+    "stem": "yi",
+    "branch": "si",
+    "hanja": "乙巳"
+  },
+  {
+    "index": 42,
+    "stem": "bing",
+    "branch": "wu",
+    "hanja": "丙午"
+  },
+  {
+    "index": 43,
+    "stem": "ding",
+    "branch": "wei",
+    "hanja": "丁未"
+  },
+  {
+    "index": 44,
+    "stem": "wu",
+    "branch": "shen",
+    "hanja": "戊申"
+  },
+  {
+    "index": 45,
+    "stem": "ji",
+    "branch": "you",
+    "hanja": "己酉"
+  },
+  {
+    "index": 46,
+    "stem": "geng",
+    "branch": "xu",
+    "hanja": "庚戌"
+  },
+  {
+    "index": 47,
+    "stem": "xin",
+    "branch": "hai",
+    "hanja": "辛亥"
+  },
+  {
+    "index": 48,
+    "stem": "ren",
+    "branch": "zi",
+    "hanja": "壬子"
+  },
+  {
+    "index": 49,
+    "stem": "gui",
+    "branch": "chou",
+    "hanja": "癸丑"
+  },
+  {
+    "index": 50,
+    "stem": "jia",
+    "branch": "yin",
+    "hanja": "甲寅"
+  },
+  {
+    "index": 51,
+    "stem": "yi",
+    "branch": "mao",
+    "hanja": "乙卯"
+  },
+  {
+    "index": 52,
+    "stem": "bing",
+    "branch": "chen",
+    "hanja": "丙辰"
+  },
+  {
+    "index": 53,
+    "stem": "ding",
+    "branch": "si",
+    "hanja": "丁巳"
+  },
+  {
+    "index": 54,
+    "stem": "wu",
+    "branch": "wu",
+    "hanja": "戊午"
+  },
+  {
+    "index": 55,
+    "stem": "ji",
+    "branch": "wei",
+    "hanja": "己未"
+  },
+  {
+    "index": 56,
+    "stem": "geng",
+    "branch": "shen",
+    "hanja": "庚申"
+  },
+  {
+    "index": 57,
+    "stem": "xin",
+    "branch": "you",
+    "hanja": "辛酉"
+  },
+  {
+    "index": 58,
+    "stem": "ren",
+    "branch": "xu",
+    "hanja": "壬戌"
+  },
+  {
+    "index": 59,
+    "stem": "gui",
+    "branch": "hai",
+    "hanja": "癸亥"
+  }
+]

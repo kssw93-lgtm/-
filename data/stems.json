@@ -1,0 +1,12 @@
+[
+  { "index": 0, "id": "jia", "hanja": "甲", "reading": "갑", "element": "wood", "yinYang": "yang" },
+  { "index": 1, "id": "yi", "hanja": "乙", "reading": "을", "element": "wood", "yinYang": "yin" },
+  { "index": 2, "id": "bing", "hanja": "丙", "reading": "병", "element": "fire", "yinYang": "yang" },
+  { "index": 3, "id": "ding", "hanja": "丁", "reading": "정", "element": "fire", "yinYang": "yin" },
+  { "index": 4, "id": "wu", "hanja": "戊", "reading": "무", "element": "earth", "yinYang": "yang" },
+  { "index": 5, "id": "ji", "hanja": "己", "reading": "기", "element": "earth", "yinYang": "yin" },
+  { "index": 6, "id": "geng", "hanja": "庚", "reading": "경", "element": "metal", "yinYang": "yang" },
+  { "index": 7, "id": "xin", "hanja": "辛", "reading": "신", "element": "metal", "yinYang": "yin" },
+  { "index": 8, "id": "ren", "hanja": "壬", "reading": "임", "element": "water", "yinYang": "yang" },
+  { "index": 9, "id": "gui", "hanja": "癸", "reading": "계", "element": "water", "yinYang": "yin" }
+]

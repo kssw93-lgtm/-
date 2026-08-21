@@ -1,0 +1,22 @@
+[
+  { "id": "career.bigeob.gang.v1", "category": "career", "pattern": "bigeob.gang", "version": 1, "text": "스스로 결정하고 주도하는 일에서 능력을 발휘하는 편이에요. 지시받기보다 직접 방향을 잡는 역할이 잘 맞아요." },
+  { "id": "career.bigeob.gang.v2", "category": "career", "pattern": "bigeob.gang", "version": 2, "text": "경쟁이 있는 환경에서 오히려 힘을 내는 타입이에요. 목표가 뚜렷할수록 추진력이 강해져요." },
+  { "id": "career.bigeob.yak.v1", "category": "career", "pattern": "bigeob.yak", "version": 1, "text": "혼자보다는 팀 안에서 안정감을 느끼는 편이에요. 협업하는 구조에서 본인의 역량이 더 잘 드러나요." },
+  { "id": "career.bigeob.yak.v2", "category": "career", "pattern": "bigeob.yak", "version": 2, "text": "자기 주장을 강하게 내세우기보다 흐름에 맞춰가는 편이에요. 신뢰를 천천히 쌓아가는 조직 생활이 잘 맞아요." },
+  { "id": "career.siksang.gang.v1", "category": "career", "pattern": "siksang.gang", "version": 1, "text": "아이디어를 내고 새로운 방식을 시도하는 일에서 강점이 나와요. 반복적인 업무보다 변화가 있는 환경이 잘 맞아요." },
+  { "id": "career.siksang.gang.v2", "category": "career", "pattern": "siksang.gang", "version": 2, "text": "자기만의 방식으로 일하고 싶어하는 편이에요. 창작·기획처럼 표현이 들어가는 분야에서 능력이 두드러져요." },
+  { "id": "career.siksang.yak.v1", "category": "career", "pattern": "siksang.yak", "version": 1, "text": "묵묵히 자기 몫을 해내는 편이에요. 겉으로 드러내지 않아도 꾸준함으로 인정받는 타입이에요." },
+  { "id": "career.siksang.yak.v2", "category": "career", "pattern": "siksang.yak", "version": 2, "text": "완벽하게 다듬어질 때까지 신중하게 준비하는 편이에요. 급하게 결과를 재촉받지 않는 환경에서 실력이 더 잘 나와요." },
+  { "id": "career.jaeseong.gang.v1", "category": "career", "pattern": "jaeseong.gang", "version": 1, "text": "결과와 성과가 명확한 일에서 동기부여가 강해지는 편이에요. 목표를 숫자나 실적으로 확인할 수 있을 때 추진력이 붙어요." },
+  { "id": "career.jaeseong.gang.v2", "category": "career", "pattern": "jaeseong.gang", "version": 2, "text": "기회를 빠르게 포착하고 행동으로 옮기는 편이에요. 영업·사업처럼 직접 부딪히는 분야에서 두각을 나타내요." },
+  { "id": "career.jaeseong.yak.v1", "category": "career", "pattern": "jaeseong.yak", "version": 1, "text": "맡은 일을 성실하게 관리하는 편이에요. 큰 리스크를 감수하기보다 안정적으로 쌓아가는 커리어가 잘 맞아요." },
+  { "id": "career.jaeseong.yak.v2", "category": "career", "pattern": "jaeseong.yak", "version": 2, "text": "주변 사람과의 관계를 통해 기회를 얻는 경우가 많은 편이에요. 신뢰를 기반으로 한 협업에서 강점이 드러나요." },
+  { "id": "career.gwanseong.gang.v1", "category": "career", "pattern": "gwanseong.gang", "version": 1, "text": "체계와 원칙이 분명한 조직에서 실력을 발휘하는 편이에요. 책임 있는 자리를 맡을수록 오히려 능력이 살아나요." },
+  { "id": "career.gwanseong.gang.v2", "category": "career", "pattern": "gwanseong.gang", "version": 2, "text": "맡은 일을 끝까지 완수하려는 책임감이 강한 편이에요. 관리자·책임자 역할에서 신뢰를 얻기 쉬워요." },
+  { "id": "career.gwanseong.yak.v1", "category": "career", "pattern": "gwanseong.yak", "version": 1, "text": "정해진 틀보다 유연한 구조에서 더 편안함을 느끼는 편이에요. 자율성이 보장되는 환경에서 성과가 더 잘 나와요." },
+  { "id": "career.gwanseong.yak.v2", "category": "career", "pattern": "gwanseong.yak", "version": 2, "text": "규칙에 얽매이기보다 상황에 맞게 대응하는 유연함이 강점이에요. 변화가 잦은 업무에서도 잘 적응하는 편이에요." },
+  { "id": "career.inseong.gang.v1", "category": "career", "pattern": "inseong.gang", "version": 1, "text": "배우고 연구하는 과정 자체에서 만족감을 느끼는 편이에요. 전문성을 쌓아가는 분야에서 꾸준히 성장하는 타입이에요." },
+  { "id": "career.inseong.gang.v2", "category": "career", "pattern": "inseong.gang", "version": 2, "text": "깊이 있게 파고드는 힘이 강한 편이에요. 단기 성과보다 장기적으로 전문가로 인정받는 경로가 잘 맞아요." },
+  { "id": "career.inseong.yak.v1", "category": "career", "pattern": "inseong.yak", "version": 1, "text": "새로운 것을 익히는 데 시간이 걸리지만, 한번 체득하면 오래 기억하고 활용하는 편이에요. 학습 속도보다 학습 깊이가 강점이에요." },
+  { "id": "career.inseong.yak.v2", "category": "career", "pattern": "inseong.yak", "version": 2, "text": "주변의 조언과 피드백을 잘 받아들이는 편이에요. 좋은 멘토나 선배가 있는 환경에서 성장 속도가 빨라져요." }
+]

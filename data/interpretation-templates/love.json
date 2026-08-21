@@ -1,0 +1,22 @@
+[
+  { "id": "love.bigeob.gang.v1", "category": "love", "pattern": "bigeob.gang", "version": 1, "text": "당신은 연애에서도 주도권을 쥐고 싶어하는 타입이에요. 끌려다니는 관계보다 스스로 방향을 정하는 연애를 할 때 훨씬 편안함을 느껴요." },
+  { "id": "love.bigeob.gang.v2", "category": "love", "pattern": "bigeob.gang", "version": 2, "text": "쉽게 곁을 내주지 않지만, 한번 마음을 정하면 흔들리지 않는 편이에요. 상대에게도 그만큼 확고한 태도를 기대하는 편이고요." },
+  { "id": "love.bigeob.yak.v1", "category": "love", "pattern": "bigeob.yak", "version": 1, "text": "관계 안에서 상대를 배려하는 마음이 큰 편이에요. 다만 너무 맞춰주기만 하다가 정작 본인의 마음을 놓치지 않는 게 중요해요." },
+  { "id": "love.bigeob.yak.v2", "category": "love", "pattern": "bigeob.yak", "version": 2, "text": "먼저 다가가기보다는 상대가 다가와 주길 기다리는 편이에요. 그만큼 준비된 관계에서 더 깊이 마음을 여는 타입이에요." },
+  { "id": "love.siksang.gang.v1", "category": "love", "pattern": "siksang.gang", "version": 1, "text": "표현이 솔직하고 감정을 숨기지 않는 편이에요. 좋아하는 티가 자연스럽게 나는 스타일이라, 상대도 마음을 편하게 느끼는 경우가 많아요." },
+  { "id": "love.siksang.gang.v2", "category": "love", "pattern": "siksang.gang", "version": 2, "text": "연애에서도 자유로운 분위기를 중요하게 여겨요. 너무 정해진 틀 안에 갇힌 관계보다는, 서로의 색깔을 존중하는 관계에서 오래갑니다." },
+  { "id": "love.siksang.yak.v1", "category": "love", "pattern": "siksang.yak", "version": 1, "text": "감정 표현이 서툴러 보여도 속마음은 섬세한 편이에요. 오해받기 쉬운 타입이라, 조금씩 마음을 드러내는 연습이 관계에 도움이 돼요." },
+  { "id": "love.siksang.yak.v2", "category": "love", "pattern": "siksang.yak", "version": 2, "text": "상대의 기분을 세심하게 살피는 편이라 배려심이 깊은 연애를 해요. 다만 혼자 삭이는 습관이 생기지 않도록 조심할 필요가 있어요." },
+  { "id": "love.jaeseong.gang.v1", "category": "love", "pattern": "jaeseong.gang", "version": 1, "text": "현실적인 조건과 안정감을 중요하게 보는 편이에요. 감정만큼이나 함께할 미래가 그려지는 상대에게 마음이 열려요." },
+  { "id": "love.jaeseong.gang.v2", "category": "love", "pattern": "jaeseong.gang", "version": 2, "text": "적극적으로 관계를 이끌어가는 힘이 있어요. 마음에 든 상대에게는 먼저 다가가는 걸 주저하지 않는 타입이에요." },
+  { "id": "love.jaeseong.yak.v1", "category": "love", "pattern": "jaeseong.yak", "version": 1, "text": "상대를 챙기는 마음이 큰 편이라, 연애할 때 주는 사랑이 많아지기 쉬워요. 받는 것에도 익숙해지는 연습이 관계 균형에 좋아요." },
+  { "id": "love.jaeseong.yak.v2", "category": "love", "pattern": "jaeseong.yak", "version": 2, "text": "관계에서 신중하게 거리를 재는 편이에요. 급하게 진전시키기보다 천천히 신뢰를 쌓아가는 연애가 훨씬 잘 맞아요." },
+  { "id": "love.gwanseong.gang.v1", "category": "love", "pattern": "gwanseong.gang", "version": 1, "text": "관계에 대한 책임감이 강한 편이에요. 한번 시작한 인연은 쉽게 놓지 않고, 끝까지 책임지려는 태도가 강점이에요." },
+  { "id": "love.gwanseong.gang.v2", "category": "love", "pattern": "gwanseong.gang", "version": 2, "text": "원칙과 예의를 중요하게 여기는 연애를 해요. 상대에게도 일관된 태도를 기대하는 편이라, 신뢰가 쌓이면 오래가는 관계를 만들어요." },
+  { "id": "love.gwanseong.yak.v1", "category": "love", "pattern": "gwanseong.yak", "version": 1, "text": "관계에서 정해진 틀에 얽매이기보다, 자연스러운 흐름을 따르는 편이에요. 규칙보다 서로의 마음을 우선하는 연애를 선호해요." },
+  { "id": "love.gwanseong.yak.v2", "category": "love", "pattern": "gwanseong.yak", "version": 2, "text": "상대의 기준에 맞춰주려는 마음이 큰 편이에요. 나만의 기준을 조금 더 세워두는 것이 관계에서 균형을 잡는 데 도움이 돼요." },
+  { "id": "love.inseong.gang.v1", "category": "love", "pattern": "inseong.gang", "version": 1, "text": "관계를 시작하기 전에 충분히 생각하고 신중하게 다가가는 편이에요. 감정보다 이해를 먼저 쌓아야 마음이 편안해지는 타입이에요." },
+  { "id": "love.inseong.gang.v2", "category": "love", "pattern": "inseong.gang", "version": 2, "text": "상대의 마음을 깊이 이해하려는 태도가 강해요. 그만큼 정서적으로 통하는 상대와 훨씬 안정적인 관계를 만들어가요." },
+  { "id": "love.inseong.yak.v1", "category": "love", "pattern": "inseong.yak", "version": 1, "text": "의존하고 싶은 마음과 독립하고 싶은 마음 사이에서 균형을 찾아가는 편이에요. 스스로를 채우는 시간이 있을 때 연애도 더 건강해져요." },
+  { "id": "love.inseong.yak.v2", "category": "love", "pattern": "inseong.yak", "version": 2, "text": "낯선 관계에 조심스럽게 다가가는 편이에요. 익숙해지기까지 시간이 걸리지만, 한번 편해지면 깊은 유대를 만들어가는 타입이에요." }
+]

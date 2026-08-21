@@ -1,0 +1,11 @@
+{
+  "comment": "60갑자 순(旬) 시작 지지 기준 공망 매핑 (계산 규칙서 42번, 데이터 테이블 30번)",
+  "byXunStartBranch": {
+    "zi": ["xu", "hai"],
+    "xu": ["shen", "you"],
+    "shen": ["wu", "wei"],
+    "wu": ["chen", "si"],
+    "chen": ["yin", "mao"],
+    "yin": ["zi", "chou"]
+  }
+}

@@ -1,0 +1,9 @@
+[
+  { "min": 88, "grade": "SS", "title": "왕족", "desc": "귀한 자리에 오른다" },
+  { "min": 80, "grade": "S", "title": "대감", "desc": "존귀함이 따라붙는다" },
+  { "min": 73, "grade": "A+", "title": "풍류객", "desc": "여유와 품격을 아는 삶" },
+  { "min": 66, "grade": "A", "title": "장인", "desc": "실력으로 인정받는다" },
+  { "min": 58, "grade": "B", "title": "선비", "desc": "성실함이 곧 재산" },
+  { "min": 50, "grade": "C", "title": "농민", "desc": "묵묵함이 결실을 맺는다" },
+  { "min": 0, "grade": "D", "title": "유랑객", "desc": "정착보다 자유로운 삶" }
+]

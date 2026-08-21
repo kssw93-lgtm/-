@@ -1,0 +1,9 @@
+{
+  "combine": [
+    { "source": "jia", "target": "ji" },
+    { "source": "yi", "target": "geng" },
+    { "source": "bing", "target": "xin" },
+    { "source": "ding", "target": "ren" },
+    { "source": "wu", "target": "gui" }
+  ]
+}

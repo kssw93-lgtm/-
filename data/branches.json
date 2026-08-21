@@ -1,0 +1,14 @@
+[
+  { "index": 0, "id": "zi", "hanja": "子", "reading": "자", "element": "water", "yinYang": "yang", "season": "winter" },
+  { "index": 1, "id": "chou", "hanja": "丑", "reading": "축", "element": "earth", "yinYang": "yin", "season": "winter" },
+  { "index": 2, "id": "yin", "hanja": "寅", "reading": "인", "element": "wood", "yinYang": "yang", "season": "spring" },
+  { "index": 3, "id": "mao", "hanja": "卯", "reading": "묘", "element": "wood", "yinYang": "yin", "season": "spring" },
+  { "index": 4, "id": "chen", "hanja": "辰", "reading": "진", "element": "earth", "yinYang": "yang", "season": "spring" },
+  { "index": 5, "id": "si", "hanja": "巳", "reading": "사", "element": "fire", "yinYang": "yin", "season": "summer" },
+  { "index": 6, "id": "wu", "hanja": "午", "reading": "오", "element": "fire", "yinYang": "yang", "season": "summer" },
+  { "index": 7, "id": "wei", "hanja": "未", "reading": "미", "element": "earth", "yinYang": "yin", "season": "summer" },
+  { "index": 8, "id": "shen", "hanja": "申", "reading": "신", "element": "metal", "yinYang": "yang", "season": "autumn" },
+  { "index": 9, "id": "you", "hanja": "酉", "reading": "유", "element": "metal", "yinYang": "yin", "season": "autumn" },
+  { "index": 10, "id": "xu", "hanja": "戌", "reading": "술", "element": "earth", "yinYang": "yang", "season": "autumn" },
+  { "index": 11, "id": "hai", "hanja": "亥", "reading": "해", "element": "water", "yinYang": "yin", "season": "winter" }
+]

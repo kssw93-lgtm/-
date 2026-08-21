@@ -1,0 +1,12 @@
+[
+  { "id": "rhythm.love.bigeob", "category": "love", "pattern": "bigeob", "label": "주도기", "tip": "먼저 다가가도 좋은 달" },
+  { "id": "rhythm.love.siksang", "category": "love", "pattern": "siksang", "label": "표현기", "tip": "마음을 자연스럽게 드러내기 좋은 달" },
+  { "id": "rhythm.love.jaeseong", "category": "love", "pattern": "jaeseong", "label": "다지기", "tip": "관계를 현실적으로 다져가기 좋은 달" },
+  { "id": "rhythm.love.gwanseong", "category": "love", "pattern": "gwanseong", "label": "진지기", "tip": "관계를 진지하게 발전시키기 좋은 달" },
+  { "id": "rhythm.love.inseong", "category": "love", "pattern": "inseong", "label": "숙고기", "tip": "서두르기보다 마음을 정리하기 좋은 달" },
+  { "id": "rhythm.career.bigeob", "category": "career", "pattern": "bigeob", "label": "추진기", "tip": "주도적으로 밀어붙이기 좋은 달" },
+  { "id": "rhythm.career.siksang", "category": "career", "pattern": "siksang", "label": "기획기", "tip": "새로운 아이디어를 시도하기 좋은 달" },
+  { "id": "rhythm.career.jaeseong", "category": "career", "pattern": "jaeseong", "label": "성과기", "tip": "실질적인 결과를 만들어내기 좋은 달" },
+  { "id": "rhythm.career.gwanseong", "category": "career", "pattern": "gwanseong", "label": "책임기", "tip": "중요한 역할이나 책임이 커지는 달" },
+  { "id": "rhythm.career.inseong", "category": "career", "pattern": "inseong", "label": "정비기", "tip": "배우고 준비하며 내실을 다지기 좋은 달" }
+]

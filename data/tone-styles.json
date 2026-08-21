@@ -1,0 +1,63 @@
+{
+  "standard": {
+    "id": "standard",
+    "label": "기본",
+    "emoji": "🔮",
+    "tagline": "차분하고 정확하게",
+    "preview": "당신의 사주를 정확하게 풀어드릴게요.",
+    "headings": {
+      "dayMaster": "일간 총평 (나의 뿌리)",
+      "personality": "기본 성향",
+      "relations": "원국 속 특별한 관계",
+      "daeunFlow": "지금의 대운 흐름"
+    },
+    "openers": ["", "", ""],
+    "closers": ["", "", ""]
+  },
+  "mz": {
+    "id": "mz",
+    "label": "MZ",
+    "emoji": "✨",
+    "tagline": "친구처럼 솔직하게",
+    "preview": "야 이거 실화냐ㅋㅋ 내가 풀어줄게!",
+    "headings": {
+      "dayMaster": "내 본캐 정체 (일간)",
+      "personality": "나 이런 사람 실화임",
+      "relations": "원국 인간관계 실화",
+      "daeunFlow": "지금 내 인생 시즌"
+    },
+    "openers": [
+      "야 이거 진짜 소름인데— ",
+      "어 이거 완전 나임ㅋㅋ ",
+      "잠만, 이거 실화냐— "
+    ],
+    "closers": [
+      " 이거 완전 찐이지 않냐.",
+      " 인정하고 갑니다.",
+      " 이 정도면 국룰 아님?"
+    ]
+  },
+  "joseon": {
+    "id": "joseon",
+    "label": "조선시대",
+    "emoji": "📜",
+    "tagline": "격식있고 진중하게",
+    "preview": "이르되, 그대의 사주를 풀어드리겠소.",
+    "headings": {
+      "dayMaster": "그대 본디 타고난 성정",
+      "personality": "그대의 됨됨이",
+      "relations": "원국에 서린 인연의 조화",
+      "daeunFlow": "지금 그대가 지나는 대운"
+    },
+    "openers": [
+      "이르되, ",
+      "가로되, ",
+      "살펴보니, "
+    ],
+    "closers": [
+      " 하니 이를 새겨두시게.",
+      " 함이 마땅하다.",
+      " 하는 바이다."
+    ]
+  }
+}

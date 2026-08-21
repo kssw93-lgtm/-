@@ -1,0 +1,48 @@
+{
+  "zi": [{ "stem": "gui", "role": "primary" }],
+  "chou": [
+    { "stem": "ji", "role": "primary" },
+    { "stem": "gui", "role": "secondary" },
+    { "stem": "xin", "role": "residual" }
+  ],
+  "yin": [
+    { "stem": "jia", "role": "primary" },
+    { "stem": "bing", "role": "secondary" },
+    { "stem": "wu", "role": "residual" }
+  ],
+  "mao": [{ "stem": "yi", "role": "primary" }],
+  "chen": [
+    { "stem": "wu", "role": "primary" },
+    { "stem": "yi", "role": "secondary" },
+    { "stem": "gui", "role": "residual" }
+  ],
+  "si": [
+    { "stem": "bing", "role": "primary" },
+    { "stem": "wu", "role": "secondary" },
+    { "stem": "geng", "role": "residual" }
+  ],
+  "wu": [
+    { "stem": "ding", "role": "primary" },
+    { "stem": "ji", "role": "residual" }
+  ],
+  "wei": [
+    { "stem": "ji", "role": "primary" },
+    { "stem": "ding", "role": "secondary" },
+    { "stem": "yi", "role": "residual" }
+  ],
+  "shen": [
+    { "stem": "geng", "role": "primary" },
+    { "stem": "ren", "role": "secondary" },
+    { "stem": "wu", "role": "residual" }
+  ],
+  "you": [{ "stem": "xin", "role": "primary" }],
+  "xu": [
+    { "stem": "wu", "role": "primary" },
+    { "stem": "xin", "role": "secondary" },
+    { "stem": "ding", "role": "residual" }
+  ],
+  "hai": [
+    { "stem": "ren", "role": "primary" },
+    { "stem": "jia", "role": "residual" }
+  ]
+}

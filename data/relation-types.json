@@ -1,0 +1,11 @@
+{
+  "stem_combine": { "name": "천간합", "desc": "서로 다른 기운이 자연스럽게 어우러지려는 힘이 있다는 뜻이에요" },
+  "branch_six_combine": { "name": "육합", "desc": "두 지지가 조화를 이루며 관계를 안정시키는 힘으로 작용할 수 있어요" },
+  "branch_clash": { "name": "충", "desc": "서로 반대 방향으로 부딪히는 기운이 있어, 그 영역에서 변화나 이동이 두드러질 수 있어요" },
+  "branch_three_combine": { "name": "삼합", "desc": "여러 지지가 하나의 큰 기운으로 뭉쳐 강한 힘을 만들어내요" },
+  "branch_directional_combine": { "name": "방합", "desc": "같은 계절의 기운이 모여 하나의 방향으로 힘을 모아줘요" },
+  "branch_punishment": { "name": "형", "desc": "긴장과 마찰이 발생할 수 있는 자리지만, 동시에 단련과 성장의 계기가 되기도 해요" },
+  "branch_break": { "name": "파", "desc": "관계나 계획이 예상과 다르게 흘러갈 수 있는 자리예요" },
+  "branch_harm": { "name": "해", "desc": "겉으로 크게 드러나지 않는 미묘한 갈등이 잠재할 수 있는 자리예요" },
+  "branch_resentment": { "name": "원진", "desc": "이유 없이 서먹해지거나 오해가 쌓이기 쉬운 자리로 봐요" }
+}

@@ -1,0 +1,12 @@
+[
+  { "id": "annual.love.bigeob", "category": "love", "pattern": "bigeob", "text": "올해는 스스로 관계를 이끌어가는 힘이 강해지는 해예요. 마음에 둔 사람이 있다면 먼저 다가가는 쪽이 유리하고, 이미 관계가 있다면 주도권을 갖고 방향을 정하는 시기가 될 수 있어요." },
+  { "id": "annual.love.siksang", "category": "love", "pattern": "siksang", "text": "올해는 감정 표현이 자연스러워지고 새로운 인연에 대한 호기심도 커지는 해예요. 평소보다 적극적으로 마음을 표현해볼 만한 시기예요." },
+  { "id": "annual.love.jaeseong", "category": "love", "pattern": "jaeseong", "text": "올해는 관계를 현실적인 기반 위에 올려두기 좋은 해예요. 함께할 미래를 구체적으로 그려보는 대화가 관계를 한 단계 끌어올릴 수 있어요." },
+  { "id": "annual.love.gwanseong", "category": "love", "pattern": "gwanseong", "text": "올해는 관계에 책임감과 진지함이 더해지는 해예요. 결혼이나 정착처럼 무게감 있는 결정을 고민하게 되는 시기일 수 있어요." },
+  { "id": "annual.love.inseong", "category": "love", "pattern": "inseong", "text": "올해는 관계를 서두르기보다 스스로를 먼저 이해하는 시간이 필요한 해예요. 조급해하지 않아도 괜찮은 흐름이에요." },
+  { "id": "annual.career.bigeob", "category": "career", "pattern": "bigeob", "text": "올해는 스스로 방향을 정하고 밀어붙이는 힘이 강해지는 해예요. 주도적으로 나설수록 성과로 이어지기 쉬운 시기예요." },
+  { "id": "annual.career.siksang", "category": "career", "pattern": "siksang", "text": "올해는 새로운 시도와 아이디어가 좋은 반응을 얻기 쉬운 해예요. 하고 싶었던 방식을 실제로 시도해볼 만한 시기예요." },
+  { "id": "annual.career.jaeseong", "category": "career", "pattern": "jaeseong", "text": "올해는 실질적인 성과와 보상이 따라오기 좋은 해예요. 적극적으로 기회를 붙잡을수록 결과가 눈에 보이는 시기예요." },
+  { "id": "annual.career.gwanseong", "category": "career", "pattern": "gwanseong", "text": "올해는 책임과 역할이 커지는 해예요. 승진이나 새로운 직책처럼 무게감 있는 변화가 찾아올 수 있어요." },
+  { "id": "annual.career.inseong", "category": "career", "pattern": "inseong", "text": "올해는 실력을 다지고 배움에 투자하기 좋은 해예요. 당장의 성과보다 기반을 탄탄히 하는 게 장기적으로 유리해요." }
+]

@@ -1,0 +1,12 @@
+[
+  { "id": "love.intro.v1", "category": "love", "text": "연애 이야기를 해볼까요? 먼저 당신의 사주를 살펴볼게요." },
+  { "id": "love.intro.v2", "category": "love", "text": "마음이 어디로 향하고 있는지, 사주에 다 나와 있어요. 한번 볼까요?" },
+  { "id": "career.intro.v1", "category": "career", "text": "일과 관련된 이야기를 시작하기 전에, 당신의 타고난 기질부터 살펴볼게요." },
+  { "id": "career.intro.v2", "category": "career", "text": "어떤 방향으로 나아가야 할지 궁금하시죠? 사주부터 확인해볼게요." },
+  { "id": "wealth.intro.v1", "category": "wealth", "text": "돈의 흐름이 궁금하신가요? 먼저 당신의 사주부터 살펴볼게요." },
+  { "id": "wealth.intro.v2", "category": "wealth", "text": "재물은 타고난 그릇과 흐름이 함께 만들어요. 당신의 그릇부터 확인해볼까요?" },
+  { "id": "reunion.intro.v1", "category": "reunion", "text": "다시 이어질 인연인지 궁금하시죠? 사주에 담긴 흐름을 살펴볼게요." },
+  { "id": "reunion.intro.v2", "category": "reunion", "text": "끊어진 인연도 사주 안에서는 흐름이 보여요. 한번 들여다볼까요?" },
+  { "id": "overall.intro.v1", "category": "overall", "text": "당신의 인생 전체를 관통하는 흐름을 살펴볼게요." },
+  { "id": "overall.intro.v2", "category": "overall", "text": "타고난 사주 하나로 인생의 큰 그림을 그려볼 수 있어요. 시작해볼까요?" }
+]

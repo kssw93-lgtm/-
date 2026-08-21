@@ -1,0 +1,12 @@
+[
+  { "id": "overall.bigeob.gang.v1", "category": "overall", "pattern": "bigeob.gang", "version": 1, "text": "인생 전체를 스스로 개척해나가는 힘이 강한 사주예요. 남을 따라가기보다 자기만의 길을 만들 때 삶이 가장 잘 풀려요." },
+  { "id": "overall.bigeob.yak.v1", "category": "overall", "pattern": "bigeob.yak", "version": 1, "text": "혼자보다 사람들과 함께할 때 인생의 흐름이 안정적으로 풀리는 사주예요. 좋은 인연을 곁에 두는 게 중요해요." },
+  { "id": "overall.siksang.gang.v1", "category": "overall", "pattern": "siksang.gang", "version": 1, "text": "표현하고 만들어내는 재능으로 인생을 풀어가는 사주예요. 하고 싶은 걸 시도할 때 길이 열려요." },
+  { "id": "overall.siksang.yak.v1", "category": "overall", "pattern": "siksang.yak", "version": 1, "text": "꾸준함과 섬세함으로 인생을 단단하게 쌓아가는 사주예요. 조급해하지 않아도 결국 인정받는 편이에요." },
+  { "id": "overall.jaeseong.gang.v1", "category": "overall", "pattern": "jaeseong.gang", "version": 1, "text": "현실 감각이 뛰어나 실질적인 성과로 인생을 채워가는 사주예요. 기회를 붙잡는 타이밍이 인생의 핵심이에요." },
+  { "id": "overall.jaeseong.yak.v1", "category": "overall", "pattern": "jaeseong.yak", "version": 1, "text": "성실하게 쌓아온 것들이 결국 인생의 자산이 되는 사주예요. 큰 욕심보다 꾸준함이 답이에요." },
+  { "id": "overall.gwanseong.gang.v1", "category": "overall", "pattern": "gwanseong.gang", "version": 1, "text": "책임과 신뢰로 인생의 자리를 만들어가는 사주예요. 맡은 역할이 클수록 오히려 능력이 빛나요." },
+  { "id": "overall.gwanseong.yak.v1", "category": "overall", "pattern": "gwanseong.yak", "version": 1, "text": "자유롭고 유연한 흐름 속에서 인생의 방향을 찾아가는 사주예요. 틀에 갇히지 않을 때 편안해져요." },
+  { "id": "overall.inseong.gang.v1", "category": "overall", "pattern": "inseong.gang", "version": 1, "text": "배움과 깊은 사고로 인생을 채워가는 사주예요. 서두르지 않고 내실을 다질 때 결실이 커요." },
+  { "id": "overall.inseong.yak.v1", "category": "overall", "pattern": "inseong.yak", "version": 1, "text": "좋은 사람과 좋은 배움을 통해 인생이 성장하는 사주예요. 곁에 두는 인연이 인생의 방향을 좌우해요." }
+]

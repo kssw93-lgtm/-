@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "meridianPeriods": [
+    { "periodStart": "1908-04-01", "periodEnd": "1911-12-31", "referenceMeridian": 127.5, "utcOffsetMinutes": 510 },
+    { "periodStart": "1912-01-01", "periodEnd": "1954-03-20", "referenceMeridian": 135, "utcOffsetMinutes": 540 },
+    { "periodStart": "1954-03-21", "periodEnd": "1961-08-09", "referenceMeridian": 127.5, "utcOffsetMinutes": 510 },
+    { "periodStart": "1961-08-10", "periodEnd": null, "referenceMeridian": 135, "utcOffsetMinutes": 540 }
+  ],
+  "daylightSavingPeriods": [
+    { "year": 1948, "startLocal": "1948-06-01T00:00:00+08:30", "endLocal": "1948-09-13T00:00:00+08:30", "offsetMinutes": 60 },
+    { "year": 1949, "startLocal": "1949-04-03T00:00:00+08:30", "endLocal": "1949-09-11T00:00:00+08:30", "offsetMinutes": 60 },
+    { "year": 1950, "startLocal": "1950-04-01T00:00:00+08:30", "endLocal": "1950-09-10T00:00:00+08:30", "offsetMinutes": 60 },
+    { "year": 1951, "startLocal": "1951-05-06T00:00:00+08:30", "endLocal": "1951-09-09T00:00:00+08:30", "offsetMinutes": 60 },
+    { "year": 1955, "startLocal": "1955-05-05T00:00:00+08:30", "endLocal": "1955-09-09T00:00:00+08:30", "offsetMinutes": 60 },
+    { "year": 1956, "startLocal": "1956-05-20T00:00:00+08:30", "endLocal": "1956-09-30T00:00:00+08:30", "offsetMinutes": 60 },
+    { "year": 1957, "startLocal": "1957-05-05T00:00:00+08:30", "endLocal": "1957-09-22T00:00:00+08:30", "offsetMinutes": 60 },
+    { "year": 1958, "startLocal": "1958-05-04T00:00:00+08:30", "endLocal": "1958-09-21T00:00:00+08:30", "offsetMinutes": 60 },
+    { "year": 1959, "startLocal": "1959-05-03T00:00:00+08:30", "endLocal": "1959-09-20T00:00:00+08:30", "offsetMinutes": 60 },
+    { "year": 1960, "startLocal": "1960-05-01T00:00:00+08:30", "endLocal": "1960-09-18T00:00:00+08:30", "offsetMinutes": 60 },
+    { "year": 1987, "startLocal": "1987-05-10T02:00:00+09:00", "endLocal": "1987-10-11T03:00:00+09:00", "offsetMinutes": 60 },
+    { "year": 1988, "startLocal": "1988-05-08T02:00:00+09:00", "endLocal": "1988-10-09T03:00:00+09:00", "offsetMinutes": 60 }
+  ]
+}

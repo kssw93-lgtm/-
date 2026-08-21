@@ -1,0 +1,12 @@
+[
+  { "id": "wealth.bigeob.gang.v1", "category": "wealth", "pattern": "bigeob.gang", "version": 1, "text": "스스로 벌어들이는 힘이 강한 편이에요. 남에게 기대기보다 직접 움직여서 결과를 만들어낼 때 재물이 따라와요." },
+  { "id": "wealth.bigeob.yak.v1", "category": "wealth", "pattern": "bigeob.yak", "version": 1, "text": "혼자 벌기보다 함께 일하는 구조에서 재물이 안정적으로 들어오는 편이에요. 동업이나 협업을 열어두면 좋아요." },
+  { "id": "wealth.siksang.gang.v1", "category": "wealth", "pattern": "siksang.gang", "version": 1, "text": "아이디어와 재능을 결과물로 바꾸는 능력이 재물운으로 이어져요. 만들어내는 일 자체가 곧 수입원이 될 수 있어요." },
+  { "id": "wealth.siksang.yak.v1", "category": "wealth", "pattern": "siksang.yak", "version": 1, "text": "꾸준함이 재물로 이어지는 편이에요. 화려한 한 방보다 오래 쌓아가는 방식이 훨씬 잘 맞아요." },
+  { "id": "wealth.jaeseong.gang.v1", "category": "wealth", "pattern": "jaeseong.gang", "version": 1, "text": "재물을 다루는 감각 자체가 타고난 편이에요. 기회를 알아보는 눈이 밝아서, 적극적으로 나설수록 결과가 좋아요." },
+  { "id": "wealth.jaeseong.yak.v1", "category": "wealth", "pattern": "jaeseong.yak", "version": 1, "text": "재물이 들고 나는 폭이 큰 편이라, 무리한 확장보다 안전하게 관리하는 습관이 중요해요." },
+  { "id": "wealth.gwanseong.gang.v1", "category": "wealth", "pattern": "gwanseong.gang", "version": 1, "text": "안정적인 직위나 조직 안에서 재물이 꾸준히 쌓이는 편이에요. 책임 있는 자리일수록 재물운도 함께 따라와요." },
+  { "id": "wealth.gwanseong.yak.v1", "category": "wealth", "pattern": "gwanseong.yak", "version": 1, "text": "정해진 틀보다 자유로운 구조에서 재물의 흐름이 더 원활해지는 편이에요." },
+  { "id": "wealth.inseong.gang.v1", "category": "wealth", "pattern": "inseong.gang", "version": 1, "text": "지식이나 자격, 전문성이 결국 재물로 연결되는 편이에요. 배움에 투자한 만큼 돌아오는 구조예요." },
+  { "id": "wealth.inseong.yak.v1", "category": "wealth", "pattern": "inseong.yak", "version": 1, "text": "좋은 사람과 좋은 정보를 통해 재물의 기회가 열리는 편이에요. 혼자보다 인맥 안에서 기회를 찾아보세요." }
+]

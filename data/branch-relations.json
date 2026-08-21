@@ -1,0 +1,63 @@
+{
+  "sixCombine": [
+    { "source": "zi", "target": "chou" },
+    { "source": "yin", "target": "hai" },
+    { "source": "mao", "target": "xu" },
+    { "source": "chen", "target": "you" },
+    { "source": "si", "target": "shen" },
+    { "source": "wu", "target": "wei" }
+  ],
+  "clash": [
+    { "source": "zi", "target": "wu" },
+    { "source": "chou", "target": "wei" },
+    { "source": "yin", "target": "shen" },
+    { "source": "mao", "target": "you" },
+    { "source": "chen", "target": "xu" },
+    { "source": "si", "target": "hai" }
+  ],
+  "threeCombine": [
+    { "branches": ["shen", "zi", "chen"], "element": "water" },
+    { "branches": ["hai", "mao", "wei"], "element": "wood" },
+    { "branches": ["yin", "wu", "xu"], "element": "fire" },
+    { "branches": ["si", "you", "chou"], "element": "metal" }
+  ],
+  "directionalCombine": [
+    { "branches": ["yin", "mao", "chen"], "element": "wood" },
+    { "branches": ["si", "wu", "wei"], "element": "fire" },
+    { "branches": ["shen", "you", "xu"], "element": "metal" },
+    { "branches": ["hai", "zi", "chou"], "element": "water" }
+  ],
+  "punishment": [
+    { "type": "triple", "branches": ["yin", "si", "shen"] },
+    { "type": "triple", "branches": ["chou", "xu", "wei"] },
+    { "type": "pair", "branches": ["zi", "mao"] },
+    { "type": "self", "branches": ["chen"] },
+    { "type": "self", "branches": ["wu"] },
+    { "type": "self", "branches": ["you"] },
+    { "type": "self", "branches": ["hai"] }
+  ],
+  "break": [
+    { "source": "zi", "target": "you" },
+    { "source": "chou", "target": "chen" },
+    { "source": "yin", "target": "hai" },
+    { "source": "mao", "target": "wu" },
+    { "source": "si", "target": "shen" },
+    { "source": "wei", "target": "xu" }
+  ],
+  "harm": [
+    { "source": "zi", "target": "wei" },
+    { "source": "chou", "target": "wu" },
+    { "source": "yin", "target": "si" },
+    { "source": "mao", "target": "chen" },
+    { "source": "shen", "target": "hai" },
+    { "source": "you", "target": "xu" }
+  ],
+  "resentment": [
+    { "source": "zi", "target": "wei" },
+    { "source": "chou", "target": "wu" },
+    { "source": "yin", "target": "you" },
+    { "source": "mao", "target": "shen" },
+    { "source": "chen", "target": "hai" },
+    { "source": "si", "target": "xu" }
+  ]
+}
