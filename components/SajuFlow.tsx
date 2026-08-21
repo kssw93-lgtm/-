@@ -234,6 +234,7 @@ export default function SajuFlow() {
           dailyFortune={interpretation.dailyFortune}
           pastLife={interpretation.pastLife}
           lifeGrades={interpretation.lifeGrades}
+          johu={interpretation.johu}
           isHourExcluded={interpretation.isHourExcluded}
           adUnlocked={adUnlocked}
           onAdUnlocked={() => setAdUnlocked(true)}

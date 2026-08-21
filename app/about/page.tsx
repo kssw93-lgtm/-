@@ -57,9 +57,6 @@ export default function AboutPage() {
         <Link href="/privacy" className="hover:text-white/70 hover:underline">
           개인정보처리방침
         </Link>
-        <Link href="/contact" className="hover:text-white/70 hover:underline">
-          문의하기
-        </Link>
       </div>
 
       <Link

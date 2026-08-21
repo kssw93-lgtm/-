@@ -70,11 +70,7 @@ export default function PrivacyPage() {
           <h2 className="mb-1.5 text-sm font-bold text-[color:var(--color-gold-light)]">4. 이용자의 권리</h2>
           <p>
             브라우저 설정에서 쿠키 저장을 차단하거나 기존 쿠키를 삭제할 수 있고, 개발자 도구 또는 브라우저 설정에서
-            언제든 로컬/세션 저장소를 초기화할 수 있어요. 개인정보 관련 문의는{" "}
-            <Link href="/contact" className="text-[color:var(--color-gold-light)] underline">
-              문의하기
-            </Link>{" "}
-            페이지를 통해 연락해 주세요.
+            언제든 로컬/세션 저장소를 초기화할 수 있어요.
           </p>
         </section>
 

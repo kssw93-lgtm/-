@@ -14,6 +14,7 @@ import {
   type DaeunFlowDisplay,
   type DailyFortune,
   type Gyeokguk,
+  type JohuAnalysis,
   type LifeStageGrade,
   type LuckColorDisplay,
   type MonthRhythmDisplay,
@@ -39,6 +40,7 @@ interface Props {
   dailyFortune: DailyFortune;
   pastLife: PastLife;
   lifeGrades: LifeStageGrade[];
+  johu: JohuAnalysis;
   isHourExcluded: boolean;
   adUnlocked: boolean;
   onAdUnlocked: () => void;
@@ -65,6 +67,7 @@ export default function ResultScreen({
   dailyFortune,
   pastLife,
   lifeGrades,
+  johu,
   isHourExcluded,
   adUnlocked,
   onAdUnlocked,
@@ -192,6 +195,13 @@ export default function ResultScreen({
               </div>
             </div>
           )}
+
+          <div className="rounded-2xl bg-white/10 p-5">
+            <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
+              조후(調候) · {johu.seasonLabel}에 태어난 사주
+            </p>
+            <p className="text-sm leading-relaxed text-white/80">{johu.text}</p>
+          </div>
 
           <div className="rounded-2xl bg-white/10 p-5">
             <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">행운의 컬러 &amp; 숫자</p>

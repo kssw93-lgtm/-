@@ -10,9 +10,6 @@ export default function SiteFooter() {
       <Link href="/about" className="hover:text-white/70 hover:underline">
         사이트 소개
       </Link>
-      <Link href="/contact" className="hover:text-white/70 hover:underline">
-        문의하기
-      </Link>
       <Link href="/privacy" className="hover:text-white/70 hover:underline">
         개인정보처리방침
       </Link>

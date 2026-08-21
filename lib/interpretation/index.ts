@@ -8,6 +8,7 @@ import { computeGyeokguk, type Gyeokguk } from "./gyeokguk";
 import { computeDailyFortune, type DailyFortune } from "./daily-fortune";
 import { computePastLife, type PastLife } from "./past-life";
 import { computeLifeGrades, type LifeStageGrade } from "./life-grade";
+import { computeJohu, type JohuAnalysis } from "./johu";
 import { computeSinsal } from "@/lib/calc/sinsal";
 import sinsalJson from "@/data/sinsal.json";
 import type { SinsalId } from "@/lib/calc/sinsal";
@@ -45,6 +46,7 @@ export * from "./daily-fortune";
 export * from "./past-life";
 export * from "./life-grade";
 export * from "./tone-style";
+export * from "./johu";
 
 export interface MonthRhythmDisplay {
   month: number;
@@ -90,6 +92,7 @@ export interface InterpretationResult {
   dailyFortune: DailyFortune;
   pastLife: PastLife;
   lifeGrades: LifeStageGrade[];
+  johu: JohuAnalysis;
   /** PDF 저장/공유용으로 섹션을 하나로 합친 텍스트 */
   resultText: string;
   isHourExcluded: boolean;
@@ -201,6 +204,7 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
   const dailyFortune = computeDailyFortune(saju);
   const pastLife = computePastLife(saju);
   const lifeGrades = computeLifeGrades(saju);
+  const johu = computeJohu(saju);
 
   return {
     category,
@@ -217,6 +221,7 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
     dailyFortune,
     pastLife,
     lifeGrades,
+    johu,
     resultText: sections.map((s) => `[${s.heading}]\n${s.text}`).join("\n\n"),
     isHourExcluded: saju.pillars.hourPillar === null,
   };

@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import AdSlot from "./AdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
 import SajuDial from "./SajuDial";
+import { ARTICLES } from "@/lib/content/articles";
 import type { Category } from "@/lib/session";
 
 interface Props {
@@ -100,6 +102,27 @@ export default function CategorySelect({ onSelect, onSelectCompatibility }: Prop
             <span className="text-[10.5px] leading-tight text-white/45">{c.desc}</span>
           </button>
         ))}
+      </div>
+
+      <div className="relative z-10 w-full">
+        <div className="mb-3 flex items-center justify-between">
+          <p className="text-sm font-bold text-white/80">📖 알아두면 더 잘 맞는 사주 상식</p>
+          <Link href="/learn" className="text-[11px] text-[color:var(--color-gold-light)]/70 hover:underline">
+            더보기 →
+          </Link>
+        </div>
+        <div className="flex gap-2.5 overflow-x-auto pb-1">
+          {ARTICLES.slice(0, 4).map((a) => (
+            <Link
+              key={a.slug}
+              href={`/learn/${a.slug}`}
+              className="flex w-[168px] flex-shrink-0 flex-col gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-3 transition hover:border-[color:var(--color-gold)]/50"
+            >
+              <p className="text-[13px] font-bold leading-snug text-white/90">{a.title}</p>
+              <p className="line-clamp-2 text-[11px] leading-snug text-white/45">{a.summary}</p>
+            </Link>
+          ))}
+        </div>
       </div>
 
       <div className="relative z-10 mt-auto flex w-full flex-col gap-3">
