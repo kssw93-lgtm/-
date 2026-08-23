@@ -21,6 +21,9 @@ const sans = Noto_Sans_KR({
 export const metadata: Metadata = {
   title: "천기누설 | 연애운·직업운",
   description: "생년월일시로 보는 무료 사주 - 연애운과 직업운을 바로 확인하세요.",
+  verification: {
+    google: "5PEFXksjaJ9b4G9tqOhswubHrr7D7nmwwPjtoo1Xph4",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
