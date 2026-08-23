@@ -14,6 +14,15 @@ interface Props {
   onRestart: () => void;
 }
 
+/** 한글 받침 유무에 따라 주격조사(이/가)를 붙인다. "나"→"내가", "저"→"제가"는 불규칙 활용이라 예외 처리한다. */
+function withSubjectParticle(word: string): string {
+  if (word === "나") return "내가";
+  if (word === "저") return "제가";
+  const lastCharCode = word.charCodeAt(word.length - 1) - 0xac00;
+  const hasBatchim = lastCharCode >= 0 && lastCharCode <= 11171 && lastCharCode % 28 !== 0;
+  return hasBatchim ? `${word}이` : `${word}가`;
+}
+
 /** 궁합 결과 화면. 계산 규칙서 60번: 두 사람의 독립 사주를 각각 계산한 뒤 비교한다. */
 export default function CompatibilityResultScreen({
   nameA,
@@ -42,14 +51,14 @@ export default function CompatibilityResultScreen({
       <div className="flex flex-col gap-4">
         <div className="rounded-2xl bg-white/10 p-5">
           <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
-            {displayA}가 {displayB}에게 통하는 기운
+            {withSubjectParticle(displayA)} {displayB}에게 통하는 기운
           </p>
           <p className="text-base leading-relaxed">{result.textAtoB}</p>
         </div>
 
         <div className="rounded-2xl bg-white/10 p-5">
           <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
-            {displayB}가 {displayA}에게 통하는 기운
+            {withSubjectParticle(displayB)} {displayA}에게 통하는 기운
           </p>
           <p className="text-base leading-relaxed">{result.textBtoA}</p>
         </div>
