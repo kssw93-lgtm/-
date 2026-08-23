@@ -105,18 +105,23 @@ describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠
     }
   });
 
-  it("행운의 컬러/숫자를 제공하는 카테고리(재물운)는 항상 값을 반환한다", () => {
+  it("행운의 컬러/숫자는 모든 카테고리에서 공통으로 항상 값을 반환한다", () => {
     const saju = computeSaju(SAMPLE_INPUT);
-    const result = interpretSaju(saju, "wealth");
-    expect(result.luckColor).not.toBeNull();
-    expect(result.luckColor!.color.length).toBeGreaterThan(0);
-    expect(result.luckColor!.numbers.length).toBe(2);
+    for (const c of ["love", "career", "wealth", "reunion", "overall"] as const) {
+      const result = interpretSaju(saju, c);
+      expect(result.luckColor).not.toBeNull();
+      expect(result.luckColor!.color.length).toBeGreaterThan(0);
+      expect(result.luckColor!.numbers.length).toBe(2);
+    }
   });
 
-  it("행운의 컬러를 제공하지 않는 카테고리(연애운)는 null을 반환한다", () => {
+  it("인연 만나기 좋은 날·장소는 연애운/재회운/종합사주에서만 제공된다", () => {
     const saju = computeSaju(SAMPLE_INPUT);
-    const result = interpretSaju(saju, "love");
-    expect(result.luckColor).toBeNull();
+    expect(interpretSaju(saju, "love").meetingTiming).not.toBeNull();
+    expect(interpretSaju(saju, "reunion").meetingTiming).not.toBeNull();
+    expect(interpretSaju(saju, "overall").meetingTiming).not.toBeNull();
+    expect(interpretSaju(saju, "career").meetingTiming).toBeNull();
+    expect(interpretSaju(saju, "wealth").meetingTiming).toBeNull();
   });
 });
 

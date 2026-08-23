@@ -10,6 +10,7 @@ import { computePastLife, type PastLife } from "./past-life";
 import { computeLifeGrades, type LifeStageGrade } from "./life-grade";
 import { computeJohu, type JohuAnalysis } from "./johu";
 import { computeLifeStages, type LifeStageDisplay } from "./life-stage";
+import { computeMeetingTiming, type MeetingTiming } from "./meeting-timing";
 import { computeSinsal } from "@/lib/calc/sinsal";
 import sinsalJson from "@/data/sinsal.json";
 import type { SinsalId } from "@/lib/calc/sinsal";
@@ -49,6 +50,7 @@ export * from "./life-grade";
 export * from "./tone-style";
 export * from "./johu";
 export * from "./life-stage";
+export * from "./meeting-timing";
 
 export interface MonthRhythmDisplay {
   month: number;
@@ -97,6 +99,8 @@ export interface InterpretationResult {
   johu: JohuAnalysis | null;
   /** 초년/중년/말년운 — 종합사주에서만 채워진다 */
   lifeStages: LifeStageDisplay[];
+  /** 인연 만나기 좋은 날·장소 — 연애운/재회운/종합사주에서만 채워진다 */
+  meetingTiming: MeetingTiming | null;
   /** PDF 저장/공유용으로 섹션을 하나로 합친 텍스트 */
   resultText: string;
   isHourExcluded: boolean;
@@ -119,14 +123,15 @@ interface CategoryFeatures {
   lifeGrades: boolean; // 인생 등급(대운별)
   pastLife: boolean; // 전생 보기
   lifeStages: boolean; // 초년/중년/말년운
+  meetingTiming: boolean; // 인연 만나기 좋은 날·장소
 }
 
 const CATEGORY_FEATURES: Record<Category, CategoryFeatures> = {
-  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: false, lifeGrades: false, pastLife: false, lifeStages: false },
-  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: false, lifeGrades: false, pastLife: false, lifeStages: false },
-  career: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: false, lifeGrades: true, pastLife: false, lifeStages: false },
-  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false },
-  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true },
+  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true },
+  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true },
+  career: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false },
+  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false },
+  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true },
 };
 
 /**
@@ -233,6 +238,7 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
     lifeGrades,
     johu,
     lifeStages,
+    meetingTiming: features.meetingTiming ? computeMeetingTiming(saju) : null,
     resultText: sections.map((s) => `[${s.heading}]\n${s.text}`).join("\n\n"),
     isHourExcluded: saju.pillars.hourPillar === null,
   };

@@ -68,3 +68,27 @@ body {
     animation: none;
   }
 }
+
+/* PDF 저장(window.print())용 인쇄 스타일 — 다크 테마 배경/반투명 카드는 인쇄 시
+   브라우저가 배경색을 생략해버려서 텅 빈 흰 종이처럼 나온다. 인쇄할 때는 검은 글자 +
+   흰 배경의 읽기 쉬운 문서로 강제 전환하고, 버튼/광고/장식 요소는 숨긴다. */
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-area,
+  .print-area * {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-color: #ccc !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-area {
+    gap: 1rem !important;
+  }
+}

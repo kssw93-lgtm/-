@@ -9,7 +9,6 @@ import AdWatchScreen from "./AdWatchScreen";
 import CalculatingLoader from "./CalculatingLoader";
 import ResultScreen from "./ResultScreen";
 import CompatibilityResultScreen from "./CompatibilityResultScreen";
-import UnlockScreen from "./UnlockScreen";
 import { computeSaju, type BirthInput, type SajuResult } from "@/lib/calc";
 import {
   applyToneStyle,
@@ -60,7 +59,6 @@ export default function SajuFlow() {
   const [interpretation, setInterpretation] = useState<InterpretationResult | null>(null);
   const [compatResult, setCompatResult] = useState<CompatibilityResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [adUnlocked, setAdUnlocked] = useState(false);
 
   useEffect(() => {
     const saved = loadBirthForm();
@@ -88,7 +86,6 @@ export default function SajuFlow() {
     setFlowMode("solo");
     setCategory(selected);
     setErrorMessage(null);
-    setAdUnlocked(false);
     // 08번: 생년월일 등 정보가 이미 입력되어 있으면 S3를 건너뛰고 바로 광고 화면으로 이동한다.
     if (form.birthDate.trim().length > 0) {
       setScreen("ad");
@@ -101,7 +98,6 @@ export default function SajuFlow() {
     setFlowMode("compatibility");
     setCategory(null);
     setErrorMessage(null);
-    setAdUnlocked(false);
     setScreen(form.birthDate.trim().length > 0 ? "compat-partner" : "s3");
   }
 
@@ -119,7 +115,6 @@ export default function SajuFlow() {
   }
 
   function handleAdWatched() {
-    setAdUnlocked(true);
     setScreen("s4");
   }
 
@@ -242,9 +237,10 @@ export default function SajuFlow() {
           lifeGrades={interpretation.lifeGrades}
           johu={interpretation.johu}
           lifeStages={interpretation.lifeStages}
+          meetingTiming={interpretation.meetingTiming}
+          resultText={interpretation.resultText}
           isHourExcluded={interpretation.isHourExcluded}
           onOtherFortune={handleOtherFortune}
-          onUnlock={() => setScreen("s6")}
         />
       )}
       {screen === "compat-result" && saju && sajuB && compatResult && (
@@ -255,14 +251,6 @@ export default function SajuFlow() {
           sajuB={sajuB}
           result={compatResult}
           onRestart={handleOtherFortune}
-        />
-      )}
-      {screen === "s6" && interpretation && (
-        <UnlockScreen
-          resultText={interpretation.resultText}
-          initiallyUnlocked={adUnlocked}
-          onUnlocked={() => setAdUnlocked(true)}
-          onBack={() => setScreen("s5")}
         />
       )}
     </>

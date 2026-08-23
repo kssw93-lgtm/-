@@ -17,6 +17,7 @@ import {
   type LifeStageDisplay,
   type LifeStageGrade,
   type LuckColorDisplay,
+  type MeetingTiming,
   type MonthRhythmDisplay,
   type PastLife,
   type SinsalDisplay,
@@ -42,9 +43,10 @@ interface Props {
   lifeGrades: LifeStageGrade[];
   johu: JohuAnalysis | null;
   lifeStages: LifeStageDisplay[];
+  meetingTiming: MeetingTiming | null;
+  resultText: string;
   isHourExcluded: boolean;
   onOtherFortune: () => void;
-  onUnlock: () => void;
 }
 
 const CURRENT_MONTH = new Date().getMonth() + 1;
@@ -68,16 +70,36 @@ export default function ResultScreen({
   lifeGrades,
   johu,
   lifeStages,
+  meetingTiming,
+  resultText,
   isHourExcluded,
   onOtherFortune,
-  onUnlock,
 }: Props) {
   const displayName = name.trim() || "당신";
   const [freeSection, ...gatedSections] = sections;
   const styleMeta = getToneStyleMeta(toneStyle);
 
+  function handlePrint() {
+    window.print();
+  }
+
+  async function handleShare() {
+    if (typeof navigator !== "undefined" && "share" in navigator) {
+      try {
+        await navigator.share({ title: "천기누설", text: resultText });
+        return;
+      } catch {
+        // 사용자가 공유를 취소한 경우 등 — 아래 복사 폴백으로 진행
+      }
+    }
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      await navigator.clipboard.writeText(resultText);
+      alert("결과 텍스트를 클립보드에 복사했어요.");
+    }
+  }
+
   return (
-    <div className="flex flex-1 flex-col gap-6 px-6 py-8">
+    <div className="print-area flex flex-1 flex-col gap-6 px-6 py-8">
       <div className="text-center">
         {toneStyle !== "standard" && (
           <span className="mb-2 inline-flex items-center gap-1 rounded-full border border-[color:var(--color-gold)]/30 bg-white/5 px-3 py-1 text-[11px] font-medium text-[color:var(--color-gold-light)]">
@@ -88,6 +110,8 @@ export default function ResultScreen({
           {displayName}님의 {CATEGORY_LABEL[category]}
         </h1>
       </div>
+
+      <AdSlot label="결과 화면 상단 디스플레이 광고" />
 
       <div className="flex gap-3">
         <div className="flex flex-1 items-center gap-2 rounded-xl bg-white/10 px-3 py-2.5">
@@ -134,6 +158,22 @@ export default function ResultScreen({
               <p className="text-base leading-relaxed">{s.text}</p>
             </div>
           ))}
+
+          {meetingTiming && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">인연을 만나기 좋은 날·장소</p>
+              <div className="flex flex-col gap-3">
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">📅 {meetingTiming.dayOfWeek}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/80">{meetingTiming.dayReason}</p>
+                </div>
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">📍 {meetingTiming.place}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/80">{meetingTiming.placeReason}</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {sinsal.length > 0 && (
             <div className="rounded-2xl bg-white/10 p-5">
@@ -245,10 +285,10 @@ export default function ResultScreen({
       )}
 
       {/* 화면별 광고 배치 원칙 09번: 결과 화면에 디스플레이 광고 1개 (결과 텍스트를 가리지 않는 위치) */}
-      <AdSlot label="결과 화면 디스플레이 광고" />
+      <AdSlot label="결과 화면 하단 디스플레이 광고" />
       <FreeAdsNotice />
 
-      <div className="mt-auto flex flex-col gap-3">
+      <div className="no-print mt-auto flex flex-col gap-3">
         <button
           onClick={onOtherFortune}
           className="w-full rounded-full bg-[color:var(--color-gold)] px-8 py-4 text-base font-semibold text-[#241a08] transition hover:brightness-110 active:scale-95"
@@ -257,13 +297,13 @@ export default function ResultScreen({
         </button>
         <div className="flex gap-3">
           <button
-            onClick={onUnlock}
+            onClick={handlePrint}
             className="flex-1 rounded-full bg-white/10 px-4 py-3 text-sm font-medium transition hover:bg-white/20 active:scale-95"
           >
             PDF로 저장
           </button>
           <button
-            onClick={onUnlock}
+            onClick={handleShare}
             className="flex-1 rounded-full bg-white/10 px-4 py-3 text-sm font-medium transition hover:bg-white/20 active:scale-95"
           >
             공유하기
