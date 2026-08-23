@@ -1,6 +1,9 @@
 import type { BranchId, FourPillars, StemId } from "./types";
 
-export type SinsalId = "cheoneulgwiin" | "yeokma" | "dohwa" | "yangin" | "hwagae" | "munchang";
+export type SinsalId =
+  | "cheoneulgwiin" | "yeokma" | "dohwa" | "yangin" | "hwagae" | "munchang"
+  | "geopsal" | "jaesal" | "cheonsal" | "jisal" | "wolsal"
+  | "mangsinsal" | "jangseongsal" | "banansal" | "yukhaesal";
 
 /**
  * 신살(神殺)은 고정된 전통 대조표를 기반으로 한 "존재 여부" 계산이다(계산 규칙서 58, 59번의
@@ -17,12 +20,44 @@ const CHEONEUL_TABLE: Record<StemId, BranchId[]> = {
   ren: ["si", "mao"], gui: ["si", "mao"],
 };
 
-// 역마살/도화살/화개살: 년지/일지 삼합 그룹 → 각 지지
-const SAMHAP_GROUPS: { members: BranchId[]; yeokma: BranchId; dohwa: BranchId; hwagae: BranchId }[] = [
-  { members: ["shen", "zi", "chen"], yeokma: "yin", dohwa: "you", hwagae: "chen" },
-  { members: ["hai", "mao", "wei"], yeokma: "si", dohwa: "zi", hwagae: "wei" },
-  { members: ["yin", "wu", "xu"], yeokma: "shen", dohwa: "mao", hwagae: "xu" },
-  { members: ["si", "you", "chou"], yeokma: "hai", dohwa: "wu", hwagae: "chou" },
+// 십이신살: 일지 삼합 그룹 → 12개 지지 전부. 겁살부터 화개살까지 순서대로 배치되며,
+// 기존에 검증된 역마·년살(도화)·화개 세 지점을 교차검증 기준점으로 삼아 나머지 9개를 확정했다.
+interface SamhapGroup {
+  members: BranchId[];
+  geopsal: BranchId;
+  jaesal: BranchId;
+  cheonsal: BranchId;
+  jisal: BranchId;
+  dohwa: BranchId; // 년살
+  wolsal: BranchId;
+  mangsinsal: BranchId;
+  jangseongsal: BranchId;
+  banansal: BranchId;
+  yeokma: BranchId;
+  yukhaesal: BranchId;
+  hwagae: BranchId;
+}
+const SAMHAP_GROUPS: SamhapGroup[] = [
+  {
+    members: ["shen", "zi", "chen"],
+    geopsal: "si", jaesal: "wu", cheonsal: "wei", jisal: "shen", dohwa: "you", wolsal: "xu",
+    mangsinsal: "hai", jangseongsal: "zi", banansal: "chou", yeokma: "yin", yukhaesal: "mao", hwagae: "chen",
+  },
+  {
+    members: ["hai", "mao", "wei"],
+    geopsal: "shen", jaesal: "you", cheonsal: "xu", jisal: "hai", dohwa: "zi", wolsal: "chou",
+    mangsinsal: "yin", jangseongsal: "mao", banansal: "chen", yeokma: "si", yukhaesal: "wu", hwagae: "wei",
+  },
+  {
+    members: ["yin", "wu", "xu"],
+    geopsal: "hai", jaesal: "zi", cheonsal: "chou", jisal: "yin", dohwa: "mao", wolsal: "chen",
+    mangsinsal: "si", jangseongsal: "wu", banansal: "wei", yeokma: "shen", yukhaesal: "you", hwagae: "xu",
+  },
+  {
+    members: ["si", "you", "chou"],
+    geopsal: "yin", jaesal: "mao", cheonsal: "chen", jisal: "si", dohwa: "wu", wolsal: "wei",
+    mangsinsal: "shen", jangseongsal: "you", banansal: "xu", yeokma: "hai", yukhaesal: "zi", hwagae: "chou",
+  },
 ];
 
 // 양인살: 일간(양간만) → 제왕지. 갑묘·병오·무오·경유·임자 — 음간 양인은 유파별로 갈려 제외.
@@ -59,9 +94,23 @@ export function computeSinsal(pillars: FourPillars): SinsalHit[] {
 
   const group = SAMHAP_GROUPS.find((g) => g.members.includes(dayBranch));
   if (group) {
-    if (branches.includes(group.yeokma)) hits.push({ id: "yeokma", matchedBranch: group.yeokma });
-    if (branches.includes(group.dohwa)) hits.push({ id: "dohwa", matchedBranch: group.dohwa });
-    if (branches.includes(group.hwagae)) hits.push({ id: "hwagae", matchedBranch: group.hwagae });
+    const samhapChecks: { id: SinsalId; branch: BranchId }[] = [
+      { id: "geopsal", branch: group.geopsal },
+      { id: "jaesal", branch: group.jaesal },
+      { id: "cheonsal", branch: group.cheonsal },
+      { id: "jisal", branch: group.jisal },
+      { id: "dohwa", branch: group.dohwa },
+      { id: "wolsal", branch: group.wolsal },
+      { id: "mangsinsal", branch: group.mangsinsal },
+      { id: "jangseongsal", branch: group.jangseongsal },
+      { id: "banansal", branch: group.banansal },
+      { id: "yeokma", branch: group.yeokma },
+      { id: "yukhaesal", branch: group.yukhaesal },
+      { id: "hwagae", branch: group.hwagae },
+    ];
+    for (const { id, branch } of samhapChecks) {
+      if (branches.includes(branch)) hits.push({ id, matchedBranch: branch });
+    }
   }
 
   const yanginTarget = YANGIN_TABLE[dayStem];

@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { computeSaju } from "@/lib/calc";
 import { computeGyeokguk, strengthBand, computeDailyFortune } from "@/lib/interpretation";
-import { computeSinsal } from "@/lib/calc/sinsal";
+import { computeSinsal, type SinsalId } from "@/lib/calc/sinsal";
+import type { BranchId, FourPillars } from "@/lib/calc/types";
 
 const SAMPLE = {
   year: 2015, month: 6, day: 21, hour: 8, minute: 30,
@@ -84,4 +85,75 @@ describe("신살 계산", () => {
     const hits = computeSinsal(pillars);
     expect(hits.some((h) => h.id === "munchang" && h.matchedBranch === "si")).toBe(true);
   });
+
+  // 십이신살 전체 48칸(4개 삼합 그룹 × 12지지) 교차검증표. 출처: guide.8-codes.com 십이신살 강의.
+  // 기존에 검증된 역마·년살(도화)·화개 세 지점이 이 표와 정확히 일치함을 먼저 확인한 뒤 확정했다.
+  const TWELVE_SINSAL_TABLE: { groupDayBranch: BranchId; branch: BranchId; id: SinsalId }[] = [
+    // 申子辰
+    { groupDayBranch: "zi", branch: "si", id: "geopsal" },
+    { groupDayBranch: "zi", branch: "wu", id: "jaesal" },
+    { groupDayBranch: "zi", branch: "wei", id: "cheonsal" },
+    { groupDayBranch: "zi", branch: "shen", id: "jisal" },
+    { groupDayBranch: "zi", branch: "you", id: "dohwa" },
+    { groupDayBranch: "zi", branch: "xu", id: "wolsal" },
+    { groupDayBranch: "zi", branch: "hai", id: "mangsinsal" },
+    { groupDayBranch: "zi", branch: "zi", id: "jangseongsal" },
+    { groupDayBranch: "zi", branch: "chou", id: "banansal" },
+    { groupDayBranch: "zi", branch: "yin", id: "yeokma" },
+    { groupDayBranch: "zi", branch: "mao", id: "yukhaesal" },
+    { groupDayBranch: "zi", branch: "chen", id: "hwagae" },
+    // 亥卯未
+    { groupDayBranch: "mao", branch: "shen", id: "geopsal" },
+    { groupDayBranch: "mao", branch: "you", id: "jaesal" },
+    { groupDayBranch: "mao", branch: "xu", id: "cheonsal" },
+    { groupDayBranch: "mao", branch: "hai", id: "jisal" },
+    { groupDayBranch: "mao", branch: "zi", id: "dohwa" },
+    { groupDayBranch: "mao", branch: "chou", id: "wolsal" },
+    { groupDayBranch: "mao", branch: "yin", id: "mangsinsal" },
+    { groupDayBranch: "mao", branch: "mao", id: "jangseongsal" },
+    { groupDayBranch: "mao", branch: "chen", id: "banansal" },
+    { groupDayBranch: "mao", branch: "si", id: "yeokma" },
+    { groupDayBranch: "mao", branch: "wu", id: "yukhaesal" },
+    { groupDayBranch: "mao", branch: "wei", id: "hwagae" },
+    // 寅午戌
+    { groupDayBranch: "wu", branch: "hai", id: "geopsal" },
+    { groupDayBranch: "wu", branch: "zi", id: "jaesal" },
+    { groupDayBranch: "wu", branch: "chou", id: "cheonsal" },
+    { groupDayBranch: "wu", branch: "yin", id: "jisal" },
+    { groupDayBranch: "wu", branch: "mao", id: "dohwa" },
+    { groupDayBranch: "wu", branch: "chen", id: "wolsal" },
+    { groupDayBranch: "wu", branch: "si", id: "mangsinsal" },
+    { groupDayBranch: "wu", branch: "wu", id: "jangseongsal" },
+    { groupDayBranch: "wu", branch: "wei", id: "banansal" },
+    { groupDayBranch: "wu", branch: "shen", id: "yeokma" },
+    { groupDayBranch: "wu", branch: "you", id: "yukhaesal" },
+    { groupDayBranch: "wu", branch: "xu", id: "hwagae" },
+    // 巳酉丑
+    { groupDayBranch: "you", branch: "yin", id: "geopsal" },
+    { groupDayBranch: "you", branch: "mao", id: "jaesal" },
+    { groupDayBranch: "you", branch: "chen", id: "cheonsal" },
+    { groupDayBranch: "you", branch: "si", id: "jisal" },
+    { groupDayBranch: "you", branch: "wu", id: "dohwa" },
+    { groupDayBranch: "you", branch: "wei", id: "wolsal" },
+    { groupDayBranch: "you", branch: "shen", id: "mangsinsal" },
+    { groupDayBranch: "you", branch: "you", id: "jangseongsal" },
+    { groupDayBranch: "you", branch: "xu", id: "banansal" },
+    { groupDayBranch: "you", branch: "hai", id: "yeokma" },
+    { groupDayBranch: "you", branch: "zi", id: "yukhaesal" },
+    { groupDayBranch: "you", branch: "chou", id: "hwagae" },
+  ];
+
+  it.each(TWELVE_SINSAL_TABLE)(
+    "십이신살: 일지 $groupDayBranch 그룹은 $branch 지지에서 $id 검출",
+    ({ groupDayBranch, branch, id }) => {
+      const pillars: FourPillars = {
+        yearPillar: { stem: "jia", branch, hanja: "" },
+        monthPillar: { stem: "bing", branch: "xu", hanja: "" },
+        dayPillar: { stem: "wu", branch: groupDayBranch, hanja: "" },
+        hourPillar: null,
+      };
+      const hits = computeSinsal(pillars);
+      expect(hits.some((h) => h.id === id && h.matchedBranch === branch)).toBe(true);
+    }
+  );
 });
