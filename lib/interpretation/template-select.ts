@@ -132,8 +132,21 @@ export function selectRhythmTemplate(category: Category, group: PatternGroup): R
   return RHYTHM_TEMPLATES.find((t) => t.category === category && t.pattern === group) ?? null;
 }
 
-export function selectDaeunFlowTemplate(category: Category, group: PatternGroup): Template | null {
-  return DAEUN_FLOW_TEMPLATES.find((t) => t.category === category && t.pattern === group) ?? null;
+/**
+ * 대운은 한 사람의 인생에 같은 패턴 그룹이 여러 번(비인접 시기에) 등장할 수 있는데,
+ * 그때마다 문구가 완전히 동일하면 반복처럼 느껴진다는 피드백을 반영해 그룹당 버전을 2개
+ * 이상 두고, 대운 인덱스까지 섞은 시드로 같은 사람이라도 서로 다른 대운 구간엔 다른
+ * 버전이 나오게 한다(같은 사람+같은 대운 구간은 항상 같은 결과 — 결정론 유지).
+ */
+export function selectDaeunFlowTemplate(
+  category: Category,
+  group: PatternGroup,
+  seedInput: string
+): Template | null {
+  const candidates = DAEUN_FLOW_TEMPLATES.filter((t) => t.category === category && t.pattern === group);
+  if (candidates.length === 0) return null;
+  const index = hashSeed(seedInput) % candidates.length;
+  return candidates[index];
 }
 
 export function selectIntroTemplate(category: Category, birthKey: string): Template {

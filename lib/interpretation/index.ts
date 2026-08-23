@@ -220,7 +220,8 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
   const dayStem = saju.pillars.dayPillar.stem;
   const daeunFlow: DaeunFlowDisplay[] = saju.majorLuck.flatMap((lp) => {
     const tenGod = getTenGod(dayStem, lp.pillar.stem);
-    const groupTemplate = selectDaeunFlowTemplate(category, GROUP_BY_TEN_GOD[tenGod]);
+    const seedInput = `${birthKey}|${category}|daeunflow|${lp.index}`;
+    const groupTemplate = selectDaeunFlowTemplate(category, GROUP_BY_TEN_GOD[tenGod], seedInput);
     if (!groupTemplate) return [];
     return [
       {

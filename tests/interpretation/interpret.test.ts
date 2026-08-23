@@ -95,6 +95,13 @@ describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠
     expect(result.daeunFlow.filter((d) => d.isCurrent).length).toBeLessThanOrEqual(1);
   });
 
+  it("대운 흐름은 결정론적이다(같은 사람은 항상 같은 텍스트 조합)", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const a = interpretSaju(saju, "career").daeunFlow.map((d) => d.text);
+    const b = interpretSaju(saju, "career").daeunFlow.map((d) => d.text);
+    expect(a).toEqual(b);
+  });
+
   it("월별 리듬은 12개월(또는 데이터 범위 내) 모두 라벨/팁을 가진다", () => {
     const saju = computeSaju(SAMPLE_INPUT);
     const result = interpretSaju(saju, "career");
