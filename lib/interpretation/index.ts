@@ -11,6 +11,8 @@ import { computeLifeGrades, type LifeStageGrade } from "./life-grade";
 import { computeJohu, type JohuAnalysis } from "./johu";
 import { computeLifeStages, type LifeStageDisplay } from "./life-stage";
 import { computeMeetingTiming, type MeetingTiming } from "./meeting-timing";
+import { computeCoreSummary, type CoreSummary } from "./core-summary";
+import { getIncomeSource, type IncomeSource } from "./income-source";
 import { computeSinsal } from "@/lib/calc/sinsal";
 import sinsalJson from "@/data/sinsal.json";
 import type { SinsalId } from "@/lib/calc/sinsal";
@@ -51,6 +53,8 @@ export * from "./tone-style";
 export * from "./johu";
 export * from "./life-stage";
 export * from "./meeting-timing";
+export * from "./core-summary";
+export * from "./income-source";
 
 export interface MonthRhythmDisplay {
   month: number;
@@ -101,6 +105,10 @@ export interface InterpretationResult {
   lifeStages: LifeStageDisplay[];
   /** 인연 만나기 좋은 날·장소 — 연애운/재회운/종합사주에서만 채워진다 */
   meetingTiming: MeetingTiming | null;
+  /** 결과 화면 맨 위 압축 요약(강점/주의/키워드) — 모든 카테고리 공통 */
+  coreSummary: CoreSummary;
+  /** 나에게 유리한 수입 구조 — 재물운/종합사주에서만 채워진다 */
+  incomeSource: IncomeSource | null;
   /** PDF 저장/공유용으로 섹션을 하나로 합친 텍스트 */
   resultText: string;
   isHourExcluded: boolean;
@@ -124,14 +132,15 @@ interface CategoryFeatures {
   pastLife: boolean; // 전생 보기
   lifeStages: boolean; // 초년/중년/말년운
   meetingTiming: boolean; // 인연 만나기 좋은 날·장소
+  incomeSource: boolean; // 나에게 유리한 수입 구조 (재물운 전용)
 }
 
 const CATEGORY_FEATURES: Record<Category, CategoryFeatures> = {
-  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true },
-  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true },
-  career: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false },
-  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false },
-  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true },
+  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false },
+  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false },
+  career: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false },
+  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true },
+  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true, incomeSource: true },
 };
 
 /**
@@ -159,6 +168,7 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
 
   const vars = { name: saju.input.name, dayStem: saju.pillars.dayPillar.stem };
   const categoryLabel = `${CATEGORY_LABEL[category]} 핵심 특징`;
+  const coreSummary = computeCoreSummary(group);
 
   // 종합사주만 원국 전체를 훑는 공통 블록(일간총평/기본성향/원국관계)으로 시작하고,
   // 나머지 카테고리는 곧바로 그 주제만의 핵심 콘텐츠로 시작한다 — 카테고리를 바꿔가며
@@ -239,6 +249,8 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
     johu,
     lifeStages,
     meetingTiming: features.meetingTiming ? computeMeetingTiming(saju) : null,
+    coreSummary,
+    incomeSource: features.incomeSource ? getIncomeSource(group) : null,
     resultText: sections.map((s) => `[${s.heading}]\n${s.text}`).join("\n\n"),
     isHourExcluded: saju.pillars.hourPillar === null,
   };

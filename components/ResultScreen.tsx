@@ -2,7 +2,7 @@
 
 import AdSlot from "./AdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
-import LifeGradeCard from "./LifeGradeCard";
+import LifeGradeCard, { GRADE_COLOR } from "./LifeGradeCard";
 import PastLifeCard from "./PastLifeCard";
 import SajuChart from "./SajuChart";
 import type { Category, ToneStyleId } from "@/lib/session";
@@ -13,6 +13,8 @@ import {
   type DaeunFlowDisplay,
   type DailyFortune,
   type Gyeokguk,
+  type CoreSummary,
+  type IncomeSource,
   type JohuAnalysis,
   type LifeStageDisplay,
   type LifeStageGrade,
@@ -44,6 +46,8 @@ interface Props {
   johu: JohuAnalysis | null;
   lifeStages: LifeStageDisplay[];
   meetingTiming: MeetingTiming | null;
+  coreSummary: CoreSummary;
+  incomeSource: IncomeSource | null;
   resultText: string;
   isHourExcluded: boolean;
   onOtherFortune: () => void;
@@ -71,6 +75,8 @@ export default function ResultScreen({
   johu,
   lifeStages,
   meetingTiming,
+  coreSummary,
+  incomeSource,
   resultText,
   isHourExcluded,
   onOtherFortune,
@@ -78,6 +84,7 @@ export default function ResultScreen({
   const displayName = name.trim() || "당신";
   const [freeSection, ...gatedSections] = sections;
   const styleMeta = getToneStyleMeta(toneStyle);
+  const currentGrade = lifeGrades.find((g) => g.isCurrent) ?? lifeGrades[0] ?? null;
 
   function handlePrint() {
     window.print();
@@ -109,6 +116,50 @@ export default function ResultScreen({
         <h1 className="text-2xl font-bold">
           {displayName}님의 {CATEGORY_LABEL[category]}
         </h1>
+      </div>
+
+      {currentGrade && (
+        <div className="rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-b from-[color:var(--color-gold)]/15 to-white/5 p-5 text-center">
+          <p className="text-4xl font-black" style={{ color: GRADE_COLOR[currentGrade.overallGrade] }}>
+            {currentGrade.overallGrade}
+          </p>
+          <p className="text-lg font-bold">{currentGrade.title}</p>
+          <p className="text-xs text-white/50">{currentGrade.titleDesc}</p>
+          <div className="mt-3 grid grid-cols-4 gap-2">
+            {currentGrade.axes.map((a) => (
+              <div key={a.label} className="rounded-xl bg-white/5 py-2 text-center">
+                <p className="text-[10px] text-white/40">{a.label}</p>
+                <p className="text-sm font-bold" style={{ color: GRADE_COLOR[a.grade] }}>
+                  {a.grade}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="rounded-2xl bg-white/10 p-5">
+        <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">사주 핵심 요약</p>
+        <div className="flex flex-col gap-2 text-sm">
+          <p>
+            <span className="text-white/50">🔥 강점 </span>
+            {coreSummary.strengths.join(" · ")}
+          </p>
+          <p>
+            <span className="text-white/50">⚠️ 주의 </span>
+            {coreSummary.cautions.join(" · ")}
+          </p>
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {coreSummary.keywords.map((k) => (
+              <span
+                key={k}
+                className="rounded-full bg-[color:var(--color-gold)]/15 px-2.5 py-1 text-xs text-[color:var(--color-gold-light)]"
+              >
+                #{k}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
 
       <AdSlot label="결과 화면 상단 디스플레이 광고" />
@@ -152,6 +203,29 @@ export default function ResultScreen({
       </div>
 
       <div className="flex flex-col gap-4">
+          {incomeSource && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">나에게 유리한 수입 구조</p>
+              <div className="flex flex-col gap-1.5 text-sm">
+                {incomeSource.sources.map((s, i) => (
+                  <p key={s}>
+                    {i + 1}. {s}
+                  </p>
+                ))}
+              </div>
+              <div className="mt-3 flex flex-col gap-2 border-t border-white/10 pt-3 text-sm leading-relaxed text-white/80">
+                <p>
+                  <span className="text-white/50">💰 들어오는 흐름 </span>
+                  {incomeSource.flowIn}
+                </p>
+                <p>
+                  <span className="text-white/50">💸 새기 쉬운 지점 </span>
+                  {incomeSource.flowOut}
+                </p>
+              </div>
+            </div>
+          )}
+
           {gatedSections.map((s) => (
             <div key={s.heading} className="rounded-2xl bg-white/10 p-5">
               <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{s.heading}</p>
@@ -161,14 +235,20 @@ export default function ResultScreen({
 
           {meetingTiming && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">인연을 만나기 좋은 날·장소</p>
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">
+                {category === "reunion" ? "연락하기 좋은 날·다시 만나기 좋은 환경" : "인연을 만나기 좋은 날·장소"}
+              </p>
               <div className="flex flex-col gap-3">
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">📅 {meetingTiming.dayOfWeek}</p>
+                  <p className="text-sm font-bold">
+                    {category === "reunion" ? "📱" : "📅"} {meetingTiming.dayOfWeek}
+                  </p>
                   <p className="mt-1 text-sm leading-relaxed text-white/80">{meetingTiming.dayReason}</p>
                 </div>
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">📍 {meetingTiming.place}</p>
+                  <p className="text-sm font-bold">
+                    {category === "reunion" ? "🤝" : "📍"} {meetingTiming.place}
+                  </p>
                   <p className="mt-1 text-sm leading-relaxed text-white/80">{meetingTiming.placeReason}</p>
                 </div>
               </div>

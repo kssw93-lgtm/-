@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { LifeStageGrade } from "@/lib/interpretation/life-grade";
 
-const GRADE_COLOR: Record<string, string> = {
+export const GRADE_COLOR: Record<string, string> = {
   SS: "#e879f9",
   S: "#c9a35c",
   "A+": "#e8cd94",

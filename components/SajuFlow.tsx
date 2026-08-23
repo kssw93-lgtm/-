@@ -238,6 +238,8 @@ export default function SajuFlow() {
           johu={interpretation.johu}
           lifeStages={interpretation.lifeStages}
           meetingTiming={interpretation.meetingTiming}
+          coreSummary={interpretation.coreSummary}
+          incomeSource={interpretation.incomeSource}
           resultText={interpretation.resultText}
           isHourExcluded={interpretation.isHourExcluded}
           onOtherFortune={handleOtherFortune}

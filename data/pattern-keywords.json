@@ -1,0 +1,7 @@
+{
+  "bigeob": { "strengths": ["결단력", "독립심", "추진력"], "cautions": ["고집", "직설적인 표현"], "keywords": ["독립", "도전", "주도"] },
+  "siksang": { "strengths": ["표현력", "창의력", "순발력"], "cautions": ["산만함", "즉흥적인 결정"], "keywords": ["표현", "창의", "확장"] },
+  "jaeseong": { "strengths": ["실행력", "현실 감각", "목표 지향"], "cautions": ["조급함", "일 중심으로 치우침"], "keywords": ["성취", "실리", "추진"] },
+  "gwanseong": { "strengths": ["책임감", "신뢰", "리더십"], "cautions": ["경직됨", "완벽주의"], "keywords": ["책임", "신뢰", "성장"] },
+  "inseong": { "strengths": ["통찰력", "학습력", "안정감"], "cautions": ["결정을 미루는 습관", "의존적인 성향"], "keywords": ["배움", "안정", "성찰"] }
+}
