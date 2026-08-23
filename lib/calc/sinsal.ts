@@ -1,6 +1,6 @@
 import type { BranchId, FourPillars, StemId } from "./types";
 
-export type SinsalId = "cheoneulgwiin" | "yeokma" | "dohwa";
+export type SinsalId = "cheoneulgwiin" | "yeokma" | "dohwa" | "yangin" | "hwagae";
 
 /**
  * 신살(神殺)은 고정된 전통 대조표를 기반으로 한 "존재 여부" 계산이다(계산 규칙서 58, 59번의
@@ -17,13 +17,18 @@ const CHEONEUL_TABLE: Record<StemId, BranchId[]> = {
   ren: ["si", "mao"], gui: ["si", "mao"],
 };
 
-// 역마살: 년지/일지 삼합 그룹 → 역마 지지
-const SAMHAP_GROUPS: { members: BranchId[]; yeokma: BranchId; dohwa: BranchId }[] = [
-  { members: ["shen", "zi", "chen"], yeokma: "yin", dohwa: "you" },
-  { members: ["hai", "mao", "wei"], yeokma: "si", dohwa: "zi" },
-  { members: ["yin", "wu", "xu"], yeokma: "shen", dohwa: "mao" },
-  { members: ["si", "you", "chou"], yeokma: "hai", dohwa: "wu" },
+// 역마살/도화살/화개살: 년지/일지 삼합 그룹 → 각 지지
+const SAMHAP_GROUPS: { members: BranchId[]; yeokma: BranchId; dohwa: BranchId; hwagae: BranchId }[] = [
+  { members: ["shen", "zi", "chen"], yeokma: "yin", dohwa: "you", hwagae: "chen" },
+  { members: ["hai", "mao", "wei"], yeokma: "si", dohwa: "zi", hwagae: "wei" },
+  { members: ["yin", "wu", "xu"], yeokma: "shen", dohwa: "mao", hwagae: "xu" },
+  { members: ["si", "you", "chou"], yeokma: "hai", dohwa: "wu", hwagae: "chou" },
 ];
+
+// 양인살: 일간(양간만) → 제왕지. 갑묘·병오·무오·경유·임자 — 음간 양인은 유파별로 갈려 제외.
+const YANGIN_TABLE: Partial<Record<StemId, BranchId>> = {
+  jia: "mao", bing: "wu", wu: "wu", geng: "you", ren: "zi",
+};
 
 export interface SinsalHit {
   id: SinsalId;
@@ -50,6 +55,12 @@ export function computeSinsal(pillars: FourPillars): SinsalHit[] {
   if (group) {
     if (branches.includes(group.yeokma)) hits.push({ id: "yeokma", matchedBranch: group.yeokma });
     if (branches.includes(group.dohwa)) hits.push({ id: "dohwa", matchedBranch: group.dohwa });
+    if (branches.includes(group.hwagae)) hits.push({ id: "hwagae", matchedBranch: group.hwagae });
+  }
+
+  const yanginTarget = YANGIN_TABLE[dayStem];
+  if (yanginTarget && branches.includes(yanginTarget)) {
+    hits.push({ id: "yangin", matchedBranch: yanginTarget });
   }
 
   return hits;

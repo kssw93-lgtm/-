@@ -51,4 +51,26 @@ describe("신살 계산", () => {
     const hits = computeSinsal(saju.pillars);
     expect(Array.isArray(hits)).toBe(true); // 존재 여부는 케이스마다 다르므로 배열 형태만 검증
   });
+
+  it("양인살: 일간이 갑이고 지지에 묘가 있으면 검출된다(고전 갑묘 양인 표)", () => {
+    const pillars = {
+      yearPillar: { stem: "jia" as const, branch: "mao" as const, hanja: "甲卯" },
+      monthPillar: { stem: "bing" as const, branch: "yin" as const, hanja: "丙寅" },
+      dayPillar: { stem: "jia" as const, branch: "zi" as const, hanja: "甲子" },
+      hourPillar: { stem: "ding" as const, branch: "mao" as const, hanja: "丁卯" },
+    };
+    const hits = computeSinsal(pillars);
+    expect(hits.some((h) => h.id === "yangin" && h.matchedBranch === "mao")).toBe(true);
+  });
+
+  it("화개살: 일지가 신자진 그룹(예: 자)이면 그룹의 고지인 진이 있을 때 검출된다", () => {
+    const pillars = {
+      yearPillar: { stem: "wu" as const, branch: "chen" as const, hanja: "戊辰" },
+      monthPillar: { stem: "bing" as const, branch: "yin" as const, hanja: "丙寅" },
+      dayPillar: { stem: "jia" as const, branch: "zi" as const, hanja: "甲子" },
+      hourPillar: { stem: "ding" as const, branch: "mao" as const, hanja: "丁卯" },
+    };
+    const hits = computeSinsal(pillars);
+    expect(hits.some((h) => h.id === "hwagae" && h.matchedBranch === "chen")).toBe(true);
+  });
 });
