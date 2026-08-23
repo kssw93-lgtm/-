@@ -73,4 +73,15 @@ describe("신살 계산", () => {
     const hits = computeSinsal(pillars);
     expect(hits.some((h) => h.id === "hwagae" && h.matchedBranch === "chen")).toBe(true);
   });
+
+  it("문창귀인: 일간이 갑이고 지지에 사가 있으면 검출된다(고전 갑사 문창 표)", () => {
+    const pillars = {
+      yearPillar: { stem: "ji" as const, branch: "si" as const, hanja: "己巳" },
+      monthPillar: { stem: "bing" as const, branch: "yin" as const, hanja: "丙寅" },
+      dayPillar: { stem: "jia" as const, branch: "zi" as const, hanja: "甲子" },
+      hourPillar: { stem: "ding" as const, branch: "mao" as const, hanja: "丁卯" },
+    };
+    const hits = computeSinsal(pillars);
+    expect(hits.some((h) => h.id === "munchang" && h.matchedBranch === "si")).toBe(true);
+  });
 });

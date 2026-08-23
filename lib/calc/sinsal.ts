@@ -1,6 +1,6 @@
 import type { BranchId, FourPillars, StemId } from "./types";
 
-export type SinsalId = "cheoneulgwiin" | "yeokma" | "dohwa" | "yangin" | "hwagae";
+export type SinsalId = "cheoneulgwiin" | "yeokma" | "dohwa" | "yangin" | "hwagae" | "munchang";
 
 /**
  * 신살(神殺)은 고정된 전통 대조표를 기반으로 한 "존재 여부" 계산이다(계산 규칙서 58, 59번의
@@ -28,6 +28,12 @@ const SAMHAP_GROUPS: { members: BranchId[]; yeokma: BranchId; dohwa: BranchId; h
 // 양인살: 일간(양간만) → 제왕지. 갑묘·병오·무오·경유·임자 — 음간 양인은 유파별로 갈려 제외.
 const YANGIN_TABLE: Partial<Record<StemId, BranchId>> = {
   jia: "mao", bing: "wu", wu: "wu", geng: "you", ren: "zi",
+};
+
+// 문창귀인: 일간 → 지지 1개. 갑사·을오·병신·정유·무신·기유·경해·신자·임인·계묘.
+const MUNCHANG_TABLE: Record<StemId, BranchId> = {
+  jia: "si", yi: "wu", bing: "shen", ding: "you", wu: "shen",
+  ji: "you", geng: "hai", xin: "zi", ren: "yin", gui: "mao",
 };
 
 export interface SinsalHit {
@@ -61,6 +67,11 @@ export function computeSinsal(pillars: FourPillars): SinsalHit[] {
   const yanginTarget = YANGIN_TABLE[dayStem];
   if (yanginTarget && branches.includes(yanginTarget)) {
     hits.push({ id: "yangin", matchedBranch: yanginTarget });
+  }
+
+  const munchangTarget = MUNCHANG_TABLE[dayStem];
+  if (branches.includes(munchangTarget)) {
+    hits.push({ id: "munchang", matchedBranch: munchangTarget });
   }
 
   return hits;
