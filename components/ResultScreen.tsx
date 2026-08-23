@@ -19,9 +19,11 @@ import {
   type LifeStageDisplay,
   type LifeStageGrade,
   type LuckColorDisplay,
+  type MeetingChannel,
   type MeetingTiming,
   type MonthRhythmDisplay,
   type PastLife,
+  type WorkStyle,
   type SinsalDisplay,
   type StarSign,
   type ZodiacAnimal,
@@ -46,6 +48,8 @@ interface Props {
   johu: JohuAnalysis | null;
   lifeStages: LifeStageDisplay[];
   meetingTiming: MeetingTiming | null;
+  meetingChannel: MeetingChannel | null;
+  workStyle: WorkStyle | null;
   coreSummary: CoreSummary;
   incomeSource: IncomeSource | null;
   resultText: string;
@@ -75,6 +79,8 @@ export default function ResultScreen({
   johu,
   lifeStages,
   meetingTiming,
+  meetingChannel,
+  workStyle,
   coreSummary,
   incomeSource,
   resultText,
@@ -203,6 +209,23 @@ export default function ResultScreen({
       </div>
 
       <div className="flex flex-col gap-4">
+          {workStyle && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">나의 업무 스타일</p>
+              <p className="text-base font-bold">{workStyle.style}</p>
+              <div className="mt-3 flex flex-col gap-2 text-sm leading-relaxed">
+                <p>
+                  <span className="text-white/50">🟢 잘 맞는 환경 </span>
+                  <span className="text-white/80">{workStyle.goodEnv}</span>
+                </p>
+                <p>
+                  <span className="text-white/50">🔴 피하면 좋은 환경 </span>
+                  <span className="text-white/80">{workStyle.badEnv}</span>
+                </p>
+              </div>
+            </div>
+          )}
+
           {incomeSource && (
             <div className="rounded-2xl bg-white/10 p-5">
               <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">나에게 유리한 수입 구조</p>
@@ -232,6 +255,20 @@ export default function ResultScreen({
               <p className="text-base leading-relaxed">{s.text}</p>
             </div>
           ))}
+
+          {meetingChannel && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
+                {category === "reunion" ? "다시 연결되기 쉬운 방식" : "인연이 들어오는 경로"}
+              </p>
+              <p className="text-base font-bold">{meetingChannel.type}</p>
+              <p className="mt-1 text-sm leading-relaxed text-white/80">{meetingChannel.desc}</p>
+              <p className="mt-3 border-t border-white/10 pt-3 text-sm">
+                <span className="text-white/50">🤍 잘 맞는 상대 </span>
+                {meetingChannel.matchType}
+              </p>
+            </div>
+          )}
 
           {meetingTiming && (
             <div className="rounded-2xl bg-white/10 p-5">

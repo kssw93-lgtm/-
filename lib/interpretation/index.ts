@@ -13,6 +13,8 @@ import { computeLifeStages, type LifeStageDisplay } from "./life-stage";
 import { computeMeetingTiming, type MeetingTiming } from "./meeting-timing";
 import { computeCoreSummary, type CoreSummary } from "./core-summary";
 import { getIncomeSource, type IncomeSource } from "./income-source";
+import { getMeetingChannel, type MeetingChannel } from "./meeting-channel";
+import { getWorkStyle, type WorkStyle } from "./work-style";
 import { computeSinsal } from "@/lib/calc/sinsal";
 import sinsalJson from "@/data/sinsal.json";
 import type { SinsalId } from "@/lib/calc/sinsal";
@@ -55,6 +57,8 @@ export * from "./life-stage";
 export * from "./meeting-timing";
 export * from "./core-summary";
 export * from "./income-source";
+export * from "./meeting-channel";
+export * from "./work-style";
 
 export interface MonthRhythmDisplay {
   month: number;
@@ -109,6 +113,10 @@ export interface InterpretationResult {
   coreSummary: CoreSummary;
   /** 나에게 유리한 수입 구조 — 재물운/종합사주에서만 채워진다 */
   incomeSource: IncomeSource | null;
+  /** 인연이 들어오는 경로 — 연애운/재회운/종합사주에서만 채워진다 */
+  meetingChannel: MeetingChannel | null;
+  /** 업무 스타일·잘 맞는 환경 — 직업운/종합사주에서만 채워진다 */
+  workStyle: WorkStyle | null;
   /** PDF 저장/공유용으로 섹션을 하나로 합친 텍스트 */
   resultText: string;
   isHourExcluded: boolean;
@@ -133,14 +141,16 @@ interface CategoryFeatures {
   lifeStages: boolean; // 초년/중년/말년운
   meetingTiming: boolean; // 인연 만나기 좋은 날·장소
   incomeSource: boolean; // 나에게 유리한 수입 구조 (재물운 전용)
+  meetingChannel: boolean; // 인연이 들어오는 경로 (연애운/재회운 전용)
+  workStyle: boolean; // 업무 스타일·잘 맞는 환경 (직업운 전용)
 }
 
 const CATEGORY_FEATURES: Record<Category, CategoryFeatures> = {
-  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false },
-  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false },
-  career: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false },
-  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true },
-  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true, incomeSource: true },
+  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false },
+  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false },
+  career: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: true },
+  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true, meetingChannel: false, workStyle: false },
+  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true, incomeSource: true, meetingChannel: true, workStyle: true },
 };
 
 /**
@@ -251,6 +261,8 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
     meetingTiming: features.meetingTiming ? computeMeetingTiming(saju) : null,
     coreSummary,
     incomeSource: features.incomeSource ? getIncomeSource(group) : null,
+    meetingChannel: features.meetingChannel ? getMeetingChannel(group) : null,
+    workStyle: features.workStyle ? getWorkStyle(group) : null,
     resultText: sections.map((s) => `[${s.heading}]\n${s.text}`).join("\n\n"),
     isHourExcluded: saju.pillars.hourPillar === null,
   };
