@@ -27,7 +27,6 @@ export type Screen = "s1" | "style" | "s2" | "s3" | "s4" | "s5" | "s6" | "compat
 
 /** 화면 흐름 설계서 08번: 세션 유지 범위 (localStorage, 서버 저장 없음) */
 const STORAGE_KEY = "saju_birth_form_v1";
-const INTRO_SEEN_KEY = "saju_intro_seen_v1";
 
 export function loadBirthForm(): BirthFormState | null {
   if (typeof window === "undefined") return null;
@@ -42,16 +41,6 @@ export function loadBirthForm(): BirthFormState | null {
 export function saveBirthForm(state: BirthFormState): void {
   if (typeof window === "undefined") return;
   window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-export function hasSeenIntro(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.localStorage.getItem(INTRO_SEEN_KEY) === "1";
-}
-
-export function markIntroSeen(): void {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(INTRO_SEEN_KEY, "1");
 }
 
 const STYLE_KEY = "saju_tone_style_v1";

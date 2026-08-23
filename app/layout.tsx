@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   description: "생년월일시로 보는 무료 사주 - 연애운과 직업운을 바로 확인하세요.",
   verification: {
     google: "5PEFXksjaJ9b4G9tqOhswubHrr7D7nmwwPjtoo1Xph4",
+    other: {
+      "naver-site-verification": "f92c5fd28f8220b9d3e25a0dd26a8e39b1d39006",
+    },
   },
 };
 

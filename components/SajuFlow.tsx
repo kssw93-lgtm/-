@@ -20,10 +20,8 @@ import {
 import { computeCompatibility, type CompatibilityResult } from "@/lib/interpretation/compatibility";
 import {
   DEFAULT_BIRTH_FORM,
-  hasSeenIntro,
   loadBirthForm,
   loadToneStyle,
-  markIntroSeen,
   saveBirthForm,
   saveToneStyle,
   type BirthFormState,
@@ -67,7 +65,9 @@ export default function SajuFlow() {
     const saved = loadBirthForm();
     if (saved) setForm(saved);
     setToneStyle(loadToneStyle());
-    if (hasSeenIntro()) setScreen("style");
+    // 방문할 때마다(새로고침 포함) 브랜드 인트로 화면을 항상 먼저 보여준다 —
+    // 이전에는 localStorage에 방문 기록이 남으면 건너뛰었는데, 그러면 사용자가
+    // "왜 첫 화면 없이 바로 넘어가냐"고 계속 헷갈려해서 그 분기를 제거했다.
   }, []);
 
   function handleSelectToneStyle(style: ToneStyleId) {
@@ -76,7 +76,6 @@ export default function SajuFlow() {
   }
 
   function handleStart() {
-    markIntroSeen();
     setScreen("style");
   }
 
