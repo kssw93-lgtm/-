@@ -103,6 +103,38 @@ describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠
     expect(a).toEqual(b);
   });
 
+  it("연애운 + 연애중: 만남 관련 섹션은 숨기고 관계 조언을 채운다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const single = interpretSaju(saju, "love", "single");
+    const dating = interpretSaju(saju, "love", "dating");
+
+    expect(single.meetingChannel).not.toBeNull();
+    expect(single.meetingTiming).not.toBeNull();
+    expect(single.datingAdvice).toBeNull();
+
+    expect(dating.meetingChannel).toBeNull();
+    expect(dating.meetingTiming).toBeNull();
+    expect(dating.datingAdvice).not.toBeNull();
+    expect((dating.datingAdvice ?? "").length).toBeGreaterThan(0);
+  });
+
+  it("연애 상태를 넘기지 않으면 기존과 동일하게 동작한다(하위 호환)", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const noStatus = interpretSaju(saju, "love");
+    const single = interpretSaju(saju, "love", "single");
+    expect(noStatus.meetingChannel).toEqual(single.meetingChannel);
+    expect(noStatus.meetingTiming).toEqual(single.meetingTiming);
+    expect(noStatus.datingAdvice).toBeNull();
+  });
+
+  it("연애운이 아닌 카테고리는 연애 상태를 넘겨도 영향받지 않는다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const withoutStatus = interpretSaju(saju, "career");
+    const withStatus = interpretSaju(saju, "career", "dating");
+    expect(withStatus.datingAdvice).toBeNull();
+    expect(withStatus.sections).toEqual(withoutStatus.sections);
+  });
+
   it("귀인 대운: 평생 대운 중 천을귀인 지지와 정확히 일치하는 시기만 뽑는다", () => {
     const saju = computeSaju(SAMPLE_INPUT);
     const gwiinDaeun = computeGwiinDaeunList(saju);

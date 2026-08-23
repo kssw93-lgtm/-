@@ -1,5 +1,6 @@
 import type { Category } from "@/lib/interpretation/template-select";
 import type { ToneStyleId } from "@/lib/interpretation/tone-style";
+import type { RelationshipStatus } from "@/lib/interpretation";
 
 export interface BirthFormState {
   name: string;
@@ -23,7 +24,9 @@ export const DEFAULT_BIRTH_FORM: BirthFormState = {
   gender: "female",
 };
 
-export type Screen = "s1" | "style" | "s2" | "s3" | "ad" | "s4" | "s5" | "compat-partner" | "compat-result";
+export type Screen =
+  | "s1" | "style" | "s2" | "love-status" | "s3" | "ad" | "s4" | "s5"
+  | "compat-partner" | "compat-result";
 
 /** 화면 흐름 설계서 08번: 세션 유지 범위 (localStorage, 서버 저장 없음) */
 const STORAGE_KEY = "saju_birth_form_v1";
@@ -56,4 +59,4 @@ export function saveToneStyle(style: ToneStyleId): void {
   window.sessionStorage.setItem(STYLE_KEY, style);
 }
 
-export type { Category, ToneStyleId };
+export type { Category, ToneStyleId, RelationshipStatus };

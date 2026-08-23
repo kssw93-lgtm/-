@@ -17,6 +17,7 @@ import { getMeetingChannel, type MeetingChannel } from "./meeting-channel";
 import { getWorkStyle, type WorkStyle } from "./work-style";
 import { computeWealthMonthRanking, type WealthMonthRanking } from "./wealth-month-ranking";
 import { computeGwiinDaeunList, type GwiinDaeun } from "./life-highlights";
+import { getDatingAdvice } from "./dating-status";
 import { computeSinsal } from "@/lib/calc/sinsal";
 import sinsalJson from "@/data/sinsal.json";
 import type { SinsalId } from "@/lib/calc/sinsal";
@@ -63,6 +64,7 @@ export * from "./meeting-channel";
 export * from "./work-style";
 export * from "./wealth-month-ranking";
 export * from "./life-highlights";
+export * from "./dating-status";
 
 export interface MonthRhythmDisplay {
   month: number;
@@ -125,6 +127,8 @@ export interface InterpretationResult {
   wealthMonthRanking: WealthMonthRanking | null;
   /** 귀인 기운이 드는 대운 시기 — 종합사주에서만 채워진다 */
   gwiinDaeun: GwiinDaeun[];
+  /** 지금 관계에서 눈여겨볼 점 — 연애운에서 "연애 중"을 선택했을 때만 채워진다 */
+  datingAdvice: string | null;
   /** PDF 저장/공유용으로 섹션을 하나로 합친 텍스트 */
   resultText: string;
   isHourExcluded: boolean;
@@ -163,15 +167,25 @@ const CATEGORY_FEATURES: Record<Category, CategoryFeatures> = {
   overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true, incomeSource: true, meetingChannel: true, workStyle: true, wealthMonthRanking: true, gwiinDaeun: true },
 };
 
+export type RelationshipStatus = "single" | "dating";
+
 /**
  * S4 로딩 단계 내부 처리(화면 흐름 설계서 05번 1~5)를 확장: 원국 → 특징값 → pattern ID →
  * 성향 + 카테고리별 + 올해/이번달/월별리듬 + 대운 흐름 + 행운의 컬러·숫자를 조합한다.
  * 여전히 실시간 AI 호출 없이, 실제 계산값(세운·월운·오행분포)에 미리 작성된 텍스트를 매칭할 뿐이다.
+ * relationshipStatus는 연애운(love)에서만 의미가 있다 — 연애 중이면 "인연을 만나는 법"
+ * 대신 "지금 관계를 다루는 법"으로 내용을 바꾼다(사용자가 직접 알려준 사실을 기준으로
+ * 텍스트만 다르게 고를 뿐, 사주 계산 자체는 전혀 달라지지 않는다).
  */
-export function interpretSaju(saju: SajuResult, category: Category): InterpretationResult {
+export function interpretSaju(
+  saju: SajuResult,
+  category: Category,
+  relationshipStatus?: RelationshipStatus
+): InterpretationResult {
   const group = extractDominantTenGodGroup(saju);
   const { strength } = computeStrengthScore(saju);
   const patternId = buildPatternId(group, strength);
+  const isDatingLove = category === "love" && relationshipStatus === "dating";
 
   const birthKey = buildBirthKey({
     year: saju.input.year,
@@ -269,13 +283,14 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
     lifeGrades,
     johu,
     lifeStages,
-    meetingTiming: features.meetingTiming ? computeMeetingTiming(saju) : null,
+    meetingTiming: features.meetingTiming && !isDatingLove ? computeMeetingTiming(saju) : null,
     coreSummary,
     incomeSource: features.incomeSource ? getIncomeSource(group) : null,
-    meetingChannel: features.meetingChannel ? getMeetingChannel(group) : null,
+    meetingChannel: features.meetingChannel && !isDatingLove ? getMeetingChannel(group) : null,
     workStyle: features.workStyle ? getWorkStyle(group) : null,
     wealthMonthRanking: features.wealthMonthRanking ? computeWealthMonthRanking(saju) : null,
     gwiinDaeun: features.gwiinDaeun ? computeGwiinDaeunList(saju) : [],
+    datingAdvice: isDatingLove ? getDatingAdvice(group) : null,
     resultText: sections.map((s) => `[${s.heading}]\n${s.text}`).join("\n\n"),
     isHourExcluded: saju.pillars.hourPillar === null,
   };

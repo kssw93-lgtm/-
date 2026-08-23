@@ -56,6 +56,7 @@ interface Props {
   incomeSource: IncomeSource | null;
   wealthMonthRanking: WealthMonthRanking | null;
   gwiinDaeun: GwiinDaeun[];
+  datingAdvice: string | null;
   resultText: string;
   isHourExcluded: boolean;
   onOtherFortune: () => void;
@@ -89,6 +90,7 @@ export default function ResultScreen({
   incomeSource,
   wealthMonthRanking,
   gwiinDaeun,
+  datingAdvice,
   resultText,
   isHourExcluded,
   onOtherFortune,
@@ -215,6 +217,13 @@ export default function ResultScreen({
       </div>
 
       <div className="flex flex-col gap-4">
+          {datingAdvice && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">지금 관계에서 눈여겨볼 점</p>
+              <p className="text-base leading-relaxed">{datingAdvice}</p>
+            </div>
+          )}
+
           {workStyle && (
             <div className="rounded-2xl bg-white/10 p-5">
               <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">나의 업무 스타일</p>

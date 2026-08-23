@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import IntroScreen from "./IntroScreen";
 import StyleSelectScreen from "./StyleSelectScreen";
 import CategorySelect from "./CategorySelect";
+import RelationshipStatusScreen from "./RelationshipStatusScreen";
 import BirthInfoForm from "./BirthInfoForm";
 import AdWatchScreen from "./AdWatchScreen";
 import CalculatingLoader from "./CalculatingLoader";
@@ -26,6 +27,7 @@ import {
   saveToneStyle,
   type BirthFormState,
   type Category,
+  type RelationshipStatus,
   type Screen,
   type ToneStyleId,
 } from "@/lib/session";
@@ -53,6 +55,7 @@ export default function SajuFlow() {
   const [form, setForm] = useState<BirthFormState>(DEFAULT_BIRTH_FORM);
   const [partnerForm, setPartnerForm] = useState<BirthFormState>({ ...DEFAULT_BIRTH_FORM, gender: "male" });
   const [category, setCategory] = useState<Category | null>(null);
+  const [relationshipStatus, setRelationshipStatus] = useState<RelationshipStatus | null>(null);
   const [toneStyle, setToneStyle] = useState<ToneStyleId>("standard");
   const [saju, setSaju] = useState<SajuResult | null>(null);
   const [sajuB, setSajuB] = useState<SajuResult | null>(null);
@@ -86,7 +89,23 @@ export default function SajuFlow() {
     setFlowMode("solo");
     setCategory(selected);
     setErrorMessage(null);
+    // 연애운은 "지금 연애 중인지"부터 먼저 물어본다 — 상태에 따라 보여줄 내용이 달라지기 때문에
+    // 생년월일이 이미 입력돼 있어도 이 질문만은 건너뛰지 않는다.
+    if (selected === "love") {
+      setScreen("love-status");
+      return;
+    }
     // 08번: 생년월일 등 정보가 이미 입력되어 있으면 S3를 건너뛰고 바로 광고 화면으로 이동한다.
+    if (form.birthDate.trim().length > 0) {
+      setScreen("ad");
+    } else {
+      setScreen("s3");
+    }
+  }
+
+  function handleSelectRelationshipStatus(status: RelationshipStatus) {
+    setRelationshipStatus(status);
+    setErrorMessage(null);
     if (form.birthDate.trim().length > 0) {
       setScreen("ad");
     } else {
@@ -134,7 +153,7 @@ export default function SajuFlow() {
 
       if (!category) return;
       const result = computeSaju(toBirthInput(form));
-      let interpreted = interpretSaju(result, category);
+      let interpreted = interpretSaju(result, category, relationshipStatus ?? undefined);
       const birthKey = buildBirthKey({
         year: result.input.year,
         month: result.input.month,
@@ -200,6 +219,9 @@ export default function SajuFlow() {
       {screen === "s2" && (
         <CategorySelect onSelect={handleSelectCategory} onSelectCompatibility={handleSelectCompatibility} />
       )}
+      {screen === "love-status" && (
+        <RelationshipStatusScreen onSelect={handleSelectRelationshipStatus} onBack={() => setScreen("s2")} />
+      )}
       {screen === "s3" && (
         <BirthInfoForm
           introText={introText}
@@ -244,6 +266,7 @@ export default function SajuFlow() {
           incomeSource={interpretation.incomeSource}
           wealthMonthRanking={interpretation.wealthMonthRanking}
           gwiinDaeun={interpretation.gwiinDaeun}
+          datingAdvice={interpretation.datingAdvice}
           resultText={interpretation.resultText}
           isHourExcluded={interpretation.isHourExcluded}
           onOtherFortune={handleOtherFortune}
