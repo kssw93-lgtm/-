@@ -52,10 +52,10 @@ export default function StyleSelectScreen({ toneStyle, onSelectToneStyle, onNext
                 boxShadow: selected ? `0 0 26px ${accent}45` : "none",
               }}
             >
-              {/* 말풍선 대사 */}
+              {/* 말풍선 대사 — 카드(그리드 컬럼) 너비를 절대 벗어나지 않도록 inset-x로 고정 */}
               <span
                 key={`${s.id}-${selected}`}
-                className="bubble-pop pointer-events-none absolute -top-2 left-1/2 z-10 w-max max-w-[112px] -translate-x-1/2 rounded-lg border border-white/15 bg-[#181229] px-2 py-1.5 text-[10px] leading-tight text-white/85 shadow-lg"
+                className="bubble-pop pointer-events-none absolute -top-2 inset-x-1 z-10 rounded-lg border border-white/15 bg-[#181229] px-1.5 py-1.5 text-center text-[9px] leading-tight text-white/85 shadow-lg"
                 style={{ animationDelay: `${i * 0.12}s` }}
               >
                 {s.preview}
