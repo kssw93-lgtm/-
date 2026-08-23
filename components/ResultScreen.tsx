@@ -26,6 +26,7 @@ import {
   type WorkStyle,
   type SinsalDisplay,
   type StarSign,
+  type WealthMonthRanking,
   type ZodiacAnimal,
 } from "@/lib/interpretation";
 
@@ -52,6 +53,7 @@ interface Props {
   workStyle: WorkStyle | null;
   coreSummary: CoreSummary;
   incomeSource: IncomeSource | null;
+  wealthMonthRanking: WealthMonthRanking | null;
   resultText: string;
   isHourExcluded: boolean;
   onOtherFortune: () => void;
@@ -83,6 +85,7 @@ export default function ResultScreen({
   workStyle,
   coreSummary,
   incomeSource,
+  wealthMonthRanking,
   resultText,
   isHourExcluded,
   onOtherFortune,
@@ -245,6 +248,36 @@ export default function ResultScreen({
                   <span className="text-white/50">💸 새기 쉬운 지점 </span>
                   {incomeSource.flowOut}
                 </p>
+              </div>
+            </div>
+          )}
+
+          {wealthMonthRanking && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">올해 재물 유리한 달 · 조심할 달</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <p className="mb-2 text-xs text-white/50">🟢 유리한 달 TOP3</p>
+                  <div className="flex flex-col gap-2">
+                    {wealthMonthRanking.topMonths.map((m) => (
+                      <div key={m.month} className="rounded-lg bg-white/5 p-2.5">
+                        <p className="text-sm font-bold">{m.month}월 · {m.tag}</p>
+                        <p className="mt-0.5 text-xs leading-relaxed text-white/70">{m.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 text-xs text-white/50">🔴 조심할 달 TOP3</p>
+                  <div className="flex flex-col gap-2">
+                    {wealthMonthRanking.cautionMonths.map((m) => (
+                      <div key={m.month} className="rounded-lg bg-white/5 p-2.5">
+                        <p className="text-sm font-bold">{m.month}월 · {m.tag}</p>
+                        <p className="mt-0.5 text-xs leading-relaxed text-white/70">{m.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           )}

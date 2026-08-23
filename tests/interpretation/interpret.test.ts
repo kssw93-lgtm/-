@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { computeSaju } from "@/lib/calc";
-import { interpretSaju } from "@/lib/interpretation";
+import { interpretSaju, computeWealthMonthRanking } from "@/lib/interpretation";
 import loveTemplates from "@/data/interpretation-templates/love.json";
 import careerTemplates from "@/data/interpretation-templates/career.json";
 import personalityTemplates from "@/data/interpretation-templates/personality.json";
@@ -99,6 +99,28 @@ describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠
     const saju = computeSaju(SAMPLE_INPUT);
     const a = interpretSaju(saju, "career").daeunFlow.map((d) => d.text);
     const b = interpretSaju(saju, "career").daeunFlow.map((d) => d.text);
+    expect(a).toEqual(b);
+  });
+
+  it("재물 월별 순위: TOP3/조심 3개씩, 겹치지 않고, TOP3 점수가 조심 3개보다 항상 높거나 같다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const ranking = computeWealthMonthRanking(saju, 2026);
+    expect(ranking).not.toBeNull();
+    if (!ranking) return;
+    expect(ranking.topMonths.length).toBe(3);
+    expect(ranking.cautionMonths.length).toBe(3);
+    const topMonthNums = new Set(ranking.topMonths.map((m) => m.month));
+    const cautionMonthNums = new Set(ranking.cautionMonths.map((m) => m.month));
+    expect([...topMonthNums].some((m) => cautionMonthNums.has(m))).toBe(false);
+    const minTopScore = Math.min(...ranking.topMonths.map((m) => m.score));
+    const maxCautionScore = Math.max(...ranking.cautionMonths.map((m) => m.score));
+    expect(minTopScore).toBeGreaterThanOrEqual(maxCautionScore);
+  });
+
+  it("재물 월별 순위는 결정론적이다(같은 사람+같은 해는 항상 같은 결과)", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const a = computeWealthMonthRanking(saju, 2026);
+    const b = computeWealthMonthRanking(saju, 2026);
     expect(a).toEqual(b);
   });
 

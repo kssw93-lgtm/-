@@ -242,6 +242,7 @@ export default function SajuFlow() {
           workStyle={interpretation.workStyle}
           coreSummary={interpretation.coreSummary}
           incomeSource={interpretation.incomeSource}
+          wealthMonthRanking={interpretation.wealthMonthRanking}
           resultText={interpretation.resultText}
           isHourExcluded={interpretation.isHourExcluded}
           onOtherFortune={handleOtherFortune}
