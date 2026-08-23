@@ -8,5 +8,20 @@
   { "id": "monthly.career.siksang", "category": "career", "pattern": "siksang", "text": "이번 달은 새로운 아이디어를 실제로 시도해보기 좋은 시기예요." },
   { "id": "monthly.career.jaeseong", "category": "career", "pattern": "jaeseong", "text": "이번 달은 그동안의 노력이 눈에 보이는 성과로 이어지기 쉬운 시기예요." },
   { "id": "monthly.career.gwanseong", "category": "career", "pattern": "gwanseong", "text": "이번 달은 책임 있는 일을 맡거나 인정받기 좋은 시기예요." },
-  { "id": "monthly.career.inseong", "category": "career", "pattern": "inseong", "text": "이번 달은 새로운 걸 배우고 내실을 다지기 좋은 시기예요." }
+  { "id": "monthly.career.inseong", "category": "career", "pattern": "inseong", "text": "이번 달은 새로운 걸 배우고 내실을 다지기 좋은 시기예요." },
+  { "id": "monthly.wealth.bigeob", "category": "wealth", "pattern": "bigeob", "text": "이번 달은 스스로 발로 뛰어야 돈이 따라오는 시기예요." },
+  { "id": "monthly.wealth.siksang", "category": "wealth", "pattern": "siksang", "text": "이번 달은 아이디어로 부수입을 만들어보기 좋은 시기예요." },
+  { "id": "monthly.wealth.jaeseong", "category": "wealth", "pattern": "jaeseong", "text": "이번 달은 그동안 준비한 게 실제 수익으로 이어지기 쉬운 시기예요." },
+  { "id": "monthly.wealth.gwanseong", "category": "wealth", "pattern": "gwanseong", "text": "이번 달은 계약이나 큰 지출 앞에서 신중해야 하는 시기예요." },
+  { "id": "monthly.wealth.inseong", "category": "wealth", "pattern": "inseong", "text": "이번 달은 지출을 줄이고 자산을 지키기 좋은 시기예요." },
+  { "id": "monthly.reunion.bigeob", "category": "reunion", "pattern": "bigeob", "text": "이번 달은 먼저 연락해볼 용기를 내기 좋은 시기예요." },
+  { "id": "monthly.reunion.siksang", "category": "reunion", "pattern": "siksang", "text": "이번 달은 자연스러운 계기가 찾아올 수 있는 시기예요." },
+  { "id": "monthly.reunion.jaeseong", "category": "reunion", "pattern": "jaeseong", "text": "이번 달은 현실적인 대화를 나눠보기 좋은 시기예요." },
+  { "id": "monthly.reunion.gwanseong", "category": "reunion", "pattern": "gwanseong", "text": "이번 달은 관계의 무게를 진지하게 짚어보는 시기예요." },
+  { "id": "monthly.reunion.inseong", "category": "reunion", "pattern": "inseong", "text": "이번 달은 재회보다 스스로를 돌보는 게 먼저인 시기예요." },
+  { "id": "monthly.overall.bigeob", "category": "overall", "pattern": "bigeob", "text": "이번 달은 스스로 결정하고 추진하는 힘이 커지는 시기예요." },
+  { "id": "monthly.overall.siksang", "category": "overall", "pattern": "siksang", "text": "이번 달은 새로운 시도와 표현이 좋은 반응을 얻는 시기예요." },
+  { "id": "monthly.overall.jaeseong", "category": "overall", "pattern": "jaeseong", "text": "이번 달은 그동안의 노력이 결실로 이어지기 쉬운 시기예요." },
+  { "id": "monthly.overall.gwanseong", "category": "overall", "pattern": "gwanseong", "text": "이번 달은 책임 있는 역할을 맡거나 중요한 결정을 내리는 시기예요." },
+  { "id": "monthly.overall.inseong", "category": "overall", "pattern": "inseong", "text": "이번 달은 배우고 정비하며 내실을 다지기 좋은 시기예요." }
 ]

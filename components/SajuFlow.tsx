@@ -5,6 +5,7 @@ import IntroScreen from "./IntroScreen";
 import StyleSelectScreen from "./StyleSelectScreen";
 import CategorySelect from "./CategorySelect";
 import BirthInfoForm from "./BirthInfoForm";
+import AdWatchScreen from "./AdWatchScreen";
 import CalculatingLoader from "./CalculatingLoader";
 import ResultScreen from "./ResultScreen";
 import CompatibilityResultScreen from "./CompatibilityResultScreen";
@@ -87,9 +88,10 @@ export default function SajuFlow() {
     setFlowMode("solo");
     setCategory(selected);
     setErrorMessage(null);
-    // 08번: 생년월일 등 정보가 이미 입력되어 있으면 S3를 건너뛰고 바로 S4로 이동한다.
+    setAdUnlocked(false);
+    // 08번: 생년월일 등 정보가 이미 입력되어 있으면 S3를 건너뛰고 바로 광고 화면으로 이동한다.
     if (form.birthDate.trim().length > 0) {
-      setScreen("s4");
+      setScreen("ad");
     } else {
       setScreen("s3");
     }
@@ -99,6 +101,7 @@ export default function SajuFlow() {
     setFlowMode("compatibility");
     setCategory(null);
     setErrorMessage(null);
+    setAdUnlocked(false);
     setScreen(form.birthDate.trim().length > 0 ? "compat-partner" : "s3");
   }
 
@@ -106,12 +109,17 @@ export default function SajuFlow() {
     setForm(nextForm);
     saveBirthForm(nextForm);
     setErrorMessage(null);
-    setScreen(flowMode === "compatibility" ? "compat-partner" : "s4");
+    setScreen(flowMode === "compatibility" ? "compat-partner" : "ad");
   }
 
   function handleSubmitPartnerForm(nextPartnerForm: BirthFormState) {
     setPartnerForm(nextPartnerForm);
     setErrorMessage(null);
+    setScreen("ad");
+  }
+
+  function handleAdWatched() {
+    setAdUnlocked(true);
     setScreen("s4");
   }
 
@@ -125,7 +133,6 @@ export default function SajuFlow() {
         setSajuB(resultB);
         setCompatResult(compat);
         setErrorMessage(null);
-        setAdUnlocked(false);
         setScreen("compat-result");
         return;
       }
@@ -145,7 +152,6 @@ export default function SajuFlow() {
       setSaju(result);
       setInterpretation(interpreted);
       setErrorMessage(null);
-      setAdUnlocked(false); // 새 결과마다 다시 잠금 상태로 시작
       setScreen("s5");
     } catch (err) {
       // 내부 기술 메시지(데이터 파일 경로 등)는 사용자에게 그대로 노출하지 않는다.
@@ -215,6 +221,7 @@ export default function SajuFlow() {
           onBack={() => setScreen("s2")}
         />
       )}
+      {screen === "ad" && <AdWatchScreen onDone={handleAdWatched} />}
       {screen === "s4" && <CalculatingLoader onDone={runCalculation} />}
       {screen === "s5" && interpretation && saju && (
         <ResultScreen
@@ -234,9 +241,8 @@ export default function SajuFlow() {
           pastLife={interpretation.pastLife}
           lifeGrades={interpretation.lifeGrades}
           johu={interpretation.johu}
+          lifeStages={interpretation.lifeStages}
           isHourExcluded={interpretation.isHourExcluded}
-          adUnlocked={adUnlocked}
-          onAdUnlocked={() => setAdUnlocked(true)}
           onOtherFortune={handleOtherFortune}
           onUnlock={() => setScreen("s6")}
         />
@@ -248,8 +254,6 @@ export default function SajuFlow() {
           sajuA={saju}
           sajuB={sajuB}
           result={compatResult}
-          adUnlocked={adUnlocked}
-          onAdUnlocked={() => setAdUnlocked(true)}
           onRestart={handleOtherFortune}
         />
       )}

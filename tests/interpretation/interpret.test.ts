@@ -60,23 +60,28 @@ describe("전체 카테고리 회귀 테스트 (신규 카테고리 추가 시 �
 });
 
 describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠/별자리)", () => {
-  it("interpretSaju는 확장된 9개 섹션을 반환하고 모두 내용이 채워진다", () => {
+  it("연애운은 원국 공통 블록 없이 카테고리 핵심 콘텐츠로 바로 시작한다", () => {
     const saju = computeSaju(SAMPLE_INPUT);
     const result = interpretSaju(saju, "love");
     expect(result.sections.map((s) => s.heading)).toEqual([
-      "일간 총평 (나의 뿌리)",
-      "기본 성향",
-      "원국 속 특별한 관계",
       "연애운 핵심 특징",
       "올해 연애운",
       "이번달 연애운",
-      "지금의 대운 흐름",
       `${result.zodiacAnimal.animal} 성격`,
       `${result.starSign.name} 성격`,
     ]);
     for (const s of result.sections) {
       expect(s.text.length).toBeGreaterThan(0);
     }
+  });
+
+  it("종합사주만 일간총평/기본성향/원국관계 같은 원국 공통 블록을 포함한다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const result = interpretSaju(saju, "overall");
+    const headings = result.sections.map((s) => s.heading);
+    expect(headings[0]).toBe("일간 총평 (나의 뿌리)");
+    expect(headings).toContain("기본 성향");
+    expect(headings).toContain("원국 속 특별한 관계");
   });
 
   it("대운 흐름(daeunFlow)은 대운 개수만큼 생성되고 각각 텍스트를 가진다", () => {
@@ -100,11 +105,18 @@ describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠
     }
   });
 
-  it("행운의 컬러/숫자는 항상 값을 반환한다", () => {
+  it("행운의 컬러/숫자를 제공하는 카테고리(재물운)는 항상 값을 반환한다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const result = interpretSaju(saju, "wealth");
+    expect(result.luckColor).not.toBeNull();
+    expect(result.luckColor!.color.length).toBeGreaterThan(0);
+    expect(result.luckColor!.numbers.length).toBe(2);
+  });
+
+  it("행운의 컬러를 제공하지 않는 카테고리(연애운)는 null을 반환한다", () => {
     const saju = computeSaju(SAMPLE_INPUT);
     const result = interpretSaju(saju, "love");
-    expect(result.luckColor.color.length).toBeGreaterThan(0);
-    expect(result.luckColor.numbers.length).toBe(2);
+    expect(result.luckColor).toBeNull();
   });
 });
 

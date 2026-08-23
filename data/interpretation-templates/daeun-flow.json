@@ -8,5 +8,20 @@
   { "id": "daeunflow.career.siksang", "category": "career", "pattern": "siksang", "text": "이 대운에는 새로운 시도와 확장이 두드러져요. 하고 싶었던 분야에 뛰어들거나 표현하는 일에서 성과가 나기 좋은 시기예요." },
   { "id": "daeunflow.career.jaeseong", "category": "career", "pattern": "jaeseong", "text": "이 대운에는 실질적인 성과와 보상이 따라오는 흐름이 강해져요. 경제적인 기반을 다지기에 좋은 시기예요." },
   { "id": "daeunflow.career.gwanseong", "category": "career", "pattern": "gwanseong", "text": "이 대운에는 책임과 지위가 커지는 흐름이에요. 승진, 이직, 새로운 직책처럼 무게감 있는 변화가 찾아올 수 있는 시기예요." },
-  { "id": "daeunflow.career.inseong", "category": "career", "pattern": "inseong", "text": "이 대운에는 배움과 내실 다지기가 중심이 되는 흐름이에요. 당장의 성과보다 장기적인 기반을 쌓기에 좋은 시기예요." }
+  { "id": "daeunflow.career.inseong", "category": "career", "pattern": "inseong", "text": "이 대운에는 배움과 내실 다지기가 중심이 되는 흐름이에요. 당장의 성과보다 장기적인 기반을 쌓기에 좋은 시기예요." },
+  { "id": "daeunflow.wealth.bigeob", "category": "wealth", "pattern": "bigeob", "text": "이 대운에는 스스로 벌어들이는 힘이 강해져요. 직접 뛰어들어 만드는 수입 구조가 유리해지는 시기예요." },
+  { "id": "daeunflow.wealth.siksang", "category": "wealth", "pattern": "siksang", "text": "이 대운에는 아이디어와 재능을 활용한 수익 기회가 늘어나요. 새로운 파이프라인을 시도하기 좋은 시기예요." },
+  { "id": "daeunflow.wealth.jaeseong", "category": "wealth", "pattern": "jaeseong", "text": "이 대운에는 실질적인 재물 성과가 뚜렷해지는 흐름이에요. 자산을 불릴 기반을 다지기 좋은 시기예요." },
+  { "id": "daeunflow.wealth.gwanseong", "category": "wealth", "pattern": "gwanseong", "text": "이 대운에는 자산 관리에 대한 책임이 커져요. 큰 계약이나 투자 결정을 신중히 내려야 하는 시기예요." },
+  { "id": "daeunflow.wealth.inseong", "category": "wealth", "pattern": "inseong", "text": "이 대운에는 무리한 확장보다 안정적으로 지키는 흐름이 강해져요. 배움과 준비에 투자하기 좋은 시기예요." },
+  { "id": "daeunflow.reunion.bigeob", "category": "reunion", "pattern": "bigeob", "text": "이 대운에는 스스로 다가가려는 용기가 강해져요. 끊어졌던 인연에 먼저 연락해볼 만한 시기예요." },
+  { "id": "daeunflow.reunion.siksang", "category": "reunion", "pattern": "siksang", "text": "이 대운에는 자연스러운 계기나 우연한 재회가 찾아오기 쉬운 흐름이에요." },
+  { "id": "daeunflow.reunion.jaeseong", "category": "reunion", "pattern": "jaeseong", "text": "이 대운에는 관계를 현실적인 기반 위에 다시 세우는 힘이 강해져요." },
+  { "id": "daeunflow.reunion.gwanseong", "category": "reunion", "pattern": "gwanseong", "text": "이 대운에는 다시 만난 관계에 책임과 무게가 더해지는 흐름이에요." },
+  { "id": "daeunflow.reunion.inseong", "category": "reunion", "pattern": "inseong", "text": "이 대운에는 재회보다 자기 자신을 먼저 이해하고 채우는 게 중심이 되는 시기예요." },
+  { "id": "daeunflow.overall.bigeob", "category": "overall", "pattern": "bigeob", "text": "이 대운에는 스스로 판단하고 밀어붙이는 힘이 강해져요. 인생의 방향을 주도적으로 정하는 시기예요." },
+  { "id": "daeunflow.overall.siksang", "category": "overall", "pattern": "siksang", "text": "이 대운에는 표현력과 도전 정신이 두드러지는 흐름이에요. 새로운 분야로 확장하기 좋은 시기예요." },
+  { "id": "daeunflow.overall.jaeseong", "category": "overall", "pattern": "jaeseong", "text": "이 대운에는 현실적인 성과와 결실이 뚜렷해지는 흐름이에요. 그동안의 노력이 눈에 보이는 결과로 이어져요." },
+  { "id": "daeunflow.overall.gwanseong", "category": "overall", "pattern": "gwanseong", "text": "이 대운에는 책임과 역할이 커지는 흐름이에요. 인생에서 중요한 전환점을 맞이할 수 있는 시기예요." },
+  { "id": "daeunflow.overall.inseong", "category": "overall", "pattern": "inseong", "text": "이 대운에는 배움과 내면의 성장이 중심이 되는 흐름이에요. 서두르지 않아도 단단해지는 시기예요." }
 ]

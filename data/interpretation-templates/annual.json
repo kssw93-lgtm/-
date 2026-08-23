@@ -8,5 +8,20 @@
   { "id": "annual.career.siksang", "category": "career", "pattern": "siksang", "text": "올해는 새로운 시도와 아이디어가 좋은 반응을 얻기 쉬운 해예요. 하고 싶었던 방식을 실제로 시도해볼 만한 시기예요." },
   { "id": "annual.career.jaeseong", "category": "career", "pattern": "jaeseong", "text": "올해는 실질적인 성과와 보상이 따라오기 좋은 해예요. 적극적으로 기회를 붙잡을수록 결과가 눈에 보이는 시기예요." },
   { "id": "annual.career.gwanseong", "category": "career", "pattern": "gwanseong", "text": "올해는 책임과 역할이 커지는 해예요. 승진이나 새로운 직책처럼 무게감 있는 변화가 찾아올 수 있어요." },
-  { "id": "annual.career.inseong", "category": "career", "pattern": "inseong", "text": "올해는 실력을 다지고 배움에 투자하기 좋은 해예요. 당장의 성과보다 기반을 탄탄히 하는 게 장기적으로 유리해요." }
+  { "id": "annual.career.inseong", "category": "career", "pattern": "inseong", "text": "올해는 실력을 다지고 배움에 투자하기 좋은 해예요. 당장의 성과보다 기반을 탄탄히 하는 게 장기적으로 유리해요." },
+  { "id": "annual.wealth.bigeob", "category": "wealth", "pattern": "bigeob", "text": "올해는 스스로 벌어들이는 힘이 강해지는 해예요. 남에게 기대기보다 직접 움직여서 만드는 수입에 집중하면 유리해요." },
+  { "id": "annual.wealth.siksang", "category": "wealth", "pattern": "siksang", "text": "올해는 아이디어나 재능을 활용한 부수입 기회가 열리는 해예요. 새로운 수익 파이프라인을 시도해볼 만해요." },
+  { "id": "annual.wealth.jaeseong", "category": "wealth", "pattern": "jaeseong", "text": "올해는 실질적인 재물 성과가 두드러지는 해예요. 적극적으로 기회를 붙잡을수록 통장 잔고로 확인되는 시기예요." },
+  { "id": "annual.wealth.gwanseong", "category": "wealth", "pattern": "gwanseong", "text": "올해는 자산 관리에 책임감이 커지는 해예요. 큰 지출이나 계약처럼 신중한 결정이 필요한 시기예요." },
+  { "id": "annual.wealth.inseong", "category": "wealth", "pattern": "inseong", "text": "올해는 무리한 투자보다 안정적으로 자산을 지키기 좋은 해예요. 배우고 준비하는 데 돈을 쓰는 게 장기적으로 유리해요." },
+  { "id": "annual.reunion.bigeob", "category": "reunion", "pattern": "bigeob", "text": "올해는 먼저 연락하거나 다가갈 용기가 생기는 해예요. 주도적으로 움직일수록 재회 가능성이 열려요." },
+  { "id": "annual.reunion.siksang", "category": "reunion", "pattern": "siksang", "text": "올해는 자연스러운 계기나 우연한 마주침이 생기기 쉬운 해예요. 억지로 만들기보다 흐름을 지켜보는 게 좋아요." },
+  { "id": "annual.reunion.jaeseong", "category": "reunion", "pattern": "jaeseong", "text": "올해는 관계를 현실적으로 다시 그려보기 좋은 해예요. 예전과 달라진 상황을 솔직하게 짚어보는 게 도움이 돼요." },
+  { "id": "annual.reunion.gwanseong", "category": "reunion", "pattern": "gwanseong", "text": "올해는 다시 만난다면 예전보다 진지한 관계로 이어질 가능성이 큰 해예요." },
+  { "id": "annual.reunion.inseong", "category": "reunion", "pattern": "inseong", "text": "올해는 재회를 서두르기보다 스스로를 먼저 정리하는 시간이 필요한 해예요." },
+  { "id": "annual.overall.bigeob", "category": "overall", "pattern": "bigeob", "text": "올해는 스스로 판단하고 밀어붙이는 힘이 두드러지는 해예요. 주도적으로 움직일수록 인생의 방향이 선명해져요." },
+  { "id": "annual.overall.siksang", "category": "overall", "pattern": "siksang", "text": "올해는 표현과 도전이 활발해지는 해예요. 새로운 시도가 인생의 전환점이 될 수 있어요." },
+  { "id": "annual.overall.jaeseong", "category": "overall", "pattern": "jaeseong", "text": "올해는 현실적인 성과와 결실이 두드러지는 해예요. 노력이 눈에 보이는 결과로 이어지는 시기예요." },
+  { "id": "annual.overall.gwanseong", "category": "overall", "pattern": "gwanseong", "text": "올해는 책임과 역할이 커지는 해예요. 인생에서 중요한 결정을 내리게 될 수 있어요." },
+  { "id": "annual.overall.inseong", "category": "overall", "pattern": "inseong", "text": "올해는 배움과 내면의 성장에 집중하기 좋은 해예요. 서두르지 않아도 단단해지는 시기예요." }
 ]

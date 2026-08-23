@@ -1,6 +1,5 @@
 "use client";
 
-import AdGate from "./AdGate";
 import AdSlot from "./AdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
 import LifeGradeCard from "./LifeGradeCard";
@@ -15,6 +14,7 @@ import {
   type DailyFortune,
   type Gyeokguk,
   type JohuAnalysis,
+  type LifeStageDisplay,
   type LifeStageGrade,
   type LuckColorDisplay,
   type MonthRhythmDisplay,
@@ -32,18 +32,17 @@ interface Props {
   sections: { heading: string; text: string }[];
   monthRhythm: MonthRhythmDisplay[];
   daeunFlow: DaeunFlowDisplay[];
-  luckColor: LuckColorDisplay;
+  luckColor: LuckColorDisplay | null;
   starSign: StarSign;
   zodiacAnimal: ZodiacAnimal;
   gyeokguk: Gyeokguk;
   sinsal: SinsalDisplay[];
   dailyFortune: DailyFortune;
-  pastLife: PastLife;
+  pastLife: PastLife | null;
   lifeGrades: LifeStageGrade[];
-  johu: JohuAnalysis;
+  johu: JohuAnalysis | null;
+  lifeStages: LifeStageDisplay[];
   isHourExcluded: boolean;
-  adUnlocked: boolean;
-  onAdUnlocked: () => void;
   onOtherFortune: () => void;
   onUnlock: () => void;
 }
@@ -68,9 +67,8 @@ export default function ResultScreen({
   pastLife,
   lifeGrades,
   johu,
+  lifeStages,
   isHourExcluded,
-  adUnlocked,
-  onAdUnlocked,
   onOtherFortune,
   onUnlock,
 }: Props) {
@@ -129,8 +127,7 @@ export default function ResultScreen({
         <p className="text-base leading-relaxed">{freeSection.text}</p>
       </div>
 
-      <AdGate unlocked={adUnlocked} onUnlocked={onAdUnlocked}>
-        <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
           {gatedSections.map((s) => (
             <div key={s.heading} className="rounded-2xl bg-white/10 p-5">
               <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{s.heading}</p>
@@ -176,6 +173,22 @@ export default function ResultScreen({
             </div>
           )}
 
+          {lifeStages.length > 0 && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">인생의 큰 흐름 (초년·중년·말년)</p>
+              <div className="flex flex-col gap-2">
+                {lifeStages.map((s) => (
+                  <div key={s.stage} className="rounded-lg bg-white/5 p-3">
+                    <p className="text-xs font-semibold text-white/60">
+                      {s.label} · {s.pillarHanja}
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed">{s.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {daeunFlow.length > 0 && (
             <div className="rounded-2xl bg-white/10 p-5">
               <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">평생 대운 흐름</p>
@@ -196,31 +209,34 @@ export default function ResultScreen({
             </div>
           )}
 
-          <div className="rounded-2xl bg-white/10 p-5">
-            <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
-              조후(調候) · {johu.seasonLabel}에 태어난 사주
-            </p>
-            <p className="text-sm leading-relaxed text-white/80">{johu.text}</p>
-          </div>
-
-          <div className="rounded-2xl bg-white/10 p-5">
-            <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">행운의 컬러 &amp; 숫자</p>
-            <div className="flex items-center gap-4">
-              <div>
-                <p className="text-lg font-bold">{luckColor.color}</p>
-                <p className="text-sm text-white/60">{luckColor.numbers.join(", ")}</p>
-              </div>
-              <p className="flex-1 text-sm leading-relaxed text-white/80">
-                지금 원국에 가장 적은 오행을 보완해주는 색과 숫자예요. {luckColor.desc}.
+          {johu && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
+                조후(調候) · {johu.seasonLabel}에 태어난 사주
               </p>
+              <p className="text-sm leading-relaxed text-white/80">{johu.text}</p>
             </div>
-          </div>
+          )}
 
-          <LifeGradeCard stages={lifeGrades} />
+          {luckColor && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">행운의 컬러 &amp; 숫자</p>
+              <div className="flex items-center gap-4">
+                <div>
+                  <p className="text-lg font-bold">{luckColor.color}</p>
+                  <p className="text-sm text-white/60">{luckColor.numbers.join(", ")}</p>
+                </div>
+                <p className="flex-1 text-sm leading-relaxed text-white/80">
+                  지금 원국에 가장 적은 오행을 보완해주는 색과 숫자예요. {luckColor.desc}.
+                </p>
+              </div>
+            </div>
+          )}
 
-          <PastLifeCard pastLife={pastLife} />
+          {lifeGrades.length > 0 && <LifeGradeCard stages={lifeGrades} />}
+
+          {pastLife && <PastLifeCard pastLife={pastLife} />}
         </div>
-      </AdGate>
 
       {isHourExcluded && (
         <p className="text-center text-xs text-white/50">

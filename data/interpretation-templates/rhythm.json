@@ -8,5 +8,20 @@
   { "id": "rhythm.career.siksang", "category": "career", "pattern": "siksang", "label": "기획기", "tip": "새로운 아이디어를 시도하기 좋은 달" },
   { "id": "rhythm.career.jaeseong", "category": "career", "pattern": "jaeseong", "label": "성과기", "tip": "실질적인 결과를 만들어내기 좋은 달" },
   { "id": "rhythm.career.gwanseong", "category": "career", "pattern": "gwanseong", "label": "책임기", "tip": "중요한 역할이나 책임이 커지는 달" },
-  { "id": "rhythm.career.inseong", "category": "career", "pattern": "inseong", "label": "정비기", "tip": "배우고 준비하며 내실을 다지기 좋은 달" }
+  { "id": "rhythm.career.inseong", "category": "career", "pattern": "inseong", "label": "정비기", "tip": "배우고 준비하며 내실을 다지기 좋은 달" },
+  { "id": "rhythm.wealth.bigeob", "category": "wealth", "pattern": "bigeob", "label": "도전기", "tip": "직접 부딪혀 기회를 만들기 좋은 달" },
+  { "id": "rhythm.wealth.siksang", "category": "wealth", "pattern": "siksang", "label": "발굴기", "tip": "새로운 수익원을 찾아보기 좋은 달" },
+  { "id": "rhythm.wealth.jaeseong", "category": "wealth", "pattern": "jaeseong", "label": "수확기", "tip": "실질적인 성과가 통장에 찍히는 달" },
+  { "id": "rhythm.wealth.gwanseong", "category": "wealth", "pattern": "gwanseong", "label": "신중기", "tip": "큰 지출과 계약은 신중해야 하는 달" },
+  { "id": "rhythm.wealth.inseong", "category": "wealth", "pattern": "inseong", "label": "저축기", "tip": "지키고 모으는 데 집중하기 좋은 달" },
+  { "id": "rhythm.reunion.bigeob", "category": "reunion", "pattern": "bigeob", "label": "용기기", "tip": "먼저 연락해보기 좋은 달" },
+  { "id": "rhythm.reunion.siksang", "category": "reunion", "pattern": "siksang", "label": "계기기", "tip": "우연한 마주침이 찾아올 수 있는 달" },
+  { "id": "rhythm.reunion.jaeseong", "category": "reunion", "pattern": "jaeseong", "label": "재정비기", "tip": "현실적인 상황을 함께 점검하기 좋은 달" },
+  { "id": "rhythm.reunion.gwanseong", "category": "reunion", "pattern": "gwanseong", "label": "진지기", "tip": "관계의 무게를 진지하게 다지는 달" },
+  { "id": "rhythm.reunion.inseong", "category": "reunion", "pattern": "inseong", "label": "정리기", "tip": "스스로를 먼저 돌보기 좋은 달" },
+  { "id": "rhythm.overall.bigeob", "category": "overall", "pattern": "bigeob", "label": "결단기", "tip": "스스로 결정하고 추진하기 좋은 달" },
+  { "id": "rhythm.overall.siksang", "category": "overall", "pattern": "siksang", "label": "확장기", "tip": "새로운 시도가 좋은 반응을 얻는 달" },
+  { "id": "rhythm.overall.jaeseong", "category": "overall", "pattern": "jaeseong", "label": "결실기", "tip": "노력이 결과로 드러나는 달" },
+  { "id": "rhythm.overall.gwanseong", "category": "overall", "pattern": "gwanseong", "label": "책임기", "tip": "중요한 결정과 역할이 커지는 달" },
+  { "id": "rhythm.overall.inseong", "category": "overall", "pattern": "inseong", "label": "정비기", "tip": "배우고 내실을 다지기 좋은 달" }
 ]

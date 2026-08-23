@@ -13,7 +13,9 @@ describe("궁합 계산", () => {
       gender: "male", calendarType: "solar", isLeapMonth: false,
     });
     const result = computeCompatibility(a, b);
-    expect(result.text.length).toBeGreaterThan(0);
+    expect(result.textAtoB.length).toBeGreaterThan(0);
+    expect(result.textBtoA.length).toBeGreaterThan(0);
+    expect(result.elementRelation.length).toBeGreaterThan(0);
     expect(["bigeob", "siksang", "jaeseong", "gwanseong", "inseong"]).toContain(result.groupAtoB);
     expect(["bigeob", "siksang", "jaeseong", "gwanseong", "inseong"]).toContain(result.groupBtoA);
   });
@@ -30,6 +32,7 @@ describe("궁합 계산", () => {
     const r1 = computeCompatibility(a, b);
     const r2 = computeCompatibility(a, b);
     expect(r1.groupAtoB).toBe(r2.groupAtoB);
-    expect(r1.text).toBe(r2.text);
+    expect(r1.textAtoB).toBe(r2.textAtoB);
+    expect(r1.elementRelation).toBe(r2.elementRelation);
   });
 });

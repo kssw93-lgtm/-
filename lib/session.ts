@@ -23,7 +23,7 @@ export const DEFAULT_BIRTH_FORM: BirthFormState = {
   gender: "female",
 };
 
-export type Screen = "s1" | "style" | "s2" | "s3" | "s4" | "s5" | "s6" | "compat-partner" | "compat-result";
+export type Screen = "s1" | "style" | "s2" | "s3" | "ad" | "s4" | "s5" | "s6" | "compat-partner" | "compat-result";
 
 /** 화면 흐름 설계서 08번: 세션 유지 범위 (localStorage, 서버 저장 없음) */
 const STORAGE_KEY = "saju_birth_form_v1";

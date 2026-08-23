@@ -1,6 +1,5 @@
 "use client";
 
-import AdGate from "./AdGate";
 import AdSlot from "./AdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
 import { describeDayMasterPair, type CompatibilityResult } from "@/lib/interpretation/compatibility";
@@ -12,8 +11,6 @@ interface Props {
   sajuA: SajuResult;
   sajuB: SajuResult;
   result: CompatibilityResult;
-  adUnlocked: boolean;
-  onAdUnlocked: () => void;
   onRestart: () => void;
 }
 
@@ -24,8 +21,6 @@ export default function CompatibilityResultScreen({
   sajuA,
   sajuB,
   result,
-  adUnlocked,
-  onAdUnlocked,
   onRestart,
 }: Props) {
   const displayA = nameA.trim() || "나";
@@ -44,41 +39,53 @@ export default function CompatibilityResultScreen({
         </p>
       </div>
 
-      <div className="rounded-2xl bg-white/10 p-5">
-        <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">서로에게 통하는 기운</p>
-        <p className="text-base leading-relaxed">{result.text}</p>
-      </div>
-
-      <AdGate unlocked={adUnlocked} onUnlocked={onAdUnlocked}>
-        <div className="flex flex-col gap-4">
-          {result.dayBranchRelation && (
-            <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
-                배우자궁(일지)의 관계 — {result.dayBranchRelation.name}
-              </p>
-              <p className="text-base leading-relaxed">{result.dayBranchRelation.desc}.</p>
-            </div>
-          )}
-
-          {!result.dayBranchRelation && (
-            <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">배우자궁(일지)의 관계</p>
-              <p className="text-base leading-relaxed">
-                두 사람의 일지 사이에 뚜렷한 합충 관계는 없어요. 서로에게 큰 자극이나 마찰 없이 각자의 속도를
-                지키며 지낼 수 있는 조합이에요.
-              </p>
-            </div>
-          )}
-
-          <div className="rounded-2xl bg-white/10 p-5 text-sm leading-relaxed text-white/70">
-            궁합은 두 사람의 원국을 각각 정확히 계산한 뒤, 일간 사이의 십신 관계와 일지(배우자궁)의 합충
-            관계만으로 판단한 결과예요. 한쪽 사주만으로 상대를 추정하지 않고, 실제로 계산된 두 사람의 값을
-            그대로 비교했어요.
-          </div>
-
-          <AdSlot />
+      <div className="flex flex-col gap-4">
+        <div className="rounded-2xl bg-white/10 p-5">
+          <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
+            {displayA}가 {displayB}에게 통하는 기운
+          </p>
+          <p className="text-base leading-relaxed">{result.textAtoB}</p>
         </div>
-      </AdGate>
+
+        <div className="rounded-2xl bg-white/10 p-5">
+          <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
+            {displayB}가 {displayA}에게 통하는 기운
+          </p>
+          <p className="text-base leading-relaxed">{result.textBtoA}</p>
+        </div>
+
+        <div className="rounded-2xl bg-white/10 p-5">
+          <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">일간 오행으로 보는 궁합</p>
+          <p className="text-base leading-relaxed">{result.elementRelation}</p>
+        </div>
+
+        {result.dayBranchRelation && (
+          <div className="rounded-2xl bg-white/10 p-5">
+            <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
+              배우자궁(일지)의 관계 — {result.dayBranchRelation.name}
+            </p>
+            <p className="text-base leading-relaxed">{result.dayBranchRelation.desc}.</p>
+          </div>
+        )}
+
+        {!result.dayBranchRelation && (
+          <div className="rounded-2xl bg-white/10 p-5">
+            <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">배우자궁(일지)의 관계</p>
+            <p className="text-base leading-relaxed">
+              두 사람의 일지 사이에 뚜렷한 합충 관계는 없어요. 서로에게 큰 자극이나 마찰 없이 각자의 속도를
+              지키며 지낼 수 있는 조합이에요.
+            </p>
+          </div>
+        )}
+
+        <div className="rounded-2xl bg-white/10 p-5 text-sm leading-relaxed text-white/70">
+          궁합은 두 사람의 원국을 각각 정확히 계산한 뒤, 일간 사이의 십신 관계(양방향)와 오행 생극 관계,
+          일지(배우자궁)의 합충 관계까지 종합해 판단한 결과예요. 한쪽 사주만으로 상대를 추정하지 않고, 실제로
+          계산된 두 사람의 값을 그대로 비교했어요.
+        </div>
+
+        <AdSlot />
+      </div>
 
       <FreeAdsNotice />
 

@@ -9,6 +9,7 @@ import { computeDailyFortune, type DailyFortune } from "./daily-fortune";
 import { computePastLife, type PastLife } from "./past-life";
 import { computeLifeGrades, type LifeStageGrade } from "./life-grade";
 import { computeJohu, type JohuAnalysis } from "./johu";
+import { computeLifeStages, type LifeStageDisplay } from "./life-stage";
 import { computeSinsal } from "@/lib/calc/sinsal";
 import sinsalJson from "@/data/sinsal.json";
 import type { SinsalId } from "@/lib/calc/sinsal";
@@ -29,7 +30,7 @@ import { substituteVariables } from "./variable-substitute";
 import { pillarHanja } from "@/lib/calc/data";
 import { getTenGod } from "@/lib/calc/ten-gods";
 import dayMasterJson from "@/data/day-master.json";
-import type { ElementId, LuckPillar, SajuResult, StemId } from "@/lib/calc/types";
+import type { ElementId, SajuResult, StemId } from "@/lib/calc/types";
 
 const DAY_MASTER_PROFILES = dayMasterJson as Record<StemId, string>;
 const SINSAL_INFO = sinsalJson as Record<SinsalId, { name: string; hanja: string; type: string; desc: string }>;
@@ -47,6 +48,7 @@ export * from "./past-life";
 export * from "./life-grade";
 export * from "./tone-style";
 export * from "./johu";
+export * from "./life-stage";
 
 export interface MonthRhythmDisplay {
   month: number;
@@ -84,48 +86,48 @@ export interface InterpretationResult {
   sections: { heading: string; text: string }[];
   monthRhythm: MonthRhythmDisplay[];
   daeunFlow: DaeunFlowDisplay[];
-  luckColor: LuckColorDisplay;
+  luckColor: LuckColorDisplay | null;
   starSign: StarSign;
   zodiacAnimal: ZodiacAnimal;
   gyeokguk: Gyeokguk;
   sinsal: SinsalDisplay[];
   dailyFortune: DailyFortune;
-  pastLife: PastLife;
+  pastLife: PastLife | null;
   lifeGrades: LifeStageGrade[];
-  johu: JohuAnalysis;
+  johu: JohuAnalysis | null;
+  /** 초년/중년/말년운 — 종합사주에서만 채워진다 */
+  lifeStages: LifeStageDisplay[];
   /** PDF 저장/공유용으로 섹션을 하나로 합친 텍스트 */
   resultText: string;
   isHourExcluded: boolean;
 }
 
-function findCurrentLuckPillar(majorLuck: LuckPillar[], nowMillis: number): { pillar: LuckPillar; phase: "before" | "current" | "after" } {
-  for (const lp of majorLuck) {
-    const startMillis = Date.parse(lp.startDate);
-    const endMillis = Date.parse(lp.endDate);
-    if (nowMillis >= startMillis && nowMillis < endMillis) {
-      return { pillar: lp, phase: "current" };
-    }
-  }
-  const first = majorLuck[0];
-  if (nowMillis < Date.parse(first.startDate)) {
-    return { pillar: first, phase: "before" };
-  }
-  return { pillar: majorLuck[majorLuck.length - 1], phase: "after" };
-}
-
 /**
- * 대운은 "장기적인 흐름"이라는 존재만 서술하고(계산 규칙서 55, 74번 ⑫: 계산과 해석 분리,
- * 단정적 예언 금지), 길흉 판단 문장은 만들지 않는다 — 어느 대운 구간에 있는지만 정확히 알려준다.
+ * 카테고리마다 결과 화면에 드러나는 "부가 섹션" 구성을 다르게 가져간다 — 원국 자체의 성질
+ * (일간총평/기본성향/원국관계/오늘의운세)은 어떤 카테고리를 보든 항상 같지만(같은 사람의 같은
+ * 사주니까 당연하다), 그 아래 곁들이는 콘텐츠는 카테고리 주제에 맞춰 다르게 골라 보여준다.
+ * 종합사주만 전부 다 포함하고(그래서 "종합"), 나머지 카테고리는 주제와 맞닿은 항목 위주로만
+ * 보여줘서 카테고리를 바꿔가며 볼 때 실제로 다른 결과처럼 느껴지게 한다.
  */
-function describeCurrentLuck(saju: SajuResult): string {
-  const { pillar, phase } = findCurrentLuckPillar(saju.majorLuck, Date.now());
-  const hanja = pillarHanja(pillar.pillar.stem, pillar.pillar.branch);
-
-  if (phase === "before") {
-    return `아직 첫 대운(${hanja})이 시작되기 전 시기예요. 만 ${pillar.startAgeDisplay}세 무렵부터 ${hanja} 대운의 흐름이 시작돼요.`;
-  }
-  return `지금은 만 ${pillar.startAgeDisplay}세부터 이어지는 ${hanja} 대운의 흐름 안에 있어요. 원국이 타고난 기본 성향이라면, 대운은 그 위에 시기별로 덧입혀지는 큰 흐름이에요.`;
+interface CategoryFeatures {
+  /** 일간총평/기본성향/원국관계/지금의대운흐름 — 원국 자체를 통째로 훑는 블록들. 종합사주만 보여준다. */
+  coreProfile: boolean;
+  zodiacPersonality: boolean; // 띠/별자리 성격
+  sinsal: boolean; // 신살
+  johu: boolean; // 조후
+  luckColor: boolean; // 행운의 컬러&숫자
+  lifeGrades: boolean; // 인생 등급(대운별)
+  pastLife: boolean; // 전생 보기
+  lifeStages: boolean; // 초년/중년/말년운
 }
+
+const CATEGORY_FEATURES: Record<Category, CategoryFeatures> = {
+  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: false, lifeGrades: false, pastLife: false, lifeStages: false },
+  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: false, lifeGrades: false, pastLife: false, lifeStages: false },
+  career: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: false, lifeGrades: true, pastLife: false, lifeStages: false },
+  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false },
+  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true },
+};
 
 /**
  * S4 로딩 단계 내부 처리(화면 흐름 설계서 05번 1~5)를 확장: 원국 → 특징값 → pattern ID →
@@ -146,18 +148,24 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
     calendarType: saju.input.calendarType,
   });
 
+  const features = CATEGORY_FEATURES[category];
   const personality = selectPersonalityTemplate(group, strength);
   const categoryTemplate = selectTemplate(category, group, strength, birthKey);
 
   const vars = { name: saju.input.name, dayStem: saju.pillars.dayPillar.stem };
   const categoryLabel = `${CATEGORY_LABEL[category]} 핵심 특징`;
 
-  const sections = [
-    { heading: "일간 총평 (나의 뿌리)", text: DAY_MASTER_PROFILES[saju.pillars.dayPillar.stem] },
-    { heading: "기본 성향", text: substituteVariables(personality.text, vars) },
-    { heading: "원국 속 특별한 관계", text: describeRelations(saju) },
-    { heading: categoryLabel, text: substituteVariables(categoryTemplate.text, vars) },
-  ];
+  // 종합사주만 원국 전체를 훑는 공통 블록(일간총평/기본성향/원국관계)으로 시작하고,
+  // 나머지 카테고리는 곧바로 그 주제만의 핵심 콘텐츠로 시작한다 — 카테고리를 바꿔가며
+  // 볼 때 매번 똑같은 문단이 반복된다는 피드백을 반영해, 겹치는 블록 자체를 없앴다.
+  const sections = features.coreProfile
+    ? [
+        { heading: "일간 총평 (나의 뿌리)", text: DAY_MASTER_PROFILES[saju.pillars.dayPillar.stem] },
+        { heading: "기본 성향", text: substituteVariables(personality.text, vars) },
+        { heading: "원국 속 특별한 관계", text: describeRelations(saju) },
+        { heading: categoryLabel, text: substituteVariables(categoryTemplate.text, vars) },
+      ]
+    : [{ heading: categoryLabel, text: substituteVariables(categoryTemplate.text, vars) }];
 
   const currentFlow = computeCurrentFlow(saju);
   if (currentFlow) {
@@ -167,14 +175,16 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
     if (monthly) sections.push({ heading: `이번달 ${CATEGORY_LABEL[category]}`, text: substituteVariables(monthly.text, vars) });
   }
 
-  sections.push({ heading: "지금의 대운 흐름", text: describeCurrentLuck(saju) });
-
   const starSign = getStarSignForSaju(saju);
   const zodiacAnimal = getZodiacAnimalForSaju(saju);
-  sections.push(
-    { heading: `${zodiacAnimal.animal} 성격`, text: zodiacAnimal.text },
-    { heading: `${starSign.name} 성격`, text: starSign.text }
-  );
+  if (features.zodiacPersonality) {
+    sections.push(
+      { heading: `${zodiacAnimal.animal} 성격`, text: zodiacAnimal.text },
+      { heading: `${starSign.name} 성격`, text: starSign.text }
+    );
+  }
+
+  const lifeStages: LifeStageDisplay[] = features.lifeStages ? computeLifeStages(saju) : [];
 
   const monthRhythm: MonthRhythmDisplay[] = computeYearRhythm(saju).flatMap((r) => {
     const t = selectRhythmTemplate(category, r.group);
@@ -198,13 +208,13 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
     ];
   });
 
-  const luckColor = computeLuckColor(saju);
+  const luckColor = features.luckColor ? computeLuckColor(saju) : null;
   const gyeokguk = computeGyeokguk(saju);
-  const sinsal: SinsalDisplay[] = computeSinsal(saju.pillars).map((hit) => SINSAL_INFO[hit.id]);
+  const sinsal: SinsalDisplay[] = features.sinsal ? computeSinsal(saju.pillars).map((hit) => SINSAL_INFO[hit.id]) : [];
   const dailyFortune = computeDailyFortune(saju);
-  const pastLife = computePastLife(saju);
-  const lifeGrades = computeLifeGrades(saju);
-  const johu = computeJohu(saju);
+  const pastLife = features.pastLife ? computePastLife(saju) : null;
+  const lifeGrades = features.lifeGrades ? computeLifeGrades(saju) : [];
+  const johu = features.johu ? computeJohu(saju) : null;
 
   return {
     category,
@@ -222,6 +232,7 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
     pastLife,
     lifeGrades,
     johu,
+    lifeStages,
     resultText: sections.map((s) => `[${s.heading}]\n${s.text}`).join("\n\n"),
     isHourExcluded: saju.pillars.hourPillar === null,
   };
