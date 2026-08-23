@@ -27,6 +27,7 @@ import {
   type SinsalDisplay,
   type StarSign,
   type WealthMonthRanking,
+  type GwiinDaeun,
   type ZodiacAnimal,
 } from "@/lib/interpretation";
 
@@ -54,6 +55,7 @@ interface Props {
   coreSummary: CoreSummary;
   incomeSource: IncomeSource | null;
   wealthMonthRanking: WealthMonthRanking | null;
+  gwiinDaeun: GwiinDaeun[];
   resultText: string;
   isHourExcluded: boolean;
   onOtherFortune: () => void;
@@ -86,6 +88,7 @@ export default function ResultScreen({
   coreSummary,
   incomeSource,
   wealthMonthRanking,
+  gwiinDaeun,
   resultText,
   isHourExcluded,
   onOtherFortune,
@@ -394,6 +397,22 @@ export default function ResultScreen({
                     </p>
                     <p className="mt-1 text-sm leading-relaxed">{d.text}</p>
                   </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {gwiinDaeun.length > 0 && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">✨ 귀인이 드는 대운 시기</p>
+              <p className="text-sm leading-relaxed text-white/80">
+                평생 대운 중 천을귀인 기운이 드는 시기예요. 어려운 순간에 뜻밖의 도움을 받기 쉬운 시기라고 봐요.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {gwiinDaeun.map((g) => (
+                  <span key={g.ageLabel} className="rounded-full bg-[color:var(--color-gold)]/20 px-3 py-1.5 text-sm font-semibold text-[color:var(--color-gold-light)]">
+                    {g.ageLabel} · {g.pillarHanja}
+                  </span>
                 ))}
               </div>
             </div>

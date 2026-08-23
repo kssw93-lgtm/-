@@ -243,6 +243,7 @@ export default function SajuFlow() {
           coreSummary={interpretation.coreSummary}
           incomeSource={interpretation.incomeSource}
           wealthMonthRanking={interpretation.wealthMonthRanking}
+          gwiinDaeun={interpretation.gwiinDaeun}
           resultText={interpretation.resultText}
           isHourExcluded={interpretation.isHourExcluded}
           onOtherFortune={handleOtherFortune}

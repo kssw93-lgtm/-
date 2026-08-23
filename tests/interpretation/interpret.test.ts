@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { computeSaju } from "@/lib/calc";
-import { interpretSaju, computeWealthMonthRanking } from "@/lib/interpretation";
+import { interpretSaju, computeWealthMonthRanking, computeGwiinDaeunList } from "@/lib/interpretation";
+import { getCheoneulTargets } from "@/lib/calc/sinsal";
 import loveTemplates from "@/data/interpretation-templates/love.json";
 import careerTemplates from "@/data/interpretation-templates/career.json";
 import personalityTemplates from "@/data/interpretation-templates/personality.json";
@@ -100,6 +101,18 @@ describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠
     const a = interpretSaju(saju, "career").daeunFlow.map((d) => d.text);
     const b = interpretSaju(saju, "career").daeunFlow.map((d) => d.text);
     expect(a).toEqual(b);
+  });
+
+  it("귀인 대운: 평생 대운 중 천을귀인 지지와 정확히 일치하는 시기만 뽑는다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const gwiinDaeun = computeGwiinDaeunList(saju);
+    const targets = getCheoneulTargets(saju.pillars.dayPillar.stem);
+    const expectedCount = saju.majorLuck.filter((lp) => targets.includes(lp.pillar.branch)).length;
+    expect(gwiinDaeun.length).toBe(expectedCount);
+    for (const g of gwiinDaeun) {
+      expect(g.pillarHanja.length).toBe(2);
+      expect(g.ageLabel).toMatch(/^\d+세~\d+세$/);
+    }
   });
 
   it("재물 월별 순위: TOP3/조심 3개씩, 겹치지 않고, TOP3 점수가 조심 3개보다 항상 높거나 같다", () => {

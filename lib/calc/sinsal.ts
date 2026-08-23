@@ -76,6 +76,11 @@ export interface SinsalHit {
   matchedBranch: BranchId;
 }
 
+/** 천을귀인 지지 대조표를 원국 밖(예: 대운)에서도 재사용할 수 있게 노출한다. */
+export function getCheoneulTargets(dayStem: StemId): BranchId[] {
+  return CHEONEUL_TABLE[dayStem];
+}
+
 export function computeSinsal(pillars: FourPillars): SinsalHit[] {
   const dayStem = pillars.dayPillar.stem;
   const dayBranch = pillars.dayPillar.branch;

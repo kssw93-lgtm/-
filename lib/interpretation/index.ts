@@ -16,6 +16,7 @@ import { getIncomeSource, type IncomeSource } from "./income-source";
 import { getMeetingChannel, type MeetingChannel } from "./meeting-channel";
 import { getWorkStyle, type WorkStyle } from "./work-style";
 import { computeWealthMonthRanking, type WealthMonthRanking } from "./wealth-month-ranking";
+import { computeGwiinDaeunList, type GwiinDaeun } from "./life-highlights";
 import { computeSinsal } from "@/lib/calc/sinsal";
 import sinsalJson from "@/data/sinsal.json";
 import type { SinsalId } from "@/lib/calc/sinsal";
@@ -61,6 +62,7 @@ export * from "./income-source";
 export * from "./meeting-channel";
 export * from "./work-style";
 export * from "./wealth-month-ranking";
+export * from "./life-highlights";
 
 export interface MonthRhythmDisplay {
   month: number;
@@ -121,6 +123,8 @@ export interface InterpretationResult {
   workStyle: WorkStyle | null;
   /** 올해 재물 유리한 달 TOP3 / 조심할 달 TOP3 — 재물운/종합사주에서만 채워진다 */
   wealthMonthRanking: WealthMonthRanking | null;
+  /** 귀인 기운이 드는 대운 시기 — 종합사주에서만 채워진다 */
+  gwiinDaeun: GwiinDaeun[];
   /** PDF 저장/공유용으로 섹션을 하나로 합친 텍스트 */
   resultText: string;
   isHourExcluded: boolean;
@@ -148,14 +152,15 @@ interface CategoryFeatures {
   meetingChannel: boolean; // 인연이 들어오는 경로 (연애운/재회운 전용)
   workStyle: boolean; // 업무 스타일·잘 맞는 환경 (직업운 전용)
   wealthMonthRanking: boolean; // 올해 재물 유리한 달 TOP3/조심할 달 TOP3 (재물운 전용)
+  gwiinDaeun: boolean; // 귀인 기운이 드는 대운 시기 (종합사주 전용)
 }
 
 const CATEGORY_FEATURES: Record<Category, CategoryFeatures> = {
-  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, wealthMonthRanking: false },
-  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, wealthMonthRanking: false },
-  career: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: true, wealthMonthRanking: false },
-  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true, meetingChannel: false, workStyle: false, wealthMonthRanking: true },
-  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true, incomeSource: true, meetingChannel: true, workStyle: true, wealthMonthRanking: true },
+  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, wealthMonthRanking: false, gwiinDaeun: false },
+  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, wealthMonthRanking: false, gwiinDaeun: false },
+  career: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: true, wealthMonthRanking: false, gwiinDaeun: false },
+  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true, meetingChannel: false, workStyle: false, wealthMonthRanking: true, gwiinDaeun: false },
+  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true, incomeSource: true, meetingChannel: true, workStyle: true, wealthMonthRanking: true, gwiinDaeun: true },
 };
 
 /**
@@ -270,6 +275,7 @@ export function interpretSaju(saju: SajuResult, category: Category): Interpretat
     meetingChannel: features.meetingChannel ? getMeetingChannel(group) : null,
     workStyle: features.workStyle ? getWorkStyle(group) : null,
     wealthMonthRanking: features.wealthMonthRanking ? computeWealthMonthRanking(saju) : null,
+    gwiinDaeun: features.gwiinDaeun ? computeGwiinDaeunList(saju) : [],
     resultText: sections.map((s) => `[${s.heading}]\n${s.text}`).join("\n\n"),
     isHourExcluded: saju.pillars.hourPillar === null,
   };
