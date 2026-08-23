@@ -95,6 +95,10 @@ export interface RootednessResult {
   matchingHiddenStems: StemId[];
 }
 
+export type TwelveStageId =
+  | "jangsaeng" | "mokyok" | "gwandae" | "geonrok" | "jewang" | "soe"
+  | "byeong" | "sa" | "myo" | "jeol" | "tae" | "yang";
+
 export interface LuckPillar {
   index: number;
   pillar: Pillar;
@@ -126,6 +130,7 @@ export interface SajuResult {
   rootedness: RootednessResult[];
   monthOrder: { branch: BranchId; season: "spring" | "summer" | "autumn" | "winter" };
   voidBranches: BranchId[];
+  twelveStages: { pillar: "year" | "month" | "day" | "hour"; branch: BranchId; stageId: TwelveStageId }[];
   luckDirection: "forward" | "backward";
   majorLuck: LuckPillar[];
   usingMockData: boolean;

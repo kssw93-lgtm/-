@@ -2,7 +2,16 @@
 
 import { branchById, stemById } from "@/lib/calc/data";
 import { computeStrengthScore, strengthBand, type Gyeokguk } from "@/lib/interpretation";
-import type { ElementId, SajuResult } from "@/lib/calc/types";
+import twelveStageMeaningJson from "@/data/twelve-stage-meaning.json";
+import type { ElementId, SajuResult, TwelveStageId } from "@/lib/calc/types";
+
+const STAGE_META = twelveStageMeaningJson as Record<TwelveStageId, { name: string; hanja: string; desc: string }>;
+const PILLAR_TO_STAGE_KEY = {
+  yearPillar: "year",
+  monthPillar: "month",
+  dayPillar: "day",
+  hourPillar: "hour",
+} as const;
 
 const PILLAR_LABEL = { yearPillar: "년주", monthPillar: "월주", dayPillar: "일주", hourPillar: "시주" } as const;
 const ELEMENT_LABEL: Record<ElementId, string> = { wood: "목", fire: "화", earth: "토", metal: "금", water: "수" };
@@ -66,6 +75,19 @@ export default function SajuChart({ saju, gyeokguk }: { saju: SajuResult; gyeokg
                   <p className="py-2 text-xs text-white/30">모름</p>
                 )}
               </div>
+            );
+          })}
+        </div>
+        <p className="mt-2 text-[10px] text-white/30">십이운성 (일간이 각 자리에서 갖는 기운의 세기)</p>
+        <div className="mt-1 grid grid-cols-4 gap-2 text-center">
+          {(["yearPillar", "monthPillar", "dayPillar", "hourPillar"] as const).map((key) => {
+            const stageKey = PILLAR_TO_STAGE_KEY[key];
+            const entry = saju.twelveStages.find((s) => s.pillar === stageKey);
+            const meta = entry ? STAGE_META[entry.stageId] : null;
+            return (
+              <p key={key} className="text-[11px] text-white/50" title={meta?.desc}>
+                {meta ? `${meta.name}(${meta.hanja})` : "-"}
+              </p>
             );
           })}
         </div>

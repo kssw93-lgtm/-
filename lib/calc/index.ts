@@ -11,6 +11,7 @@ import { computeStemTenGods, computeHiddenStemTenGods } from "./ten-gods";
 import { computeRelations } from "./relations";
 import { computeRootedness } from "./rootedness";
 import { computeVoidBranches } from "./void-branches";
+import { computeTwelveStagesForPillars } from "./twelve-stages";
 import { computeLuckDirection, computeMajorLuck } from "./daeun";
 import { createDefaultSolarTermSource, SUPPORTED_BIRTH_YEAR_RANGE, type SolarTermSource } from "./solar-terms";
 import { branchById, sexagenaryIndexOf } from "./data";
@@ -19,6 +20,7 @@ import type { LunarToSolarRecord } from "./calendar-convert";
 import type { BirthInput, FourPillars, SajuResult } from "./types";
 
 export * from "./types";
+export * from "./twelve-stages";
 export { SUPPORTED_BIRTH_YEAR_RANGE };
 
 const DEFAULT_LUNAR_SOURCE: LunarCalendarSource = new UnavailableLunarCalendarSource(
@@ -116,6 +118,9 @@ export function computeSaju(input: BirthInput, options: ComputeSajuOptions = {})
   const dayPillarIndex = sexagenaryIndexOf(dayPillar.stem, dayPillar.branch);
   const voidBranches = computeVoidBranches(dayPillarIndex);
 
+  // 12-1. 십이운성 (일간 기준 년/월/일/시지)
+  const twelveStages = computeTwelveStagesForPillars(pillars);
+
   // 13. 대운
   const luckDirection = computeLuckDirection(yearPillar.stem, input.gender);
   const majorLuck = computeMajorLuck({
@@ -138,6 +143,7 @@ export function computeSaju(input: BirthInput, options: ComputeSajuOptions = {})
     rootedness,
     monthOrder,
     voidBranches,
+    twelveStages,
     luckDirection,
     majorLuck,
     usingMockData: false,
