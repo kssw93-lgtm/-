@@ -27,6 +27,11 @@ export const metadata: Metadata = {
       "naver-site-verification": "f92c5fd28f8220b9d3e25a0dd26a8e39b1d39006",
     },
   },
+  alternates: {
+    types: {
+      "application/rss+xml": "/rss.xml",
+    },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
