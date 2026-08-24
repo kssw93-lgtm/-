@@ -6,6 +6,7 @@ import LifeGradeCard, { GRADE_COLOR } from "./LifeGradeCard";
 import PastLifeCard from "./PastLifeCard";
 import TalismanCard from "./TalismanCard";
 import SajuChart from "./SajuChart";
+import ReliabilityBadge from "./ReliabilityBadge";
 import type { Category, ToneStyleId } from "@/lib/session";
 import type { SajuResult } from "@/lib/calc/types";
 import {
@@ -34,6 +35,7 @@ import {
   type ZodiacAnimal,
   type ZodiacCompat,
   type ZodiacCareerFit,
+  type WorkRelationships,
 } from "@/lib/interpretation";
 
 interface Props {
@@ -65,6 +67,7 @@ interface Props {
   gwiinDaeun: GwiinDaeun[];
   zodiacCompat: ZodiacCompat | null;
   zodiacCareer: ZodiacCareerFit | null;
+  workRelationships: WorkRelationships | null;
   datingAdvice: string | null;
   resultText: string;
   isHourExcluded: boolean;
@@ -104,6 +107,7 @@ export default function ResultScreen({
   gwiinDaeun,
   zodiacCompat,
   zodiacCareer,
+  workRelationships,
   datingAdvice,
   resultText,
   isHourExcluded,
@@ -266,7 +270,10 @@ export default function ResultScreen({
 
           {zodiacCareer && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">띠·별자리로 보는 직업 적성</p>
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">띠·별자리로 보는 직업 적성</p>
+                <ReliabilityBadge tier="fun" />
+              </div>
               <div className="flex flex-col gap-3">
                 <div className="rounded-lg bg-white/5 p-3">
                   <p className="text-sm font-bold">
@@ -279,6 +286,29 @@ export default function ResultScreen({
                     {starSign.symbol} {starSign.name} · {zodiacCareer.star.fields}
                   </p>
                   <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCareer.star.desc}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {workRelationships && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">직장 내 인간관계</p>
+                <ReliabilityBadge tier="interpretive" />
+              </div>
+              <div className="flex flex-col gap-3">
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">🧑‍💼 상사와의 관계</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/80">{workRelationships.boss}</p>
+                </div>
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">🤝 동료와의 관계</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/80">{workRelationships.peer}</p>
+                </div>
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">🧑‍🎓 부하직원과의 관계</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/80">{workRelationships.subordinate}</p>
                 </div>
               </div>
             </div>
@@ -390,7 +420,10 @@ export default function ResultScreen({
 
           {zodiacCompat && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">🐾 띠 궁합</p>
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">🐾 띠 궁합</p>
+                <ReliabilityBadge tier="fun" />
+              </div>
               <div className="flex flex-col gap-2">
                 <div className="rounded-lg bg-white/5 p-3">
                   <p className="text-sm font-bold">💛 찰떡궁합 {zodiacCompat.animalBest.labels.join(", ")}</p>

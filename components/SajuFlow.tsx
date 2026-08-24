@@ -316,6 +316,7 @@ export default function SajuFlow() {
           gwiinDaeun={interpretation.gwiinDaeun}
           zodiacCompat={interpretation.zodiacCompat}
           zodiacCareer={interpretation.zodiacCareer}
+          workRelationships={interpretation.workRelationships}
           datingAdvice={interpretation.datingAdvice}
           resultText={interpretation.resultText}
           isHourExcluded={interpretation.isHourExcluded}
