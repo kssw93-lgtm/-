@@ -24,6 +24,8 @@ import {
   type MonthRhythmDisplay,
   type PastLife,
   type WorkStyle,
+  type GyeokgukCareerFit,
+  type GyeokgukWealthStyle,
   type SinsalDisplay,
   type StarSign,
   type WealthMonthRanking,
@@ -52,6 +54,8 @@ interface Props {
   meetingTiming: MeetingTiming | null;
   meetingChannel: MeetingChannel | null;
   workStyle: WorkStyle | null;
+  gyeokgukCareerFit: GyeokgukCareerFit | null;
+  gyeokgukWealthStyle: GyeokgukWealthStyle | null;
   coreSummary: CoreSummary;
   incomeSource: IncomeSource | null;
   wealthMonthRanking: WealthMonthRanking | null;
@@ -86,6 +90,8 @@ export default function ResultScreen({
   meetingTiming,
   meetingChannel,
   workStyle,
+  gyeokgukCareerFit,
+  gyeokgukWealthStyle,
   coreSummary,
   incomeSource,
   wealthMonthRanking,
@@ -241,6 +247,14 @@ export default function ResultScreen({
             </div>
           )}
 
+          {gyeokgukCareerFit && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">격국으로 보는 직업 적성</p>
+              <p className="text-base font-bold">{gyeokgukCareerFit.fitField}</p>
+              <p className="mt-2 text-sm leading-relaxed text-white/80">{gyeokgukCareerFit.desc}</p>
+            </div>
+          )}
+
           {incomeSource && (
             <div className="rounded-2xl bg-white/10 p-5">
               <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">나에게 유리한 수입 구조</p>
@@ -261,6 +275,14 @@ export default function ResultScreen({
                   {incomeSource.flowOut}
                 </p>
               </div>
+            </div>
+          )}
+
+          {gyeokgukWealthStyle && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">격국으로 보는 재물 스타일</p>
+              <p className="text-base font-bold">{gyeokgukWealthStyle.style}</p>
+              <p className="mt-2 text-sm leading-relaxed text-white/80">{gyeokgukWealthStyle.desc}</p>
             </div>
           )}
 

@@ -262,6 +262,8 @@ export default function SajuFlow() {
           meetingTiming={interpretation.meetingTiming}
           meetingChannel={interpretation.meetingChannel}
           workStyle={interpretation.workStyle}
+          gyeokgukCareerFit={interpretation.gyeokgukCareerFit}
+          gyeokgukWealthStyle={interpretation.gyeokgukWealthStyle}
           coreSummary={interpretation.coreSummary}
           incomeSource={interpretation.incomeSource}
           wealthMonthRanking={interpretation.wealthMonthRanking}

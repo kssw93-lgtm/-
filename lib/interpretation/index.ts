@@ -16,6 +16,8 @@ import { getIncomeSource, type IncomeSource } from "./income-source";
 import { getMeetingChannel, type MeetingChannel } from "./meeting-channel";
 import { getWorkStyle, type WorkStyle } from "./work-style";
 import { computeWealthMonthRanking, type WealthMonthRanking } from "./wealth-month-ranking";
+import { getGyeokgukCareerFit, type GyeokgukCareerFit } from "./gyeokguk-career";
+import { getGyeokgukWealthStyle, type GyeokgukWealthStyle } from "./gyeokguk-wealth";
 import { computeGwiinDaeunList, type GwiinDaeun } from "./life-highlights";
 import { getDatingAdvice } from "./dating-status";
 import { computeSinsal } from "@/lib/calc/sinsal";
@@ -63,6 +65,8 @@ export * from "./income-source";
 export * from "./meeting-channel";
 export * from "./work-style";
 export * from "./wealth-month-ranking";
+export * from "./gyeokguk-career";
+export * from "./gyeokguk-wealth";
 export * from "./life-highlights";
 export * from "./dating-status";
 export * from "./rootedness-summary";
@@ -124,9 +128,13 @@ export interface InterpretationResult {
   meetingChannel: MeetingChannel | null;
   /** 업무 스타일·잘 맞는 환경 — 직업운/종합사주에서만 채워진다 */
   workStyle: WorkStyle | null;
+  /** 격국별 직업 적성 — 직업운/종합사주에서만 채워진다 */
+  gyeokgukCareerFit: GyeokgukCareerFit | null;
+  /** 격국별 재물 스타일 — 재물운/종합사주에서만 채워진다 */
+  gyeokgukWealthStyle: GyeokgukWealthStyle | null;
   /** 올해 재물 유리한 달 TOP3 / 조심할 달 TOP3 — 재물운/종합사주에서만 채워진다 */
   wealthMonthRanking: WealthMonthRanking | null;
-  /** 귀인 기운이 드는 대운 시기 — 종합사주에서만 채워진다 */
+  /** 귀인 기운이 드는 대운 시기 — 직업운/재물운/종합사주에서 채워진다 */
   gwiinDaeun: GwiinDaeun[];
   /** 지금 관계에서 눈여겨볼 점 — 연애운에서 "연애 중"을 선택했을 때만 채워진다 */
   datingAdvice: string | null;
@@ -156,16 +164,18 @@ interface CategoryFeatures {
   incomeSource: boolean; // 나에게 유리한 수입 구조 (재물운 전용)
   meetingChannel: boolean; // 인연이 들어오는 경로 (연애운/재회운 전용)
   workStyle: boolean; // 업무 스타일·잘 맞는 환경 (직업운 전용)
+  gyeokgukCareerFit: boolean; // 격국별 직업 적성 (직업운 전용)
+  gyeokgukWealthStyle: boolean; // 격국별 재물 스타일 (재물운 전용)
   wealthMonthRanking: boolean; // 올해 재물 유리한 달 TOP3/조심할 달 TOP3 (재물운 전용)
-  gwiinDaeun: boolean; // 귀인 기운이 드는 대운 시기 (종합사주 전용)
+  gwiinDaeun: boolean; // 귀인 기운이 드는 대운 시기
 }
 
 const CATEGORY_FEATURES: Record<Category, CategoryFeatures> = {
-  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, wealthMonthRanking: false, gwiinDaeun: false },
-  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, wealthMonthRanking: false, gwiinDaeun: false },
-  career: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: true, wealthMonthRanking: false, gwiinDaeun: false },
-  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: false, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true, meetingChannel: false, workStyle: false, wealthMonthRanking: true, gwiinDaeun: false },
-  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true, incomeSource: true, meetingChannel: true, workStyle: true, wealthMonthRanking: true, gwiinDaeun: true },
+  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: false },
+  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: false },
+  career: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: true, gyeokgukCareerFit: true, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: true },
+  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true, meetingChannel: false, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: true, wealthMonthRanking: true, gwiinDaeun: true },
+  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true, incomeSource: true, meetingChannel: true, workStyle: true, gyeokgukCareerFit: true, gyeokgukWealthStyle: true, wealthMonthRanking: true, gwiinDaeun: true },
 };
 
 export type RelationshipStatus = "single" | "dating";
@@ -289,6 +299,8 @@ export function interpretSaju(
     incomeSource: features.incomeSource ? getIncomeSource(group) : null,
     meetingChannel: features.meetingChannel && !isDatingLove ? getMeetingChannel(group) : null,
     workStyle: features.workStyle ? getWorkStyle(group) : null,
+    gyeokgukCareerFit: features.gyeokgukCareerFit ? getGyeokgukCareerFit(gyeokguk.tenGod) : null,
+    gyeokgukWealthStyle: features.gyeokgukWealthStyle ? getGyeokgukWealthStyle(gyeokguk.tenGod) : null,
     wealthMonthRanking: features.wealthMonthRanking ? computeWealthMonthRanking(saju) : null,
     gwiinDaeun: features.gwiinDaeun ? computeGwiinDaeunList(saju) : [],
     datingAdvice: isDatingLove ? getDatingAdvice(group) : null,

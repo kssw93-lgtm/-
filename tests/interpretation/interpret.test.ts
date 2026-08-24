@@ -245,3 +245,39 @@ describe("통근(通根) 요약", () => {
     expect(summary.totalCount).toBe(3);
   });
 });
+
+describe("직업운/재물운 보강: 신살·귀인 대운·격국 기반 콘텐츠", () => {
+  it("직업운은 격국별 직업 적성만 채워지고 재물 스타일은 비어있다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const result = interpretSaju(saju, "career");
+    expect(result.gyeokgukCareerFit).not.toBeNull();
+    expect(result.gyeokgukCareerFit?.fitField.length).toBeGreaterThan(0);
+    expect(result.gyeokgukWealthStyle).toBeNull();
+  });
+
+  it("재물운은 격국별 재물 스타일만 채워지고 직업 적성은 비어있다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const result = interpretSaju(saju, "wealth");
+    expect(result.gyeokgukWealthStyle).not.toBeNull();
+    expect(result.gyeokgukWealthStyle?.style.length).toBeGreaterThan(0);
+    expect(result.gyeokgukCareerFit).toBeNull();
+  });
+
+  it("직업운/재물운 모두 신살과 귀인 대운이 이제 채워진다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const career = interpretSaju(saju, "career");
+    const wealth = interpretSaju(saju, "wealth");
+    // 신살은 사람마다 없을 수도 있으니 배열 형태만 확인(빈 배열이 아니라 undefined가 아님을 확인)
+    expect(Array.isArray(career.sinsal)).toBe(true);
+    expect(Array.isArray(wealth.sinsal)).toBe(true);
+    expect(Array.isArray(career.gwiinDaeun)).toBe(true);
+    expect(Array.isArray(wealth.gwiinDaeun)).toBe(true);
+  });
+
+  it("연애운 등 관련 없는 카테고리는 격국 직업/재물 필드가 항상 null이다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const result = interpretSaju(saju, "love");
+    expect(result.gyeokgukCareerFit).toBeNull();
+    expect(result.gyeokgukWealthStyle).toBeNull();
+  });
+});
