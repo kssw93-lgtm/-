@@ -197,7 +197,13 @@ const CATEGORY_FEATURES: Record<Category, CategoryFeatures> = {
   reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: false, zodiacCompat: true, zodiacCareer: false, workRelationships: false, loveDeepDive: false },
   career: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: true, gyeokgukCareerFit: true, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: true, zodiacCompat: false, zodiacCareer: true, workRelationships: true, loveDeepDive: false },
   wealth: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true, meetingChannel: false, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: true, wealthMonthRanking: true, gwiinDaeun: true, zodiacCompat: false, zodiacCareer: false, workRelationships: false, loveDeepDive: false },
-  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true, incomeSource: true, meetingChannel: true, workStyle: true, gyeokgukCareerFit: true, gyeokgukWealthStyle: true, wealthMonthRanking: true, gwiinDaeun: true, zodiacCompat: true, zodiacCareer: true, workRelationships: true, loveDeepDive: true },
+  // 종합사주는 "왜 이런 사람인지"를 원국 전체로 훑어 보여주는 자리이지, 각 개별
+  // 카테고리의 심화 콘텐츠(연애 심화분석/직장 인간관계/재물 랭킹 등)를 그대로 복붙해
+  // 보여주는 자리가 아니다. 예전엔 거의 모든 플래그를 켜뒀더니 종합사주 PDF에 연애운·
+  // 직업운·재물운 카드가 통째로 다시 등장해 "카테고리를 눌러도 똑같은 내용"이라는
+  // 피드백을 받았다 — 그래서 원국 자체를 훑는 항목(coreProfile/성향/신살/조후/행운색/
+  // 인생등급/전생/생애주기/귀인대운)만 남기고, 특정 카테고리 "전용" 심화 항목은 모두 끈다.
+  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: true, zodiacCompat: false, zodiacCareer: false, workRelationships: false, loveDeepDive: false },
 };
 
 export type RelationshipStatus = "single" | "dating";

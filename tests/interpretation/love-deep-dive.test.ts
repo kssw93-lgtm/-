@@ -37,10 +37,10 @@ describe("interpretSaju에서 loveDeepDive는 연애운/종합사주에서만 �
     isLeapMonth: false,
   };
 
-  it("연애운/종합사주는 loveDeepDive가 채워지고, 재회운/직업운/재물운은 null이다", () => {
+  it("연애운에서만 loveDeepDive가 채워진다 (종합사주는 개별 카테고리 심화 콘텐츠를 복제하지 않는다)", () => {
     const saju = computeSaju(SAMPLE_INPUT);
     expect(interpretSaju(saju, "love").loveDeepDive).not.toBeNull();
-    expect(interpretSaju(saju, "overall").loveDeepDive).not.toBeNull();
+    expect(interpretSaju(saju, "overall").loveDeepDive).toBeNull();
     expect(interpretSaju(saju, "reunion").loveDeepDive).toBeNull();
     expect(interpretSaju(saju, "career").loveDeepDive).toBeNull();
     expect(interpretSaju(saju, "wealth").loveDeepDive).toBeNull();

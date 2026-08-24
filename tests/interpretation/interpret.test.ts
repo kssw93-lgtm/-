@@ -200,11 +200,11 @@ describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠
     }
   });
 
-  it("인연 만나기 좋은 날·장소는 연애운/재회운/종합사주에서만 제공된다", () => {
+  it("인연 만나기 좋은 날·장소는 연애운/재회운에서만 제공된다 (종합사주는 개별 카테고리 심화 콘텐츠를 복제하지 않는다)", () => {
     const saju = computeSaju(SAMPLE_INPUT);
     expect(interpretSaju(saju, "love").meetingTiming).not.toBeNull();
     expect(interpretSaju(saju, "reunion").meetingTiming).not.toBeNull();
-    expect(interpretSaju(saju, "overall").meetingTiming).not.toBeNull();
+    expect(interpretSaju(saju, "overall").meetingTiming).toBeNull();
     expect(interpretSaju(saju, "career").meetingTiming).toBeNull();
     expect(interpretSaju(saju, "wealth").meetingTiming).toBeNull();
   });

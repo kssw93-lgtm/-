@@ -35,10 +35,10 @@ describe("interpretSaju에서 workRelationships는 직업운/종합사주에서�
     isLeapMonth: false,
   };
 
-  it("직업운/종합사주는 workRelationships가 채워지고, 연애운/재물운은 null이다", () => {
+  it("직업운에서만 workRelationships가 채워진다 (종합사주는 개별 카테고리 심화 콘텐츠를 복제하지 않는다)", () => {
     const saju = computeSaju(SAMPLE_INPUT);
     expect(interpretSaju(saju, "career").workRelationships).not.toBeNull();
-    expect(interpretSaju(saju, "overall").workRelationships).not.toBeNull();
+    expect(interpretSaju(saju, "overall").workRelationships).toBeNull();
     expect(interpretSaju(saju, "love").workRelationships).toBeNull();
     expect(interpretSaju(saju, "wealth").workRelationships).toBeNull();
     expect(interpretSaju(saju, "reunion").workRelationships).toBeNull();
