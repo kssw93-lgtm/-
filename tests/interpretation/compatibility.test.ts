@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { computeSaju } from "@/lib/calc";
 import { computeCompatibility } from "@/lib/interpretation/compatibility";
-import { computeCompatibilityAxes, getConflictPoint } from "@/lib/interpretation/compatibility-axes";
+import { computeCompatibilityAxes, getConflictPoint, getSecretMindTeaser } from "@/lib/interpretation/compatibility-axes";
 
 describe("궁합 계산", () => {
   it("두 사람의 사주를 각각 독립적으로 계산해 비교한다(계산 규칙서 60번)", () => {
@@ -111,4 +111,30 @@ describe("관계에서 함께 신경 쓰면 좋은 점 (배우자궁 관계 기�
       expect(result?.desc.length).toBeGreaterThan(0);
     }
   );
+});
+
+describe("상대방 마음 살짝 엿보기 (groupBtoA 재사용)", () => {
+  const BASE = {
+    groupAtoB: "inseong" as const,
+    groupBtoA: "inseong" as const,
+    textAtoB: "t1",
+    textBtoA: "t2",
+    elementRelation: "같은 기운",
+    elementRelationTier: "same" as const,
+    dayBranchRelation: null,
+  };
+
+  it.each(["bigeob", "siksang", "jaeseong", "gwanseong", "inseong"] as const)(
+    "groupBtoA=%s면 해당 그룹의 문구를 반환한다",
+    (groupBtoA) => {
+      const teaser = getSecretMindTeaser({ ...BASE, groupBtoA });
+      expect(teaser.length).toBeGreaterThan(0);
+    }
+  );
+
+  it("groupBtoA가 다르면 다른 문구가 나온다(동일 문구 재탕 아님)", () => {
+    const a = getSecretMindTeaser({ ...BASE, groupBtoA: "bigeob" });
+    const b = getSecretMindTeaser({ ...BASE, groupBtoA: "jaeseong" });
+    expect(a).not.toBe(b);
+  });
 });

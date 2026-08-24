@@ -1,5 +1,6 @@
 import compatAxesJson from "@/data/compatibility-axes.json";
 import conflictPointsJson from "@/data/compatibility-conflict-points.json";
+import secretMindJson from "@/data/compatibility-secret-mind.json";
 import type { CompatibilityResult } from "./compatibility";
 import type { PatternGroup } from "./feature-extract";
 
@@ -51,6 +52,18 @@ const CONFLICT_POINTS = conflictPointsJson as Record<string, ConflictPoint>;
 export function getConflictPoint(dayBranchRelation: CompatibilityResult["dayBranchRelation"]): ConflictPoint | null {
   if (!dayBranchRelation || dayBranchRelation.type === "branch_six_combine") return null;
   return CONFLICT_POINTS[dayBranchRelation.type] ?? null;
+}
+
+const SECRET_MIND = secretMindJson as Record<PatternGroup, string>;
+
+/**
+ * "상대방 마음 살짝 엿보기" 재미 콘텐츠 — 상대방 데이터 없이 지어내는 게 아니라, 궁합
+ * 계산에서 이미 산출된 groupBtoA(상대방의 일간이 나의 일간에 대해 갖는 십신 관계, 상대방의
+ * 실제 생년월일로 계산된 값)를 그대로 재사용한다. textBtoA와 같은 근거지만, "속마음을
+ * 엿본다"는 재미 콘셉트에 맞춰 다른 톤으로 새로 썼다.
+ */
+export function getSecretMindTeaser(compat: CompatibilityResult): string {
+  return SECRET_MIND[compat.groupBtoA];
 }
 
 /** 배우자궁(일지) 관계의 유형에 따라 정서적 자극의 성격을 3단계로 나눈다. 육합=긍정적 안정, 충/파/해/원진=자극과 긴장, 관계 없음=무난. */

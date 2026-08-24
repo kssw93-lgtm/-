@@ -4,6 +4,7 @@ import AdSlot from "./AdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
 import LifeGradeCard, { GRADE_COLOR } from "./LifeGradeCard";
 import PastLifeCard from "./PastLifeCard";
+import TalismanCard from "./TalismanCard";
 import SajuChart from "./SajuChart";
 import type { Category, ToneStyleId } from "@/lib/session";
 import type { SajuResult } from "@/lib/calc/types";
@@ -476,6 +477,8 @@ export default function ResultScreen({
           {lifeGrades.length > 0 && <LifeGradeCard stages={lifeGrades} />}
 
           {pastLife && <PastLifeCard pastLife={pastLife} />}
+
+          <TalismanCard displayName={displayName} luckColor={luckColor} coreSummary={coreSummary} gyeokguk={gyeokguk} />
         </div>
 
       {isHourExcluded && (

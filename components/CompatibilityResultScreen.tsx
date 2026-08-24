@@ -3,7 +3,8 @@
 import AdSlot from "./AdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
 import { describeDayMasterPair, type CompatibilityResult } from "@/lib/interpretation/compatibility";
-import { computeCompatibilityAxes, getConflictPoint, type CompatTier } from "@/lib/interpretation/compatibility-axes";
+import { computeCompatibilityAxes, getConflictPoint, getSecretMindTeaser, type CompatTier } from "@/lib/interpretation/compatibility-axes";
+import SecretMindCard from "./SecretMindCard";
 import type { SajuResult } from "@/lib/calc/types";
 
 const TIER_COLOR: Record<CompatTier, string> = {
@@ -44,6 +45,7 @@ export default function CompatibilityResultScreen({
   const axes = computeCompatibilityAxes(result);
   const axisList = [axes.personality, axes.communication, axes.emotional, axes.daily, axes.money, axes.marriage];
   const conflictPoint = getConflictPoint(result.dayBranchRelation);
+  const secretMindTeaser = getSecretMindTeaser(result);
 
   return (
     <div className="flex flex-1 flex-col gap-6 px-6 py-8">
@@ -79,6 +81,8 @@ export default function CompatibilityResultScreen({
           점수(%)로 환산할 근거가 없는 항목이라 숫자 대신 세 단계 정성 평가로 보여드려요. 아래에서 각 항목의 자세한 이유를 확인할 수 있어요.
         </p>
       </div>
+
+      <SecretMindCard partnerLabel={displayB} teaser={secretMindTeaser} />
 
       <div className="flex flex-col gap-4">
         <div className="rounded-2xl bg-white/10 p-5">
