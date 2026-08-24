@@ -326,6 +326,9 @@ export default function ResultScreen({
                   <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCareer.star.desc}</p>
                 </div>
               </div>
+              <p className="mt-3 border-t border-white/10 pt-3 text-xs leading-relaxed text-white/40">
+                🔮 명리학적 해석을 바탕으로 구성한 오락적 콘텐츠이며 실제 미래나 사실을 확정하는 내용은 아닙니다.
+              </p>
             </div>
           )}
 
@@ -496,6 +499,9 @@ export default function ResultScreen({
                   <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.starChallenging.desc}</p>
                 </div>
               </div>
+              <p className="mt-3 border-t border-white/10 pt-3 text-xs leading-relaxed text-white/40">
+                🔮 명리학적 해석을 바탕으로 구성한 오락적 콘텐츠이며 실제 미래나 사실을 확정하는 내용은 아닙니다.
+              </p>
             </div>
           )}
 
