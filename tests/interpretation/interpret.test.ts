@@ -61,10 +61,15 @@ describe("전체 카테고리 회귀 테스트 (신규 카테고리 추가 시 �
 });
 
 describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠/별자리)", () => {
-  it("연애운은 원국 공통 블록 없이 카테고리 핵심 콘텐츠로 바로 시작한다", () => {
+  it("연애운은 원국 공통 블록 없이 카테고리 핵심 콘텐츠로 바로 시작하고, 일간→월간→연간 순으로 이어진다", () => {
     const saju = computeSaju(SAMPLE_INPUT);
     const result = interpretSaju(saju, "love");
-    expect(result.sections.map((s) => s.heading)).toEqual(["연애운 핵심 특징", "올해 연애운", "이번달 연애운"]);
+    expect(result.sections.map((s) => s.heading)).toEqual([
+      "연애운 핵심 특징",
+      "오늘의 연애운",
+      "이번달 연애운",
+      "올해 연애운",
+    ]);
     for (const s of result.sections) {
       expect(s.text.length).toBeGreaterThan(0);
     }

@@ -23,6 +23,7 @@ import { getZodiacCareerFit, type ZodiacCareerFit } from "./zodiac-career";
 import { getSinsalDescForCategory } from "./sinsal-category";
 import { getWorkRelationships, type WorkRelationships } from "./work-relationships";
 import { getLoveDeepDive, type LoveDeepDive } from "./love-deep-dive";
+import { getDailyTierText } from "./daily-tier";
 import { computeGwiinDaeunList, type GwiinDaeun } from "./life-highlights";
 import { getDatingAdvice } from "./dating-status";
 import { computeSinsal } from "@/lib/calc/sinsal";
@@ -77,6 +78,7 @@ export * from "./zodiac-career";
 export * from "./sinsal-category";
 export * from "./work-relationships";
 export * from "./love-deep-dive";
+export * from "./daily-tier";
 export * from "./life-highlights";
 export * from "./dating-status";
 export * from "./rootedness-summary";
@@ -190,20 +192,21 @@ interface CategoryFeatures {
   zodiacCareer: boolean; // 띠·별자리로 보는 직업 적성 (직업운 전용)
   workRelationships: boolean; // 직장 내 인간관계(상사·동료·부하) (직업운 전용)
   loveDeepDive: boolean; // 연애운 심화(이상형/나를 좋아하기 쉬운 사람/갈등 포인트/결혼운) (연애운 전용)
+  dailyTier: boolean; // 오늘의 OO운 — 일간/월간/연간 3단 구조 중 일간 티어 (love/reunion/career/wealth 전용)
 }
 
 const CATEGORY_FEATURES: Record<Category, CategoryFeatures> = {
-  love: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: false, zodiacCompat: true, zodiacCareer: false, workRelationships: false, loveDeepDive: true },
-  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: false, zodiacCompat: true, zodiacCareer: false, workRelationships: false, loveDeepDive: false },
-  career: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: true, gyeokgukCareerFit: true, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: true, zodiacCompat: false, zodiacCareer: true, workRelationships: true, loveDeepDive: false },
-  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true, meetingChannel: false, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: true, wealthMonthRanking: true, gwiinDaeun: true, zodiacCompat: false, zodiacCareer: false, workRelationships: false, loveDeepDive: false },
+  love: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: false, zodiacCompat: true, zodiacCareer: false, workRelationships: false, loveDeepDive: true, dailyTier: true },
+  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: false, zodiacCompat: true, zodiacCareer: false, workRelationships: false, loveDeepDive: false, dailyTier: true },
+  career: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: true, gyeokgukCareerFit: true, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: true, zodiacCompat: false, zodiacCareer: true, workRelationships: true, loveDeepDive: false, dailyTier: true },
+  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true, meetingChannel: false, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: true, wealthMonthRanking: true, gwiinDaeun: true, zodiacCompat: false, zodiacCareer: false, workRelationships: false, loveDeepDive: false, dailyTier: true },
   // 종합사주는 "왜 이런 사람인지"를 원국 전체로 훑어 보여주는 자리이지, 각 개별
   // 카테고리의 심화 콘텐츠(연애 심화분석/직장 인간관계/재물 랭킹 등)를 그대로 복붙해
   // 보여주는 자리가 아니다. 예전엔 거의 모든 플래그를 켜뒀더니 종합사주 PDF에 연애운·
   // 직업운·재물운 카드가 통째로 다시 등장해 "카테고리를 눌러도 똑같은 내용"이라는
   // 피드백을 받았다 — 그래서 원국 자체를 훑는 항목(coreProfile/성향/신살/조후/행운색/
   // 인생등급/전생/생애주기/귀인대운)만 남기고, 특정 카테고리 "전용" 심화 항목은 모두 끈다.
-  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: true, zodiacCompat: false, zodiacCareer: false, workRelationships: false, loveDeepDive: false },
+  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: true, zodiacCompat: false, zodiacCareer: false, workRelationships: false, loveDeepDive: false, dailyTier: false },
 };
 
 export type RelationshipStatus = "single" | "dating";
@@ -242,6 +245,7 @@ export function interpretSaju(
   const vars = { name: saju.input.name, dayStem: saju.pillars.dayPillar.stem };
   const categoryLabel = `${CATEGORY_LABEL[category]} 핵심 특징`;
   const coreSummary = computeCoreSummary(group);
+  const dailyFortune = computeDailyFortune(saju);
 
   // 종합사주만 원국 전체를 훑는 공통 블록(일간총평/기본성향/원국관계)으로 시작하고,
   // 나머지 카테고리는 곧바로 그 주제만의 핵심 콘텐츠로 시작한다 — 카테고리를 바꿔가며
@@ -255,12 +259,20 @@ export function interpretSaju(
       ]
     : [{ heading: categoryLabel, text: substituteVariables(categoryTemplate.text, vars) }];
 
+  // 일간(오늘) → 월간(이번달) → 연간(올해) 순서로 쌓아, 짧은 호흡에서 긴 호흡 순으로
+  // 자연스럽게 읽히게 한다. 오늘의 OO운은 dailyFortune에서 이미 계산한 오늘의 십신을
+  // 그대로 재사용해 카테고리 색깔만 입힌 것이라 새로운 계산이 추가되지 않는다.
+  if (features.dailyTier) {
+    const dailyTierText = getDailyTierText(category, dailyFortune.tenGod);
+    if (dailyTierText) sections.push({ heading: `오늘의 ${CATEGORY_LABEL[category]}`, text: dailyTierText });
+  }
+
   const currentFlow = computeCurrentFlow(saju);
   if (currentFlow) {
     const annual = selectAnnualTemplate(category, currentFlow.annualGroup);
     const monthly = selectMonthlyTemplate(category, currentFlow.monthlyGroup);
-    if (annual) sections.push({ heading: `올해 ${CATEGORY_LABEL[category]}`, text: substituteVariables(annual.text, vars) });
     if (monthly) sections.push({ heading: `이번달 ${CATEGORY_LABEL[category]}`, text: substituteVariables(monthly.text, vars) });
+    if (annual) sections.push({ heading: `올해 ${CATEGORY_LABEL[category]}`, text: substituteVariables(annual.text, vars) });
   }
 
   const starSign = getStarSignForSaju(saju);
@@ -305,7 +317,6 @@ export function interpretSaju(
         return { ...base, desc: getSinsalDescForCategory(hit.id, category, base.desc) };
       })
     : [];
-  const dailyFortune = computeDailyFortune(saju);
   const pastLife = features.pastLife ? computePastLife(saju) : null;
   const lifeGrades = features.lifeGrades ? computeLifeGrades(saju) : [];
   const johu = features.johu ? computeJohu(saju) : null;
