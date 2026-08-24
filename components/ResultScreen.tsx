@@ -36,6 +36,7 @@ import {
   type ZodiacCompat,
   type ZodiacCareerFit,
   type WorkRelationships,
+  type LoveDeepDive,
 } from "@/lib/interpretation";
 
 interface Props {
@@ -68,6 +69,7 @@ interface Props {
   zodiacCompat: ZodiacCompat | null;
   zodiacCareer: ZodiacCareerFit | null;
   workRelationships: WorkRelationships | null;
+  loveDeepDive: LoveDeepDive | null;
   datingAdvice: string | null;
   resultText: string;
   isHourExcluded: boolean;
@@ -108,6 +110,7 @@ export default function ResultScreen({
   zodiacCompat,
   zodiacCareer,
   workRelationships,
+  loveDeepDive,
   datingAdvice,
   resultText,
   isHourExcluded,
@@ -248,6 +251,33 @@ export default function ResultScreen({
             <div className="rounded-2xl bg-white/10 p-5">
               <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">지금 관계에서 눈여겨볼 점</p>
               <p className="text-base leading-relaxed">{datingAdvice}</p>
+            </div>
+          )}
+
+          {loveDeepDive && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">연애 심화 분석</p>
+                <ReliabilityBadge tier="interpretive" />
+              </div>
+              <div className="flex flex-col gap-3">
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">💘 내가 끌리는 이상형</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/80">{loveDeepDive.idealType}</p>
+                </div>
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">🧲 나를 좋아하기 쉬운 사람</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/80">{loveDeepDive.attractsYou}</p>
+                </div>
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">⚡ 연애에서 부딪히기 쉬운 지점</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/80">{loveDeepDive.conflictPoint}</p>
+                </div>
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">💍 결혼운</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/80">{loveDeepDive.marriageTendency}</p>
+                </div>
+              </div>
             </div>
           )}
 

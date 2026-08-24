@@ -317,6 +317,7 @@ export default function SajuFlow() {
           zodiacCompat={interpretation.zodiacCompat}
           zodiacCareer={interpretation.zodiacCareer}
           workRelationships={interpretation.workRelationships}
+          loveDeepDive={interpretation.loveDeepDive}
           datingAdvice={interpretation.datingAdvice}
           resultText={interpretation.resultText}
           isHourExcluded={interpretation.isHourExcluded}
