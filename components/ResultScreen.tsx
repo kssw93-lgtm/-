@@ -32,6 +32,8 @@ import {
   type WealthMonthRanking,
   type GwiinDaeun,
   type ZodiacAnimal,
+  type ZodiacCompat,
+  type ZodiacCareerFit,
 } from "@/lib/interpretation";
 
 interface Props {
@@ -61,6 +63,8 @@ interface Props {
   incomeSource: IncomeSource | null;
   wealthMonthRanking: WealthMonthRanking | null;
   gwiinDaeun: GwiinDaeun[];
+  zodiacCompat: ZodiacCompat | null;
+  zodiacCareer: ZodiacCareerFit | null;
   datingAdvice: string | null;
   resultText: string;
   isHourExcluded: boolean;
@@ -97,6 +101,8 @@ export default function ResultScreen({
   incomeSource,
   wealthMonthRanking,
   gwiinDaeun,
+  zodiacCompat,
+  zodiacCareer,
   datingAdvice,
   resultText,
   isHourExcluded,
@@ -256,6 +262,26 @@ export default function ResultScreen({
             </div>
           )}
 
+          {zodiacCareer && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">띠·별자리로 보는 직업 적성</p>
+              <div className="flex flex-col gap-3">
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">
+                    🐾 {zodiacAnimal.animal} · {zodiacCareer.animal.fields}
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCareer.animal.desc}</p>
+                </div>
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">
+                    {starSign.symbol} {starSign.name} · {zodiacCareer.star.fields}
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCareer.star.desc}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {incomeSource && (
             <div className="rounded-2xl bg-white/10 p-5">
               <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">나에게 유리한 수입 구조</p>
@@ -355,6 +381,46 @@ export default function ResultScreen({
                     {category === "reunion" ? "🤝" : "📍"} {meetingTiming.place}
                   </p>
                   <p className="mt-1 text-sm leading-relaxed text-white/80">{meetingTiming.placeReason}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {zodiacCompat && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">🐾 띠 궁합</p>
+              <div className="flex flex-col gap-2">
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">💛 찰떡궁합 {zodiacCompat.animalBest.labels.join(", ")}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.animalBest.desc}</p>
+                </div>
+                {zodiacCompat.animalGood.labels.length > 0 && (
+                  <div className="rounded-lg bg-white/5 p-3">
+                    <p className="text-sm font-bold">🟢 잘 맞는 편 {zodiacCompat.animalGood.labels.join(", ")}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.animalGood.desc}</p>
+                  </div>
+                )}
+                {zodiacCompat.animalEffort.labels.length > 0 && (
+                  <div className="rounded-lg bg-white/5 p-3">
+                    <p className="text-sm font-bold">🔴 노력이 필요한 편 {zodiacCompat.animalEffort.labels.join(", ")}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.animalEffort.desc}</p>
+                  </div>
+                )}
+              </div>
+
+              <p className="mb-3 mt-5 text-xs font-semibold text-[color:var(--color-gold-light)]">{starSign.symbol} 별자리 궁합</p>
+              <div className="flex flex-col gap-2">
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">💛 찰떡궁합 {zodiacCompat.starBest.labels.join(", ")}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.starBest.desc}</p>
+                </div>
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">🟢 잘 맞는 편 {zodiacCompat.starGood.labels.join(", ")}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.starGood.desc}</p>
+                </div>
+                <div className="rounded-lg bg-white/5 p-3">
+                  <p className="text-sm font-bold">🔴 노력이 필요한 편 {zodiacCompat.starChallenging.labels.join(", ")}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.starChallenging.desc}</p>
                 </div>
               </div>
             </div>

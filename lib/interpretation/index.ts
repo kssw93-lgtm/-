@@ -18,6 +18,8 @@ import { getWorkStyle, type WorkStyle } from "./work-style";
 import { computeWealthMonthRanking, type WealthMonthRanking } from "./wealth-month-ranking";
 import { getGyeokgukCareerFit, type GyeokgukCareerFit } from "./gyeokguk-career";
 import { getGyeokgukWealthStyle, type GyeokgukWealthStyle } from "./gyeokguk-wealth";
+import { getZodiacCompat, type ZodiacCompat } from "./zodiac-compat";
+import { getZodiacCareerFit, type ZodiacCareerFit } from "./zodiac-career";
 import { computeGwiinDaeunList, type GwiinDaeun } from "./life-highlights";
 import { getDatingAdvice } from "./dating-status";
 import { computeSinsal } from "@/lib/calc/sinsal";
@@ -67,6 +69,8 @@ export * from "./work-style";
 export * from "./wealth-month-ranking";
 export * from "./gyeokguk-career";
 export * from "./gyeokguk-wealth";
+export * from "./zodiac-compat";
+export * from "./zodiac-career";
 export * from "./life-highlights";
 export * from "./dating-status";
 export * from "./rootedness-summary";
@@ -136,6 +140,10 @@ export interface InterpretationResult {
   wealthMonthRanking: WealthMonthRanking | null;
   /** 귀인 기운이 드는 대운 시기 — 직업운/재물운/종합사주에서 채워진다 */
   gwiinDaeun: GwiinDaeun[];
+  /** 띠·별자리 궁합 — 연애운/재회운/종합사주에서만 채워진다 */
+  zodiacCompat: ZodiacCompat | null;
+  /** 띠·별자리로 보는 직업 적성 — 직업운/종합사주에서만 채워진다 */
+  zodiacCareer: ZodiacCareerFit | null;
   /** 지금 관계에서 눈여겨볼 점 — 연애운에서 "연애 중"을 선택했을 때만 채워진다 */
   datingAdvice: string | null;
   /** PDF 저장/공유용으로 섹션을 하나로 합친 텍스트 */
@@ -168,14 +176,16 @@ interface CategoryFeatures {
   gyeokgukWealthStyle: boolean; // 격국별 재물 스타일 (재물운 전용)
   wealthMonthRanking: boolean; // 올해 재물 유리한 달 TOP3/조심할 달 TOP3 (재물운 전용)
   gwiinDaeun: boolean; // 귀인 기운이 드는 대운 시기
+  zodiacCompat: boolean; // 띠·별자리 궁합 (연애운/재회운 전용)
+  zodiacCareer: boolean; // 띠·별자리로 보는 직업 적성 (직업운 전용)
 }
 
 const CATEGORY_FEATURES: Record<Category, CategoryFeatures> = {
-  love: { coreProfile: false, zodiacPersonality: true, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: false },
-  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: false },
-  career: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: true, gyeokgukCareerFit: true, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: true },
-  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true, meetingChannel: false, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: true, wealthMonthRanking: true, gwiinDaeun: true },
-  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true, incomeSource: true, meetingChannel: true, workStyle: true, gyeokgukCareerFit: true, gyeokgukWealthStyle: true, wealthMonthRanking: true, gwiinDaeun: true },
+  love: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: false, zodiacCompat: true, zodiacCareer: false },
+  reunion: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: false, pastLife: false, lifeStages: false, meetingTiming: true, incomeSource: false, meetingChannel: true, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: false, zodiacCompat: true, zodiacCareer: false },
+  career: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: false, meetingChannel: false, workStyle: true, gyeokgukCareerFit: true, gyeokgukWealthStyle: false, wealthMonthRanking: false, gwiinDaeun: true, zodiacCompat: false, zodiacCareer: true },
+  wealth: { coreProfile: false, zodiacPersonality: false, sinsal: true, johu: false, luckColor: true, lifeGrades: true, pastLife: false, lifeStages: false, meetingTiming: false, incomeSource: true, meetingChannel: false, workStyle: false, gyeokgukCareerFit: false, gyeokgukWealthStyle: true, wealthMonthRanking: true, gwiinDaeun: true, zodiacCompat: false, zodiacCareer: false },
+  overall: { coreProfile: true, zodiacPersonality: true, sinsal: true, johu: true, luckColor: true, lifeGrades: true, pastLife: true, lifeStages: true, meetingTiming: true, incomeSource: true, meetingChannel: true, workStyle: true, gyeokgukCareerFit: true, gyeokgukWealthStyle: true, wealthMonthRanking: true, gwiinDaeun: true, zodiacCompat: true, zodiacCareer: true },
 };
 
 export type RelationshipStatus = "single" | "dating";
@@ -276,6 +286,8 @@ export function interpretSaju(
   const pastLife = features.pastLife ? computePastLife(saju) : null;
   const lifeGrades = features.lifeGrades ? computeLifeGrades(saju) : [];
   const johu = features.johu ? computeJohu(saju) : null;
+  const zodiacCompat = features.zodiacCompat ? getZodiacCompat(saju.pillars.yearPillar.branch, starSign.id) : null;
+  const zodiacCareer = features.zodiacCareer ? getZodiacCareerFit(saju.pillars.yearPillar.branch, starSign.id) : null;
 
   return {
     category,
@@ -303,6 +315,8 @@ export function interpretSaju(
     gyeokgukWealthStyle: features.gyeokgukWealthStyle ? getGyeokgukWealthStyle(gyeokguk.tenGod) : null,
     wealthMonthRanking: features.wealthMonthRanking ? computeWealthMonthRanking(saju) : null,
     gwiinDaeun: features.gwiinDaeun ? computeGwiinDaeunList(saju) : [],
+    zodiacCompat,
+    zodiacCareer,
     datingAdvice: isDatingLove ? getDatingAdvice(group) : null,
     resultText: sections.map((s) => `[${s.heading}]\n${s.text}`).join("\n\n"),
     isHourExcluded: saju.pillars.hourPillar === null,

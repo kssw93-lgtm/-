@@ -64,16 +64,27 @@ describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠
   it("연애운은 원국 공통 블록 없이 카테고리 핵심 콘텐츠로 바로 시작한다", () => {
     const saju = computeSaju(SAMPLE_INPUT);
     const result = interpretSaju(saju, "love");
-    expect(result.sections.map((s) => s.heading)).toEqual([
-      "연애운 핵심 특징",
-      "올해 연애운",
-      "이번달 연애운",
-      `${result.zodiacAnimal.animal} 성격`,
-      `${result.starSign.name} 성격`,
-    ]);
+    expect(result.sections.map((s) => s.heading)).toEqual(["연애운 핵심 특징", "올해 연애운", "이번달 연애운"]);
     for (const s of result.sections) {
       expect(s.text.length).toBeGreaterThan(0);
     }
+  });
+
+  it("연애운은 띠/별자리 성격 반복 대신 띠/별자리 궁합을 보여준다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const result = interpretSaju(saju, "love");
+    expect(result.sections.map((s) => s.heading)).not.toContain(`${result.zodiacAnimal.animal} 성격`);
+    expect(result.zodiacCompat).not.toBeNull();
+    expect(result.zodiacCompat?.animalBest.labels.length).toBe(1);
+    expect(result.zodiacCareer).toBeNull();
+  });
+
+  it("직업운은 띠/별자리 궁합 대신 띠/별자리 직업 적성을 보여준다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const result = interpretSaju(saju, "career");
+    expect(result.zodiacCareer).not.toBeNull();
+    expect(result.zodiacCareer?.animal.fields.length).toBeGreaterThan(0);
+    expect(result.zodiacCompat).toBeNull();
   });
 
   it("종합사주만 일간총평/기본성향/원국관계 같은 원국 공통 블록을 포함한다", () => {
