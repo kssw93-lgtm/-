@@ -154,6 +154,11 @@ export default function CompatibilityResultScreen({
           <p className="text-base leading-relaxed">{axes.marriage.desc}</p>
         </div>
 
+        <div className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/10 p-5">
+          <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">총평</p>
+          <p className="text-base leading-relaxed">{result.summary}</p>
+        </div>
+
         <div className="rounded-2xl bg-white/10 p-5 text-sm leading-relaxed text-white/70">
           궁합은 두 사람의 원국을 각각 정확히 계산한 뒤, 일간 사이의 십신 관계(양방향)와 오행 생극 관계,
           일지(배우자궁)의 합충 관계까지 종합해 판단한 결과예요. 한쪽 사주만으로 상대를 추정하지 않고, 실제로

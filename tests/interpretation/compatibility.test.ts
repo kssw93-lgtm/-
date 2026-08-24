@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { computeSaju } from "@/lib/calc";
 import { computeCompatibility } from "@/lib/interpretation/compatibility";
 import { computeCompatibilityAxes, getConflictPoint, getSecretMindTeaser } from "@/lib/interpretation/compatibility-axes";
+import compatibilitySummaryJson from "@/data/compatibility-summary.json";
 
 describe("궁합 계산", () => {
   it("두 사람의 사주를 각각 독립적으로 계산해 비교한다(계산 규칙서 60번)", () => {
@@ -19,6 +20,14 @@ describe("궁합 계산", () => {
     expect(result.elementRelation.length).toBeGreaterThan(0);
     expect(["bigeob", "siksang", "jaeseong", "gwanseong", "inseong"]).toContain(result.groupAtoB);
     expect(["bigeob", "siksang", "jaeseong", "gwanseong", "inseong"]).toContain(result.groupBtoA);
+    expect(result.summary.length).toBeGreaterThan(0);
+  });
+
+  it("총평(summary)은 네 가지 오행 관계 유형(같음/상생/상극/무관)에 대해 모두 채워져 있고 서로 다르다", () => {
+    const tiers: Array<"same" | "generates" | "controls" | "neutral"> = ["same", "generates", "controls", "neutral"];
+    const texts = tiers.map((t) => (compatibilitySummaryJson as Record<string, string>)[t]);
+    for (const t of texts) expect(t.length).toBeGreaterThan(0);
+    expect(new Set(texts).size).toBe(tiers.length);
   });
 
   it("동일 두 사람은 항상 동일한 궁합 결과가 나온다(결정론적)", () => {
@@ -47,6 +56,7 @@ describe("궁합 요약 6축", () => {
     elementRelation: "같은 기운",
     elementRelationTier: "same" as const,
     dayBranchRelation: null,
+    summary: "s",
   };
 
   it("성격 궁합: 같은 오행(same)이면 잘 맞아요, 상극(controls)이면 노력이 필요해요", () => {
@@ -122,6 +132,7 @@ describe("상대방 마음 살짝 엿보기 (groupBtoA 재사용)", () => {
     elementRelation: "같은 기운",
     elementRelationTier: "same" as const,
     dayBranchRelation: null,
+    summary: "s",
   };
 
   it.each(["bigeob", "siksang", "jaeseong", "gwanseong", "inseong"] as const)(

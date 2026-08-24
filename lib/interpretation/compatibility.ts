@@ -1,6 +1,7 @@
 import compatibilityJson from "@/data/interpretation-templates/compatibility.json";
 import relationTypesJson from "@/data/relation-types.json";
 import fiveElementsJson from "@/data/five-elements.json";
+import compatibilitySummaryJson from "@/data/compatibility-summary.json";
 import { getTenGod } from "@/lib/calc/ten-gods";
 import { BRANCH_RELATIONS, stemById, stemHanja, branchHanja } from "@/lib/calc/data";
 import { GROUP_BY_TEN_GOD, type PatternGroup } from "./feature-extract";
@@ -9,6 +10,7 @@ import type { BranchId, ElementId, SajuResult } from "@/lib/calc/types";
 const COMPAT_TEMPLATES = compatibilityJson as { id: string; pattern: PatternGroup; text: string }[];
 const RELATION_TYPES = relationTypesJson as Record<string, { name: string; desc: string }>;
 const FIVE_ELEMENTS = fiveElementsJson as { generates: Record<ElementId, ElementId>; controls: Record<ElementId, ElementId> };
+const COMPAT_SUMMARY = compatibilitySummaryJson as Record<ElementRelationTier, string>;
 
 const ELEMENT_LABEL: Record<ElementId, string> = { wood: "목(木)", fire: "화(火)", earth: "토(土)", metal: "금(金)", water: "수(水)" };
 
@@ -25,6 +27,8 @@ export interface CompatibilityResult {
   /** elementRelation 텍스트가 어떤 종류의 관계를 서술한 것인지 기계적으로 판별 가능한 값 (요약 축 계산용) */
   elementRelationTier: ElementRelationTier;
   dayBranchRelation: { type: string; name: string; desc: string } | null;
+  /** 리포트 맨 끝 총평 — elementRelationTier(오행 생/극/동일/무관)를 기준으로 마무리한다 */
+  summary: string;
 }
 
 /**
@@ -110,6 +114,7 @@ export function computeCompatibility(sajuA: SajuResult, sajuB: SajuResult): Comp
     elementRelation,
     elementRelationTier,
     dayBranchRelation,
+    summary: COMPAT_SUMMARY[elementRelationTier],
   };
 }
 
