@@ -10,6 +10,7 @@ import AdWatchScreen from "./AdWatchScreen";
 import CalculatingLoader from "./CalculatingLoader";
 import ResultScreen from "./ResultScreen";
 import CompatibilityResultScreen from "./CompatibilityResultScreen";
+import DailyFortuneScreen from "./DailyFortuneScreen";
 import { computeSaju, type BirthInput, type SajuResult } from "@/lib/calc";
 import {
   applyToneStyle,
@@ -138,6 +139,28 @@ export default function SajuFlow() {
     setScreen("s4");
   }
 
+  /** "오늘의 운세" 빠른 진입 — 저장된 정보로 말투/카테고리/생년월일 입력을 전부 건너뛴다. */
+  function handleQuickDaily() {
+    try {
+      const result = computeSaju(toBirthInput(form));
+      setSaju(result);
+      setErrorMessage(null);
+      setScreen("daily-ad");
+    } catch (err) {
+      console.error("오늘의 운세 계산 실패:", err);
+      setErrorMessage("저장된 정보로 계산할 수 없어요. 정보를 다시 입력해 주세요.");
+      setScreen("s3");
+    }
+  }
+
+  function handleDailyAdWatched() {
+    setScreen("daily-result");
+  }
+
+  function handleSeeFullResult() {
+    setScreen("s2");
+  }
+
   function runCalculation() {
     try {
       if (flowMode === "compatibility") {
@@ -229,7 +252,13 @@ export default function SajuFlow() {
         </div>
       )}
 
-      {screen === "s1" && <IntroScreen onStart={handleStart} />}
+      {screen === "s1" && (
+        <IntroScreen
+          onStart={handleStart}
+          savedName={form.birthDate.trim().length > 0 ? form.name : null}
+          onQuickDaily={handleQuickDaily}
+        />
+      )}
       {screen === "style" && (
         <StyleSelectScreen toneStyle={toneStyle} onSelectToneStyle={handleSelectToneStyle} onNext={handleConfirmStyle} />
       )}
@@ -302,6 +331,15 @@ export default function SajuFlow() {
           sajuB={sajuB}
           result={compatResult}
           onRestart={handleOtherFortune}
+          onResetPerson={handleResetPerson}
+        />
+      )}
+      {screen === "daily-ad" && <AdWatchScreen onDone={handleDailyAdWatched} />}
+      {screen === "daily-result" && saju && (
+        <DailyFortuneScreen
+          displayName={form.name.trim() || "당신"}
+          saju={saju}
+          onSeeFullResult={handleSeeFullResult}
           onResetPerson={handleResetPerson}
         />
       )}
