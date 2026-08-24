@@ -231,8 +231,16 @@ export default function ResultScreen({
       <SajuChart saju={saju} gyeokguk={gyeokguk} />
 
       <div className="rounded-2xl bg-white/10 p-5">
-        <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{freeSection.heading}</p>
+        <div className="mb-2 flex items-center justify-between">
+          <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">{freeSection.heading}</p>
+          {category === "reunion" && <ReliabilityBadge tier="interpretive" />}
+        </div>
         <p className="text-base leading-relaxed">{freeSection.text}</p>
+        {category === "reunion" && (
+          <p className="mt-3 border-t border-white/10 pt-3 text-xs leading-relaxed text-white/40">
+            🔮 재회운은 사주 흐름을 바탕으로 한 참고용 해석이에요. 실제 상대방의 마음이나 연락 여부를 확인하는 게 아니라, 재회를 고민 중일 때 스스로의 태도를 돌아보는 참고 자료로 봐주세요.
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col gap-4">
