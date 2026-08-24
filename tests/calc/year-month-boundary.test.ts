@@ -101,7 +101,7 @@ describe("시간 미상", () => {
 });
 
 describe("회귀 테스트: 연도 경계와 무관한 날짜에서 인접 연도 데이터 누락으로 오류가 나면 안 된다", () => {
-  it("2000-06-15(시간 미상)는 1999/2001년 절기 데이터가 없어도 정상 계산된다", () => {
+  it("2000-06-15(시간 미상)는 정상 계산된다", () => {
     const r = computeSaju({
       year: 2000,
       month: 6,
@@ -114,6 +114,63 @@ describe("회귀 테스트: 연도 경계와 무관한 날짜에서 인접 연�
     });
     expect(r.pillars.yearPillar.hanja).toBe("庚辰");
     expect(r.pillars.hourPillar).toBeNull();
+  });
+
+  it("1950-06-15(시간 미상, 지원 최소연도)는 정상 계산된다", () => {
+    const r = computeSaju({
+      year: 1950,
+      month: 6,
+      day: 15,
+      hour: null,
+      minute: 0,
+      gender: "female",
+      calendarType: "solar",
+      isLeapMonth: false,
+    });
+    expect(r.pillars.yearPillar.hanja).toBeTruthy();
+    expect(r.pillars.hourPillar).toBeNull();
+  });
+});
+
+/**
+ * 1950~1999년은 천문 계산(VSOP87)으로 확장된 구간 — KASI 실측이 없는 연도에서도
+ * 입춘 경계 판정이 정확히 작동하는지 확인한다.
+ * 계산값: 1975년 입춘 = 1975-02-04 19:59 KST (data/solar-terms/1975.json).
+ */
+describe("입춘 경계 (확장 구간, 1975년 — 천문 계산)", () => {
+  it("입춘 1분 전(19:58) → 이전 연도 년주", () => {
+    const before = computeSaju({
+      year: 1975, month: 2, day: 4, hour: 19, minute: 58,
+      gender: "male", calendarType: "solar", isLeapMonth: false,
+    });
+    const after = computeSaju({
+      year: 1975, month: 2, day: 4, hour: 20, minute: 0,
+      gender: "male", calendarType: "solar", isLeapMonth: false,
+    });
+    expect(before.pillars.yearPillar.hanja).not.toBe(after.pillars.yearPillar.hanja);
+  });
+});
+
+describe("지원 연도 범위 경계 (1950~2028)", () => {
+  const make = (year: number) => ({
+    year, month: 6, day: 15, hour: 12, minute: 0,
+    gender: "male" as const, calendarType: "solar" as const, isLeapMonth: false,
+  });
+
+  it("1949년생은 거부된다", () => {
+    expect(() => computeSaju(make(1949))).toThrow();
+  });
+
+  it("1950년생(최소연도)은 계산된다", () => {
+    expect(() => computeSaju(make(1950))).not.toThrow();
+  });
+
+  it("2028년생(최대연도)은 계산된다", () => {
+    expect(() => computeSaju(make(2028))).not.toThrow();
+  });
+
+  it("2029년생은 거부된다", () => {
+    expect(() => computeSaju(make(2029))).toThrow();
   });
 });
 

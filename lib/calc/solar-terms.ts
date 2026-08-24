@@ -75,13 +75,21 @@ type SolarTermsIndex = Record<string, RawSolarTermRecord[]>;
 const INDEX = solarTermsIndex as SolarTermsIndex;
 
 /**
- * KASI SpcdeInfoService/get24DivisionsInfo API를 개발계정(무료) 키로 수집한 실제 절기 데이터.
- * 이 API 키의 계정 등급에서는 2000~2028년 구간만 데이터를 제공한다(1900~1999, 2029년 이후는
- * resultCode=00이지만 totalCount=0으로 응답 — data.go.kr 운영계정 승인 전 개발계정 범위 제한으로 추정).
- * 서비스 지원 범위를 넓히려면 data.go.kr에서 해당 API의 운영계정 활용신청(무료) 승인 후
- * scripts/fetch-kasi-data.ts 를 더 넓은 --from/--to로 재실행하면 된다(코드 수정 불필요).
+ * 2000~2028년: KASI SpcdeInfoService/get24DivisionsInfo API로 수집한 실측 데이터.
+ * 이 API는 2000~2028년 구간만 데이터를 제공한다(1900~1999, 2029년 이후는 resultCode=00이지만
+ * totalCount=0으로 응답). 2026-08-24 기준 data.go.kr 운영계정 활용신청이 승인된 키로도 동일하게
+ * 1999/2029/2030년이 totalCount=0으로 확인됐다 — 즉 이 제한은 개발계정/운영계정 등급 차이가
+ * 아니라, KASI가 이 API 자체에 2000~2028년 데이터만 공개해 둔 원본 데이터 범위 제한이다.
+ *
+ * 1950~1999년: 위 제한을 풀기 위해 천문 계산(VSOP87 + 실측 ΔT, lib/calc/astronomical-solar-terms.ts)
+ * 으로 직접 산출해 KASI 데이터와 동일한 형식으로 저장했다. 2000~2028년 KASI 실측 693개(이례적
+ * 3건 제외)와 비교해 평균 오차 0.26분, 최대 0.63분으로 검증됨
+ * (tests/calc/astronomical-solar-terms-validation.test.ts).
+ *
+ * 2029년 이후로 더 확장하려면: 다른 KASI 서비스나 별도 데이터 출처를 검토하거나, 위와 동일한
+ * 천문 계산 방식을 그대로 확장하면 된다(같은 검증 파이프라인 재사용 가능).
  */
-export const SUPPORTED_BIRTH_YEAR_RANGE = { min: 2000, max: 2028 } as const;
+export const SUPPORTED_BIRTH_YEAR_RANGE = { min: 1950, max: 2028 } as const;
 
 export function createDefaultSolarTermSource(): SolarTermSource {
   return new JsonSolarTermSource((year) => INDEX[String(year)]);
