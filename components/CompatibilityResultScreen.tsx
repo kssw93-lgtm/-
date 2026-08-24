@@ -3,7 +3,14 @@
 import AdSlot from "./AdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
 import { describeDayMasterPair, type CompatibilityResult } from "@/lib/interpretation/compatibility";
+import { computeCompatibilityAxes, type CompatTier } from "@/lib/interpretation/compatibility-axes";
 import type { SajuResult } from "@/lib/calc/types";
+
+const TIER_COLOR: Record<CompatTier, string> = {
+  good: "#4ade80",
+  neutral: "#c9a35c",
+  challenging: "#f87171",
+};
 
 interface Props {
   nameA: string;
@@ -34,6 +41,8 @@ export default function CompatibilityResultScreen({
 }: Props) {
   const displayA = nameA.trim() || "나";
   const displayB = nameB.trim() || "상대방";
+  const axes = computeCompatibilityAxes(result);
+  const axisList = [axes.personality, axes.communication, axes.emotional, axes.daily, axes.money, axes.marriage];
 
   return (
     <div className="flex flex-1 flex-col gap-6 px-6 py-8">
@@ -45,6 +54,28 @@ export default function CompatibilityResultScreen({
         <p className="text-xs text-white/50">두 사람의 일주(日柱)</p>
         <p className="mt-1 text-2xl font-bold text-[color:var(--color-gold-light)]">
           {describeDayMasterPair(sajuA, sajuB)}
+        </p>
+      </div>
+
+      <div className="rounded-2xl bg-white/10 p-5">
+        <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">궁합 요약 6축</p>
+        <div className="grid grid-cols-2 gap-2.5">
+          {axisList.map((axis) => (
+            <div key={axis.label} className="rounded-xl bg-white/5 p-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-white/60">{axis.label}</span>
+                <span
+                  className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                  style={{ backgroundColor: `${TIER_COLOR[axis.tier]}26`, color: TIER_COLOR[axis.tier] }}
+                >
+                  {axis.tierLabel}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-white/40">
+          점수(%)로 환산할 근거가 없는 항목이라 숫자 대신 세 단계 정성 평가로 보여드려요. 아래에서 각 항목의 자세한 이유를 확인할 수 있어요.
         </p>
       </div>
 
@@ -86,6 +117,26 @@ export default function CompatibilityResultScreen({
             </p>
           </div>
         )}
+
+        <div className="rounded-2xl bg-white/10 p-5">
+          <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">대화 궁합</p>
+          <p className="text-base leading-relaxed">{axes.communication.desc}</p>
+        </div>
+
+        <div className="rounded-2xl bg-white/10 p-5">
+          <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">생활 궁합</p>
+          <p className="text-base leading-relaxed">{axes.daily.desc}</p>
+        </div>
+
+        <div className="rounded-2xl bg-white/10 p-5">
+          <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">금전 궁합</p>
+          <p className="text-base leading-relaxed">{axes.money.desc}</p>
+        </div>
+
+        <div className="rounded-2xl bg-white/10 p-5">
+          <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">결혼 궁합</p>
+          <p className="text-base leading-relaxed">{axes.marriage.desc}</p>
+        </div>
 
         <div className="rounded-2xl bg-white/10 p-5 text-sm leading-relaxed text-white/70">
           궁합은 두 사람의 원국을 각각 정확히 계산한 뒤, 일간 사이의 십신 관계(양방향)와 오행 생극 관계,

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { computeSaju } from "@/lib/calc";
 import { computeCompatibility } from "@/lib/interpretation/compatibility";
+import { computeCompatibilityAxes } from "@/lib/interpretation/compatibility-axes";
 
 describe("궁합 계산", () => {
   it("두 사람의 사주를 각각 독립적으로 계산해 비교한다(계산 규칙서 60번)", () => {
@@ -34,5 +35,60 @@ describe("궁합 계산", () => {
     expect(r1.groupAtoB).toBe(r2.groupAtoB);
     expect(r1.textAtoB).toBe(r2.textAtoB);
     expect(r1.elementRelation).toBe(r2.elementRelation);
+  });
+});
+
+describe("궁합 요약 6축", () => {
+  const BASE = {
+    groupAtoB: "inseong" as const,
+    groupBtoA: "inseong" as const,
+    textAtoB: "t1",
+    textBtoA: "t2",
+    elementRelation: "같은 기운",
+    elementRelationTier: "same" as const,
+    dayBranchRelation: null,
+  };
+
+  it("성격 궁합: 같은 오행(same)이면 잘 맞아요, 상극(controls)이면 노력이 필요해요", () => {
+    const same = computeCompatibilityAxes({ ...BASE, elementRelationTier: "same" });
+    expect(same.personality.tier).toBe("good");
+    const controls = computeCompatibilityAxes({ ...BASE, elementRelationTier: "controls" });
+    expect(controls.personality.tier).toBe("challenging");
+  });
+
+  it("대화 궁합: 어느 한쪽이라도 식상이면 잘 맞아요, 아니면 무난해요", () => {
+    const withSiksang = computeCompatibilityAxes({ ...BASE, groupAtoB: "siksang" });
+    expect(withSiksang.communication.tier).toBe("good");
+    const without = computeCompatibilityAxes(BASE);
+    expect(without.communication.tier).toBe("neutral");
+  });
+
+  it("감정/결혼 궁합: 육합이면 둘 다 잘 맞아요, 충이면 둘 다 노력이 필요해요(관성 유무와 무관)", () => {
+    const combine = computeCompatibilityAxes({
+      ...BASE,
+      dayBranchRelation: { type: "branch_six_combine", name: "육합", desc: "d" },
+    });
+    expect(combine.emotional.tier).toBe("good");
+    expect(combine.marriage.tier).toBe("good");
+
+    const clash = computeCompatibilityAxes({
+      ...BASE,
+      groupAtoB: "gwanseong",
+      dayBranchRelation: { type: "branch_clash", name: "충", desc: "d" },
+    });
+    expect(clash.emotional.tier).toBe("challenging");
+    expect(clash.marriage.tier).toBe("challenging");
+  });
+
+  it("결혼 궁합: 배우자궁 관계가 없어도 관성이 있으면 잘 맞아요로 판정한다", () => {
+    const result = computeCompatibilityAxes({ ...BASE, groupBtoA: "gwanseong" });
+    expect(result.marriage.tier).toBe("good");
+  });
+
+  it("아무 조건도 해당하지 않으면 생활/금전/결혼 궁합은 무난해요로 판정한다", () => {
+    const result = computeCompatibilityAxes(BASE);
+    expect(result.daily.tier).toBe("neutral");
+    expect(result.money.tier).toBe("neutral");
+    expect(result.marriage.tier).toBe("neutral");
   });
 });
