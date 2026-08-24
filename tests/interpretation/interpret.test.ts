@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { computeSaju } from "@/lib/calc";
-import { interpretSaju, computeWealthMonthRanking, computeGwiinDaeunList } from "@/lib/interpretation";
+import { interpretSaju, computeWealthMonthRanking, computeGwiinDaeunList, computeRootednessSummary } from "@/lib/interpretation";
 import { getCheoneulTargets } from "@/lib/calc/sinsal";
 import loveTemplates from "@/data/interpretation-templates/love.json";
 import careerTemplates from "@/data/interpretation-templates/career.json";
@@ -225,5 +225,23 @@ describe("01-1번: 출생시간 미상 예외", () => {
     const saju = computeSaju(SAMPLE_INPUT);
     const result = interpretSaju(saju, "love");
     expect(result.isHourExcluded).toBe(false);
+  });
+});
+
+describe("통근(通根) 요약", () => {
+  it("saju.rootedness와 동일한 개수의 지지를 년/월/일/시 순서로 매핑한다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const summary = computeRootednessSummary(saju);
+    expect(summary.pillars.length).toBe(saju.rootedness.length);
+    expect(summary.pillars.map((p) => p.rooted)).toEqual(saju.rootedness.map((r) => r.rooted));
+    expect(summary.rootedCount).toBe(saju.rootedness.filter((r) => r.rooted).length);
+    expect(summary.text.length).toBeGreaterThan(0);
+  });
+
+  it("시간 미상이면 3곳(년/월/일)만 반환한다", () => {
+    const saju = computeSaju({ ...SAMPLE_INPUT, hour: null, minute: 0 });
+    const summary = computeRootednessSummary(saju);
+    expect(summary.pillars.length).toBe(3);
+    expect(summary.totalCount).toBe(3);
   });
 });

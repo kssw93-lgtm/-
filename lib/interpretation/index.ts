@@ -65,6 +65,7 @@ export * from "./work-style";
 export * from "./wealth-month-ranking";
 export * from "./life-highlights";
 export * from "./dating-status";
+export * from "./rootedness-summary";
 
 export interface MonthRhythmDisplay {
   month: number;

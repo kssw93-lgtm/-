@@ -1,7 +1,7 @@
 "use client";
 
 import { branchById, stemById } from "@/lib/calc/data";
-import { computeStrengthScore, strengthBand, type Gyeokguk } from "@/lib/interpretation";
+import { computeStrengthScore, strengthBand, computeRootednessSummary, type Gyeokguk } from "@/lib/interpretation";
 import twelveStageMeaningJson from "@/data/twelve-stage-meaning.json";
 import type { ElementId, SajuResult, TwelveStageId } from "@/lib/calc/types";
 
@@ -41,6 +41,7 @@ export default function SajuChart({ saju, gyeokguk }: { saju: SajuResult; gyeokg
   const maxCount = Math.max(1, ...Object.values(counts));
   const strength = computeStrengthScore(saju);
   const band = strengthBand(strength.total);
+  const rootedness = computeRootednessSummary(saju);
 
   const pillarKeys = (["yearPillar", "monthPillar", "dayPillar", "hourPillar"] as const).filter(
     (k) => saju.pillars[k] !== null
@@ -135,6 +136,31 @@ export default function SajuChart({ saju, gyeokguk }: { saju: SajuResult; gyeokg
           <span>태강</span>
         </div>
         <p className="mt-1 text-center text-base font-bold">{band.label}</p>
+      </div>
+
+      <div className="rounded-xl bg-white/5 px-4 py-3">
+        <div className="mb-2 flex items-center justify-between">
+          <p className="text-xs text-white/50">통근(通根) — 일간이 뿌리내린 자리</p>
+          <p className="text-xs text-white/40">
+            {rootedness.rootedCount}/{rootedness.totalCount}곳
+          </p>
+        </div>
+        <div className="flex gap-2">
+          {rootedness.pillars.map((p) => (
+            <div
+              key={p.pillarLabel}
+              className={`flex-1 rounded-lg py-2 text-center ${
+                p.rooted ? "bg-[color:var(--color-gold)]/20 ring-1 ring-[color:var(--color-gold)]/50" : "bg-white/5"
+              }`}
+            >
+              <p className="text-[10px] text-white/40">{p.pillarLabel}</p>
+              <p className={`text-sm font-bold ${p.rooted ? "text-[color:var(--color-gold-light)]" : "text-white/30"}`}>
+                {p.branchHanja}
+              </p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-2 text-xs leading-relaxed text-white/60">{rootedness.text}</p>
       </div>
 
       <div className="rounded-xl bg-white/5 px-4 py-3">
