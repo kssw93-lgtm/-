@@ -24,6 +24,7 @@ import { getSinsalDescForCategory } from "./sinsal-category";
 import { getWorkRelationships, type WorkRelationships } from "./work-relationships";
 import { getLoveDeepDive, type LoveDeepDive } from "./love-deep-dive";
 import { getDailyTierText } from "./daily-tier";
+import { getCategorySummary } from "./category-summary";
 import { computeGwiinDaeunList, type GwiinDaeun } from "./life-highlights";
 import { getDatingAdvice } from "./dating-status";
 import { computeSinsal } from "@/lib/calc/sinsal";
@@ -79,6 +80,7 @@ export * from "./sinsal-category";
 export * from "./work-relationships";
 export * from "./love-deep-dive";
 export * from "./daily-tier";
+export * from "./category-summary";
 export * from "./life-highlights";
 export * from "./dating-status";
 export * from "./rootedness-summary";
@@ -158,6 +160,8 @@ export interface InterpretationResult {
   loveDeepDive: LoveDeepDive | null;
   /** 지금 관계에서 눈여겨볼 점 — 연애운에서 "연애 중"을 선택했을 때만 채워진다 */
   datingAdvice: string | null;
+  /** 리포트 맨 끝 총평 — 모든 카테고리(종합사주 포함)에서 항상 채워진다 */
+  categorySummary: string;
   /** PDF 저장/공유용으로 섹션을 하나로 합친 텍스트 */
   resultText: string;
   isHourExcluded: boolean;
@@ -324,6 +328,7 @@ export function interpretSaju(
   const zodiacCareer = features.zodiacCareer ? getZodiacCareerFit(saju.pillars.yearPillar.branch, starSign.id) : null;
   const workRelationships = features.workRelationships ? getWorkRelationships(group) : null;
   const loveDeepDive = features.loveDeepDive ? getLoveDeepDive(group) : null;
+  const categorySummary = getCategorySummary(category, group);
 
   return {
     category,
@@ -356,7 +361,9 @@ export function interpretSaju(
     workRelationships,
     loveDeepDive,
     datingAdvice: isDatingLove ? getDatingAdvice(group) : null,
-    resultText: sections.map((s) => `[${s.heading}]\n${s.text}`).join("\n\n"),
+    categorySummary,
+    resultText:
+      sections.map((s) => `[${s.heading}]\n${s.text}`).join("\n\n") + `\n\n[총평]\n${categorySummary}`,
     isHourExcluded: saju.pillars.hourPillar === null,
   };
 }

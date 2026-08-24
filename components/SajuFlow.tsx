@@ -319,6 +319,7 @@ export default function SajuFlow() {
           workRelationships={interpretation.workRelationships}
           loveDeepDive={interpretation.loveDeepDive}
           datingAdvice={interpretation.datingAdvice}
+          categorySummary={interpretation.categorySummary}
           resultText={interpretation.resultText}
           isHourExcluded={interpretation.isHourExcluded}
           onOtherFortune={handleOtherFortune}

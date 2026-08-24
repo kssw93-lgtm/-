@@ -71,6 +71,7 @@ interface Props {
   workRelationships: WorkRelationships | null;
   loveDeepDive: LoveDeepDive | null;
   datingAdvice: string | null;
+  categorySummary: string;
   resultText: string;
   isHourExcluded: boolean;
   onOtherFortune: () => void;
@@ -112,6 +113,7 @@ export default function ResultScreen({
   workRelationships,
   loveDeepDive,
   datingAdvice,
+  categorySummary,
   resultText,
   isHourExcluded,
   onOtherFortune,
@@ -622,6 +624,11 @@ export default function ResultScreen({
           {lifeGrades.length > 0 && <LifeGradeCard stages={lifeGrades} />}
 
           {pastLife && <PastLifeCard pastLife={pastLife} />}
+
+          <div className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/10 p-5">
+            <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">총평</p>
+            <p className="text-base leading-relaxed">{categorySummary}</p>
+          </div>
 
           <TalismanCard displayName={displayName} luckColor={luckColor} coreSummary={coreSummary} gyeokguk={gyeokguk} />
         </div>
