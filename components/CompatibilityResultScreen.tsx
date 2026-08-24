@@ -3,7 +3,7 @@
 import AdSlot from "./AdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
 import { describeDayMasterPair, type CompatibilityResult } from "@/lib/interpretation/compatibility";
-import { computeCompatibilityAxes, type CompatTier } from "@/lib/interpretation/compatibility-axes";
+import { computeCompatibilityAxes, getConflictPoint, type CompatTier } from "@/lib/interpretation/compatibility-axes";
 import type { SajuResult } from "@/lib/calc/types";
 
 const TIER_COLOR: Record<CompatTier, string> = {
@@ -43,6 +43,7 @@ export default function CompatibilityResultScreen({
   const displayB = nameB.trim() || "상대방";
   const axes = computeCompatibilityAxes(result);
   const axisList = [axes.personality, axes.communication, axes.emotional, axes.daily, axes.money, axes.marriage];
+  const conflictPoint = getConflictPoint(result.dayBranchRelation);
 
   return (
     <div className="flex flex-1 flex-col gap-6 px-6 py-8">
@@ -115,6 +116,15 @@ export default function CompatibilityResultScreen({
               두 사람의 일지 사이에 뚜렷한 합충 관계는 없어요. 서로에게 큰 자극이나 마찰 없이 각자의 속도를
               지키며 지낼 수 있는 조합이에요.
             </p>
+          </div>
+        )}
+
+        {conflictPoint && (
+          <div className="rounded-2xl bg-white/10 p-5">
+            <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
+              💡 관계에서 함께 신경 쓰면 좋은 점 — {conflictPoint.title}
+            </p>
+            <p className="text-base leading-relaxed">{conflictPoint.desc}</p>
           </div>
         )}
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { computeSaju } from "@/lib/calc";
 import { computeCompatibility } from "@/lib/interpretation/compatibility";
-import { computeCompatibilityAxes } from "@/lib/interpretation/compatibility-axes";
+import { computeCompatibilityAxes, getConflictPoint } from "@/lib/interpretation/compatibility-axes";
 
 describe("궁합 계산", () => {
   it("두 사람의 사주를 각각 독립적으로 계산해 비교한다(계산 규칙서 60번)", () => {
@@ -91,4 +91,24 @@ describe("궁합 요약 6축", () => {
     expect(result.money.tier).toBe("neutral");
     expect(result.marriage.tier).toBe("neutral");
   });
+});
+
+describe("관계에서 함께 신경 쓰면 좋은 점 (배우자궁 관계 기반)", () => {
+  it("관계가 없으면 null", () => {
+    expect(getConflictPoint(null)).toBeNull();
+  });
+
+  it("육합이면 null(긍정적 관계라 조심할 점 카드를 띄우지 않음)", () => {
+    expect(getConflictPoint({ type: "branch_six_combine", name: "육합", desc: "d" })).toBeNull();
+  });
+
+  it.each(["branch_clash", "branch_break", "branch_harm", "branch_resentment"] as const)(
+    "%s는 title/desc가 채워진 결과를 반환한다",
+    (type) => {
+      const result = getConflictPoint({ type, name: "n", desc: "d" });
+      expect(result).not.toBeNull();
+      expect(result?.title.length).toBeGreaterThan(0);
+      expect(result?.desc.length).toBeGreaterThan(0);
+    }
+  );
 });

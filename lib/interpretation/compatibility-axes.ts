@@ -1,4 +1,5 @@
 import compatAxesJson from "@/data/compatibility-axes.json";
+import conflictPointsJson from "@/data/compatibility-conflict-points.json";
 import type { CompatibilityResult } from "./compatibility";
 import type { PatternGroup } from "./feature-extract";
 
@@ -33,6 +34,24 @@ const TIER_LABEL: Record<CompatTier, string> = {
 
 const NO_DAY_BRANCH_RELATION_TEXT =
   "두 사람의 일지 사이에 뚜렷한 합충 관계는 없어요. 서로에게 큰 자극이나 마찰 없이 각자의 속도를 지키며 지낼 수 있는 조합이에요.";
+
+export interface ConflictPoint {
+  title: string;
+  desc: string;
+}
+
+const CONFLICT_POINTS = conflictPointsJson as Record<string, ConflictPoint>;
+
+/**
+ * 배우자궁(일지) 관계가 충·파·해·원진일 때, 그 관계 유형이 두 사람 사이에서 구체적으로
+ * 어떤 상황으로 나타나는 편인지 서술한다. 새 계산이 아니라 이미 계산된 dayBranchRelation.type
+ * (합충형파해원진 존재 여부)을 그대로 재사용하고, 그 유형의 전통적 의미(relation-types.json)를
+ * 부부/커플 상황에 맞게 더 구체적으로 풀어썼을 뿐이다. 육합이거나 관계가 없으면 null.
+ */
+export function getConflictPoint(dayBranchRelation: CompatibilityResult["dayBranchRelation"]): ConflictPoint | null {
+  if (!dayBranchRelation || dayBranchRelation.type === "branch_six_combine") return null;
+  return CONFLICT_POINTS[dayBranchRelation.type] ?? null;
+}
 
 /** 배우자궁(일지) 관계의 유형에 따라 정서적 자극의 성격을 3단계로 나눈다. 육합=긍정적 안정, 충/파/해/원진=자극과 긴장, 관계 없음=무난. */
 function emotionalTier(dayBranchRelation: CompatibilityResult["dayBranchRelation"]): CompatTier {
