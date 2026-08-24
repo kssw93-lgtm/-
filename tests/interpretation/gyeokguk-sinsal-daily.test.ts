@@ -156,4 +156,71 @@ describe("신살 계산", () => {
       expect(hits.some((h) => h.id === id && h.matchedBranch === branch)).toBe(true);
     }
   );
+
+  // 괴강살 고전 4개(경진·경술·임진·무술) 전수검증. 출처: sazasaju.com(사자사주) 신살 비교글,
+  // threads.com 게시물 — 두 독립 출처 모두 이 4개를 "고전 기준"으로 일치시켰다.
+  const GOEGANG_CASES: { stem: "geng" | "ren" | "wu"; branch: "chen" | "xu" }[] = [
+    { stem: "geng", branch: "chen" }, // 경진
+    { stem: "geng", branch: "xu" }, // 경술
+    { stem: "ren", branch: "chen" }, // 임진
+    { stem: "wu", branch: "xu" }, // 무술
+  ];
+
+  it.each(GOEGANG_CASES)("괴강살: 일주 $stem$branch 조합에서 검출된다", ({ stem, branch }) => {
+    const pillars: FourPillars = {
+      yearPillar: { stem: "yi", branch: "mao", hanja: "" },
+      monthPillar: { stem: "ding", branch: "you", hanja: "" },
+      dayPillar: { stem, branch, hanja: "" },
+      hourPillar: null,
+    };
+    const hits = computeSinsal(pillars);
+    expect(hits.some((h) => h.id === "goegangsal" && h.matchedBranch === branch)).toBe(true);
+  });
+
+  it("괴강살: 현대 확장 견해(무진·임술)는 이견이 있어 검출하지 않는다", () => {
+    const mujin: FourPillars = {
+      yearPillar: { stem: "yi", branch: "mao", hanja: "" },
+      monthPillar: { stem: "ding", branch: "you", hanja: "" },
+      dayPillar: { stem: "wu", branch: "chen", hanja: "" },
+      hourPillar: null,
+    };
+    expect(computeSinsal(mujin).some((h) => h.id === "goegangsal")).toBe(false);
+
+    const imsul: FourPillars = {
+      yearPillar: { stem: "yi", branch: "mao", hanja: "" },
+      monthPillar: { stem: "ding", branch: "you", hanja: "" },
+      dayPillar: { stem: "ren", branch: "xu", hanja: "" },
+      hourPillar: null,
+    };
+    expect(computeSinsal(imsul).some((h) => h.id === "goegangsal")).toBe(false);
+  });
+
+  // 백호살 7개 간지 전수검증. 독립된 두 출처(사자사주, joseilbo)에서 동일하게 확인됨.
+  const BAEKHO_CASES: { stem: "jia" | "yi" | "bing" | "ding" | "wu" | "ren" | "gui"; branch: "chen" | "wei" | "xu" | "chou" }[] = [
+    { stem: "jia", branch: "chen" }, // 갑진
+    { stem: "yi", branch: "wei" }, // 을미
+    { stem: "bing", branch: "xu" }, // 병술
+    { stem: "ding", branch: "chou" }, // 정축
+    { stem: "wu", branch: "chen" }, // 무진
+    { stem: "ren", branch: "xu" }, // 임술
+    { stem: "gui", branch: "chou" }, // 계축
+  ];
+
+  it.each(BAEKHO_CASES)("백호살: 일주 $stem$branch 조합에서 검출된다", ({ stem, branch }) => {
+    const pillars: FourPillars = {
+      yearPillar: { stem: "yi", branch: "mao", hanja: "" },
+      monthPillar: { stem: "ji", branch: "si", hanja: "" },
+      dayPillar: { stem, branch, hanja: "" },
+      hourPillar: null,
+    };
+    const hits = computeSinsal(pillars);
+    expect(hits.some((h) => h.id === "baekhosal" && h.matchedBranch === branch)).toBe(true);
+  });
+
+  it("괴강살과 백호살은 서로 겹치는 간지가 없다", () => {
+    const goegangSet = new Set(GOEGANG_CASES.map((c) => `${c.stem}-${c.branch}`));
+    const baekhoSet = new Set(BAEKHO_CASES.map((c) => `${c.stem}-${c.branch}`));
+    const overlap = [...goegangSet].filter((k) => baekhoSet.has(k));
+    expect(overlap).toEqual([]);
+  });
 });

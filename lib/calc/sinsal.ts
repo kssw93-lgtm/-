@@ -1,9 +1,10 @@
-import type { BranchId, FourPillars, StemId } from "./types";
+import type { BranchId, FourPillars, Pillar, StemId } from "./types";
 
 export type SinsalId =
   | "cheoneulgwiin" | "yeokma" | "dohwa" | "yangin" | "hwagae" | "munchang"
   | "geopsal" | "jaesal" | "cheonsal" | "jisal" | "wolsal"
-  | "mangsinsal" | "jangseongsal" | "banansal" | "yukhaesal";
+  | "mangsinsal" | "jangseongsal" | "banansal" | "yukhaesal"
+  | "goegangsal" | "baekhosal";
 
 /**
  * 신살(神殺)은 고정된 전통 대조표를 기반으로 한 "존재 여부" 계산이다(계산 규칙서 58, 59번의
@@ -71,6 +72,28 @@ const MUNCHANG_TABLE: Record<StemId, BranchId> = {
   ji: "you", geng: "hai", xin: "zi", ren: "yin", gui: "mao",
 };
 
+// 괴강살: 특정 간지(천간+지지) 조합이 원국 네 기둥 중 하나와 정확히 일치할 때 성립.
+// 고전 4개(경진·경술·임진·무술)만 사용 — 무진·임술을 추가하는 현대 확장 견해는
+// 자료마다 갈려서(백호살과 중복 판정되기도 함) 제외했다. 독립된 두 출처로 교차검증.
+const GOEGANG_TABLE: { stem: StemId; branch: BranchId }[] = [
+  { stem: "geng", branch: "chen" },
+  { stem: "geng", branch: "xu" },
+  { stem: "ren", branch: "chen" },
+  { stem: "wu", branch: "xu" },
+];
+
+// 백호살(백호대살): 갑진·을미·병술·정축·무진·임술·계축 7개 간지. 독립된 두 출처에서
+// 동일하게 확인되는 비쟁점 표 — 괴강살(고전 4개 기준)과 겹치는 간지가 없다.
+const BAEKHO_TABLE: { stem: StemId; branch: BranchId }[] = [
+  { stem: "jia", branch: "chen" },
+  { stem: "yi", branch: "wei" },
+  { stem: "bing", branch: "xu" },
+  { stem: "ding", branch: "chou" },
+  { stem: "wu", branch: "chen" },
+  { stem: "ren", branch: "xu" },
+  { stem: "gui", branch: "chou" },
+];
+
 export interface SinsalHit {
   id: SinsalId;
   matchedBranch: BranchId;
@@ -126,6 +149,18 @@ export function computeSinsal(pillars: FourPillars): SinsalHit[] {
   const munchangTarget = MUNCHANG_TABLE[dayStem];
   if (branches.includes(munchangTarget)) {
     hits.push({ id: "munchang", matchedBranch: munchangTarget });
+  }
+
+  const allPillars: Pillar[] = [pillars.yearPillar, pillars.monthPillar, pillars.dayPillar];
+  if (pillars.hourPillar) allPillars.push(pillars.hourPillar);
+
+  for (const p of allPillars) {
+    if (GOEGANG_TABLE.some((t) => t.stem === p.stem && t.branch === p.branch)) {
+      hits.push({ id: "goegangsal", matchedBranch: p.branch });
+    }
+    if (BAEKHO_TABLE.some((t) => t.stem === p.stem && t.branch === p.branch)) {
+      hits.push({ id: "baekhosal", matchedBranch: p.branch });
+    }
   }
 
   return hits;
