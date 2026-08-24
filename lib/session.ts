@@ -46,6 +46,12 @@ export function saveBirthForm(state: BirthFormState): void {
   window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
+/** "다른 사람 정보로 보기" — 저장된 생년월일 정보를 지우고 처음부터 새로 입력받는다. */
+export function clearBirthForm(): void {
+  if (typeof window === "undefined") return;
+  window.sessionStorage.removeItem(STORAGE_KEY);
+}
+
 const STYLE_KEY = "saju_tone_style_v1";
 
 export function loadToneStyle(): ToneStyleId {

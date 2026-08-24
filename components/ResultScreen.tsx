@@ -69,6 +69,7 @@ interface Props {
   resultText: string;
   isHourExcluded: boolean;
   onOtherFortune: () => void;
+  onResetPerson: () => void;
 }
 
 const CURRENT_MONTH = new Date().getMonth() + 1;
@@ -107,6 +108,7 @@ export default function ResultScreen({
   resultText,
   isHourExcluded,
   onOtherFortune,
+  onResetPerson,
 }: Props) {
   const displayName = name.trim() || "당신";
   const [freeSection, ...gatedSections] = sections;
@@ -578,6 +580,14 @@ export default function ResultScreen({
             공유하기
           </button>
         </div>
+        <button
+          onClick={() => {
+            if (confirm("입력한 생년월일 정보를 지우고 다른 사람 정보로 새로 볼까요?")) onResetPerson();
+          }}
+          className="text-center text-xs text-white/40 underline-offset-4 transition hover:text-white/70 hover:underline"
+        >
+          🔄 다른 사람 정보로 보기
+        </button>
       </div>
     </div>
   );

@@ -20,6 +20,7 @@ interface Props {
   sajuB: SajuResult;
   result: CompatibilityResult;
   onRestart: () => void;
+  onResetPerson: () => void;
 }
 
 /** 한글 받침 유무에 따라 주격조사(이/가)를 붙인다. "나"→"내가", "저"→"제가"는 불규칙 활용이라 예외 처리한다. */
@@ -39,6 +40,7 @@ export default function CompatibilityResultScreen({
   sajuB,
   result,
   onRestart,
+  onResetPerson,
 }: Props) {
   const displayA = nameA.trim() || "나";
   const displayB = nameB.trim() || "상대방";
@@ -168,6 +170,14 @@ export default function CompatibilityResultScreen({
         className="mt-auto w-full rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-8 py-4 text-lg font-bold text-[#241a08] shadow-[0_8px_30px_rgba(201,163,92,0.35)] transition hover:brightness-110 active:scale-95"
       >
         다른 운세도 보기
+      </button>
+      <button
+        onClick={() => {
+          if (confirm("입력한 생년월일 정보를 지우고 다른 사람 정보로 새로 볼까요?")) onResetPerson();
+        }}
+        className="text-center text-xs text-white/40 underline-offset-4 transition hover:text-white/70 hover:underline"
+      >
+        🔄 다른 사람 정보로 보기
       </button>
     </div>
   );

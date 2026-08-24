@@ -21,6 +21,7 @@ import {
 import { computeCompatibility, type CompatibilityResult } from "@/lib/interpretation/compatibility";
 import {
   DEFAULT_BIRTH_FORM,
+  clearBirthForm,
   loadBirthForm,
   loadToneStyle,
   saveBirthForm,
@@ -188,6 +189,22 @@ export default function SajuFlow() {
     setScreen("s2");
   }
 
+  /** "다른 사람 정보로 보기" — 저장된 생년월일을 지우고 완전히 새로 입력받는다. */
+  function handleResetPerson() {
+    clearBirthForm();
+    setForm(DEFAULT_BIRTH_FORM);
+    setPartnerForm({ ...DEFAULT_BIRTH_FORM, gender: "male" });
+    setCategory(null);
+    setRelationshipStatus(null);
+    setFlowMode("solo");
+    setSaju(null);
+    setSajuB(null);
+    setInterpretation(null);
+    setCompatResult(null);
+    setErrorMessage(null);
+    setScreen("s2");
+  }
+
   const FALLBACK_INTRO: Record<Category, string> = {
     love: "연애 이야기를 해볼까요? 먼저 당신의 사주를 살펴볼게요.",
     career: "일과 관련된 이야기를 시작하기 전에, 당신의 타고난 기질부터 살펴볼게요.",
@@ -274,6 +291,7 @@ export default function SajuFlow() {
           resultText={interpretation.resultText}
           isHourExcluded={interpretation.isHourExcluded}
           onOtherFortune={handleOtherFortune}
+          onResetPerson={handleResetPerson}
         />
       )}
       {screen === "compat-result" && saju && sajuB && compatResult && (
@@ -284,6 +302,7 @@ export default function SajuFlow() {
           sajuB={sajuB}
           result={compatResult}
           onRestart={handleOtherFortune}
+          onResetPerson={handleResetPerson}
         />
       )}
     </>

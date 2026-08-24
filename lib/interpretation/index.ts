@@ -20,6 +20,7 @@ import { getGyeokgukCareerFit, type GyeokgukCareerFit } from "./gyeokguk-career"
 import { getGyeokgukWealthStyle, type GyeokgukWealthStyle } from "./gyeokguk-wealth";
 import { getZodiacCompat, type ZodiacCompat } from "./zodiac-compat";
 import { getZodiacCareerFit, type ZodiacCareerFit } from "./zodiac-career";
+import { getSinsalDescForCategory } from "./sinsal-category";
 import { computeGwiinDaeunList, type GwiinDaeun } from "./life-highlights";
 import { getDatingAdvice } from "./dating-status";
 import { computeSinsal } from "@/lib/calc/sinsal";
@@ -71,6 +72,7 @@ export * from "./gyeokguk-career";
 export * from "./gyeokguk-wealth";
 export * from "./zodiac-compat";
 export * from "./zodiac-career";
+export * from "./sinsal-category";
 export * from "./life-highlights";
 export * from "./dating-status";
 export * from "./rootedness-summary";
@@ -281,7 +283,12 @@ export function interpretSaju(
 
   const luckColor = features.luckColor ? computeLuckColor(saju) : null;
   const gyeokguk = computeGyeokguk(saju);
-  const sinsal: SinsalDisplay[] = features.sinsal ? computeSinsal(saju.pillars).map((hit) => SINSAL_INFO[hit.id]) : [];
+  const sinsal: SinsalDisplay[] = features.sinsal
+    ? computeSinsal(saju.pillars).map((hit) => {
+        const base = SINSAL_INFO[hit.id];
+        return { ...base, desc: getSinsalDescForCategory(hit.id, category, base.desc) };
+      })
+    : [];
   const dailyFortune = computeDailyFortune(saju);
   const pastLife = features.pastLife ? computePastLife(saju) : null;
   const lifeGrades = features.lifeGrades ? computeLifeGrades(saju) : [];
