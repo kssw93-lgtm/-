@@ -18,9 +18,14 @@ const sans = Noto_Sans_KR({
   display: "swap",
 });
 
+const SITE_URL = "https://cheongi-nuseol.vercel.app";
+const SITE_TITLE = "천기누설 | 연애운·직업운";
+const SITE_DESCRIPTION = "생년월일시로 보는 무료 사주 - 연애운과 직업운을 바로 확인하세요.";
+
 export const metadata: Metadata = {
-  title: "천기누설 | 연애운·직업운",
-  description: "생년월일시로 보는 무료 사주 - 연애운과 직업운을 바로 확인하세요.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   verification: {
     google: "5PEFXksjaJ9b4G9tqOhswubHrr7D7nmwwPjtoo1Xph4",
     other: {
@@ -32,6 +37,21 @@ export const metadata: Metadata = {
     types: {
       "application/rss+xml": "/rss.xml",
     },
+  },
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: "천기누설",
+    locale: "ko_KR",
+    type: "website",
+    images: [{ url: "/thumbnail.png", width: 1200, height: 630, alt: SITE_TITLE }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ["/thumbnail.png"],
   },
 };
 
