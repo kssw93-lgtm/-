@@ -53,14 +53,27 @@ export default function DailyFortuneScreen({ displayName, saju, onSeeFullResult,
         <p className="mt-3 text-xs text-white/40">일진(日辰) {dailyFortune.dayPillarHanja}</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="rounded-2xl bg-white/10 p-5">
+        <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">오늘의 총평</p>
+        <p className="text-sm leading-relaxed text-white/80">{dailyFortune.summary}</p>
+      </div>
+
+      <div className="flex flex-col gap-3">
         <div className="rounded-xl bg-white/10 p-4">
-          <p className="text-xs text-white/50">💕 인연</p>
-          <p className="mt-1 text-sm font-semibold">{dailyFortune.loveTag}</p>
+          <p className="text-xs text-white/50">💕 오늘의 연애운 · {dailyFortune.loveTag}</p>
+          <p className="mt-1 text-sm leading-relaxed text-white/80">{dailyFortune.loveDetail}</p>
         </div>
         <div className="rounded-xl bg-white/10 p-4">
-          <p className="text-xs text-white/50">💰 재물</p>
-          <p className="mt-1 text-sm font-semibold">{dailyFortune.moneyTag}</p>
+          <p className="text-xs text-white/50">💰 오늘의 금전운 · {dailyFortune.moneyTag}</p>
+          <p className="mt-1 text-sm leading-relaxed text-white/80">{dailyFortune.moneyDetail}</p>
+        </div>
+        <div className="rounded-xl bg-white/10 p-4">
+          <p className="text-xs text-white/50">🌿 오늘의 컨디션 관리</p>
+          <p className="mt-1 text-sm leading-relaxed text-white/80">{dailyFortune.healthTip}</p>
+        </div>
+        <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+          <p className="text-xs text-white/50">⚠️ 오늘 이런 점을 조심하세요</p>
+          <p className="mt-1 text-sm leading-relaxed text-white/80">{dailyFortune.caution}</p>
         </div>
       </div>
 

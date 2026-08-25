@@ -6,7 +6,18 @@ import type { SajuResult, TenGod } from "@/lib/calc/types";
 
 const DAILY_TEN_GOD = dailyTenGodJson as Record<
   TenGod,
-  { label: string; oneliner: string; loveTag: string; moneyTag: string; baseScore: number }
+  {
+    label: string;
+    oneliner: string;
+    loveTag: string;
+    moneyTag: string;
+    baseScore: number;
+    summary: string;
+    loveDetail: string;
+    moneyDetail: string;
+    healthTip: string;
+    caution: string;
+  }
 >;
 
 export interface DailyFortune {
@@ -18,6 +29,14 @@ export interface DailyFortune {
   loveTag: string;
   moneyTag: string;
   score: number;
+  /** 오늘의 총평 — oneliner보다 긴 2~3문장 요약 */
+  summary: string;
+  loveDetail: string;
+  moneyDetail: string;
+  /** 건강운 — 특정 질병·증상을 예측하지 않고, 일반적인 컨디션 관리 팁만 다룬다 */
+  healthTip: string;
+  /** 오늘 조심할 점 — 한 줄 */
+  caution: string;
 }
 
 /**
@@ -47,5 +66,10 @@ export function computeDailyFortune(saju: SajuResult, now: Date = new Date()): D
     loveTag: info.loveTag,
     moneyTag: info.moneyTag,
     score,
+    summary: info.summary,
+    loveDetail: info.loveDetail,
+    moneyDetail: info.moneyDetail,
+    healthTip: info.healthTip,
+    caution: info.caution,
   };
 }
