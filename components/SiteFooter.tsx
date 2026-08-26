@@ -7,6 +7,9 @@ export default function SiteFooter() {
       <Link href="/learn" className="hover:text-white/70 hover:underline">
         사주 배우기
       </Link>
+      <Link href="/zodiac" className="hover:text-white/70 hover:underline">
+        별자리·띠 성격
+      </Link>
       <Link href="/about" className="hover:text-white/70 hover:underline">
         사이트 소개
       </Link>
