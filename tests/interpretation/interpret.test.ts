@@ -101,6 +101,15 @@ describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠
     expect(headings).toContain("원국 속 특별한 관계");
   });
 
+  it("기본 성향은 일간(日干)과 월지 격국(格局)을 결합한 문장으로 시작한다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const result = interpretSaju(saju, "overall");
+    const personality = result.sections.find((s) => s.heading === "기본 성향");
+    expect(personality?.text).toContain("일간(日干)");
+    expect(personality?.text).toContain("격국(格局)");
+    expect(personality?.text).toContain(result.gyeokguk.name);
+  });
+
   it("대운 흐름(daeunFlow)은 대운 개수만큼 생성되고 각각 텍스트를 가진다", () => {
     const saju = computeSaju(SAMPLE_INPUT);
     const result = interpretSaju(saju, "career");
@@ -110,6 +119,15 @@ describe("결과 구성 (성향 + 카테고리 + 올해/이번달 + 대운 + 띠
       expect(d.pillarHanja.length).toBe(2);
     }
     expect(result.daeunFlow.filter((d) => d.isCurrent).length).toBeLessThanOrEqual(1);
+  });
+
+  it("대운 흐름 텍스트는 나이대에 맞는 생애주기 프레이밍 문장으로 시작한다", () => {
+    const saju = computeSaju(SAMPLE_INPUT);
+    const result = interpretSaju(saju, "career");
+    const teenOrAdult = result.daeunFlow[0];
+    const startAge = Number(teenOrAdult.ageLabel.split("세")[0]);
+    const expectedKeyword = startAge <= 19 ? "학업" : startAge <= 39 ? "진로" : startAge <= 59 ? "승진" : "건강";
+    expect(teenOrAdult.text).toContain(expectedKeyword);
   });
 
   it("대운 흐름은 결정론적이다(같은 사람은 항상 같은 텍스트 조합)", () => {

@@ -4,6 +4,8 @@ import { computeCurrentFlow, computeYearRhythm } from "./current-flow";
 import { computeLuckColor } from "./luck-color";
 import { getStarSignForSaju, getZodiacAnimalForSaju, type StarSign, type ZodiacAnimal } from "./zodiac";
 import { describeRelations } from "./relations-narrative";
+import { computeFiveElementsBalance } from "./five-elements-balance";
+import { getLifeStageFraming } from "./life-stage-framing";
 import { computeGyeokguk, type Gyeokguk } from "./gyeokguk";
 import { computeDailyFortune, type DailyFortune } from "./daily-fortune";
 import { computePastLife, type PastLife } from "./past-life";
@@ -44,7 +46,7 @@ import {
   type Category,
 } from "./template-select";
 import { substituteVariables } from "./variable-substitute";
-import { pillarHanja } from "@/lib/calc/data";
+import { pillarHanja, stemHanja } from "@/lib/calc/data";
 import { getTenGod } from "@/lib/calc/ten-gods";
 import dayMasterJson from "@/data/day-master.json";
 import type { ElementId, SajuResult, StemId } from "@/lib/calc/types";
@@ -84,6 +86,8 @@ export * from "./category-summary";
 export * from "./life-highlights";
 export * from "./dating-status";
 export * from "./rootedness-summary";
+export * from "./five-elements-balance";
+export * from "./life-stage-framing";
 
 export interface MonthRhythmDisplay {
   month: number;
@@ -250,15 +254,28 @@ export function interpretSaju(
   const categoryLabel = `${CATEGORY_LABEL[category]} 핵심 특징`;
   const coreSummary = computeCoreSummary(group);
   const dailyFortune = computeDailyFortune(saju);
+  // 격국(월지 격국)과 오행 균형은 뒤에서도 쓰이지만, "기본 성향" 서두에 결합해 보여주려면
+  // sections를 구성하기 전에 먼저 계산해둬야 한다.
+  const gyeokguk = computeGyeokguk(saju);
+  const fiveElementsBalance = computeFiveElementsBalance(saju);
 
-  // 종합사주만 원국 전체를 훑는 공통 블록(일간총평/기본성향/원국관계)으로 시작하고,
+  // 십신 하나만 보고 성향을 말하지 않도록, 일간(日干)의 본질적 기운과 월지 격국(格局)을
+  // 먼저 결합해 기본 성향과 사회적 태도의 중심을 잡은 뒤, 기존 성향 텍스트로 이어간다.
+  const personalityText = `당신은 일간(日干) ${stemHanja(saju.pillars.dayPillar.stem)}의 사람이고, 월지 격국(格局)은 '${gyeokguk.name}' — ${gyeokguk.subtitle}이에요. 이 기운이 기본 성향과 사회적 태도의 중심을 이뤄요. ${substituteVariables(personality.text, vars)}`;
+
+  // 종합사주만 원국 전체를 훑는 공통 블록(일간총평/기본성향/원국관계/오행균형)으로 시작하고,
   // 나머지 카테고리는 곧바로 그 주제만의 핵심 콘텐츠로 시작한다 — 카테고리를 바꿔가며
   // 볼 때 매번 똑같은 문단이 반복된다는 피드백을 반영해, 겹치는 블록 자체를 없앴다.
   const sections = features.coreProfile
     ? [
         { heading: "일간 총평 (나의 뿌리)", text: DAY_MASTER_PROFILES[saju.pillars.dayPillar.stem] },
-        { heading: "기본 성향", text: substituteVariables(personality.text, vars) },
+        { heading: "기본 성향", text: personalityText },
         { heading: "원국 속 특별한 관계", text: describeRelations(saju) },
+        // 원국에 3개 이상 쏠렸거나 하나도 없는 오행이 있을 때만 보여준다 — 균형 잡힌
+        // 원국이면 억지로 지어내지 않는다.
+        ...(fiveElementsBalance.narrative
+          ? [{ heading: "오행 균형", text: fiveElementsBalance.narrative }]
+          : []),
         { heading: categoryLabel, text: substituteVariables(categoryTemplate.text, vars) },
       ]
     : [{ heading: categoryLabel, text: substituteVariables(categoryTemplate.text, vars) }];
@@ -307,14 +324,13 @@ export function interpretSaju(
         index: lp.index,
         ageLabel: `${lp.startAgeDisplay}세~${lp.startAgeDisplay + 9}세`,
         pillarHanja: pillarHanja(lp.pillar.stem, lp.pillar.branch),
-        text: groupTemplate.text,
+        text: `${getLifeStageFraming(lp.startAgeDisplay)} ${groupTemplate.text}`,
         isCurrent: nowMillis >= Date.parse(lp.startDate) && nowMillis < Date.parse(lp.endDate),
       },
     ];
   });
 
   const luckColor = features.luckColor ? computeLuckColor(saju) : null;
-  const gyeokguk = computeGyeokguk(saju);
   const sinsal: SinsalDisplay[] = features.sinsal
     ? computeSinsal(saju.pillars).map((hit) => {
         const base = SINSAL_INFO[hit.id];
