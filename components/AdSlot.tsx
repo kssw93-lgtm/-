@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -17,13 +17,18 @@ const AD_SLOT = "3567680618";
  * 실패해도 레이아웃이 깨지지 않도록 조용히 무시한다.
  * 반응형 광고는 부모에 고정 높이를 주면 0x0으로 접혀버릴 수 있어 일부러 높이를
  * 강제하지 않는다(애드센스 공식 권장 사항).
+ *
+ * 반응형(auto) 포맷은 실제로 광고가 채워지는지와 무관하게 레이아웃 공간을 먼저
+ * 예약해두는 특성이 있어, 미채움(no-fill) 상태가 오래 지속되면 화면에 빈 여백만
+ * 남는다. push 후 일정 시간 안에 data-ad-status가 "filled"로 바뀌지 않으면
+ * 아예 렌더링을 접어(display: none) 빈 공간이 남지 않도록 한다.
  */
 export default function AdSlot({ label }: { label?: string }) {
   const insRef = useRef<HTMLModElement>(null);
   const pushedRef = useRef(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
-    if (pushedRef.current) return;
     let raf = 0;
     let attempts = 0;
 
@@ -41,12 +46,23 @@ export default function AdSlot({ label }: { label?: string }) {
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       } catch {
-        // 광고 차단기 등으로 실패해도 무시 — 나머지 화면은 그대로 정상 동작해야 한다
+        setCollapsed(true);
+        return;
       }
+      // 개발 모드의 StrictMode 이펙트 이중 호출로 cleanup이 이 타이머를 취소해버리면
+      // 미채움 감지가 영영 동작하지 않으므로, 언마운트 여부와 무관하게 살려둔다
+      // (언마운트된 뒤에 실행돼도 insRef.current가 null이라 안전하게 무시된다).
+      setTimeout(() => {
+        if (insRef.current?.getAttribute("data-ad-status") !== "filled") {
+          setCollapsed(true);
+        }
+      }, 4000);
     }
     raf = requestAnimationFrame(tryPush);
     return () => cancelAnimationFrame(raf);
   }, []);
+
+  if (collapsed) return null;
 
   return (
     <ins

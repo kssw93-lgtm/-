@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useSimulatedAdWatch } from "@/lib/ad";
+import { useAdWatch } from "@/lib/ad";
+import AdSlot from "@/components/AdSlot";
 import type { CoreSummary, Gyeokguk, LuckColorDisplay } from "@/lib/interpretation";
 
 interface Props {
@@ -21,7 +22,7 @@ interface Props {
  * 광고 시청의 대가로 느껴지는 결과물을 남긴다.
  */
 export default function TalismanCard({ displayName, luckColor, coreSummary, gyeokguk }: Props) {
-  const { state, watch } = useSimulatedAdWatch();
+  const { state, secondsLeft, watch } = useAdWatch();
   const cardRef = useRef<HTMLDivElement>(null);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "done">("idle");
 
@@ -42,6 +43,15 @@ export default function TalismanCard({ displayName, luckColor, coreSummary, gyeo
     }
   }
 
+  if (state === "playing") {
+    return (
+      <div className="flex w-full flex-col items-center gap-3 rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-b from-[color:var(--color-gold)]/10 to-transparent p-6 text-center">
+        <p className="text-xs text-white/50">광고가 끝나면 자동으로 열려요 ({secondsLeft}초)</p>
+        <AdSlot label="리워드 광고" />
+      </div>
+    );
+  }
+
   if (state !== "done") {
     return (
       <div className="flex w-full flex-col items-center gap-3 rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-b from-[color:var(--color-gold)]/10 to-transparent p-6 text-center">
@@ -50,10 +60,9 @@ export default function TalismanCard({ displayName, luckColor, coreSummary, gyeo
         <p className="text-xs text-white/50">짧은 광고를 보면 나만의 부적이 만들어져요</p>
         <button
           onClick={() => watch(() => {})}
-          disabled={state === "playing"}
-          className="mt-1 w-full max-w-xs rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-6 py-3 text-sm font-bold text-[#241a08] transition enabled:hover:brightness-110 enabled:active:scale-95 disabled:opacity-60"
+          className="mt-1 w-full max-w-xs rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-6 py-3 text-sm font-bold text-[#241a08] transition hover:brightness-110 active:scale-95"
         >
-          {state === "playing" ? "부적 만드는 중…" : "광고 보고 부적 받기"}
+          광고 보고 부적 받기
         </button>
       </div>
     );

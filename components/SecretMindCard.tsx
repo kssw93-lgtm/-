@@ -1,6 +1,7 @@
 "use client";
 
-import { useSimulatedAdWatch } from "@/lib/ad";
+import { useAdWatch } from "@/lib/ad";
+import AdSlot from "@/components/AdSlot";
 
 interface Props {
   partnerLabel: string;
@@ -14,7 +15,16 @@ interface Props {
  * 재미로 보는 콘텐츠임을 분명히 한다.
  */
 export default function SecretMindCard({ partnerLabel, teaser }: Props) {
-  const { state, watch } = useSimulatedAdWatch();
+  const { state, secondsLeft, watch } = useAdWatch();
+
+  if (state === "playing") {
+    return (
+      <div className="flex w-full flex-col items-center gap-3 rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-b from-[color:var(--color-gold)]/10 to-transparent p-6 text-center">
+        <p className="text-xs text-white/50">광고가 끝나면 자동으로 열려요 ({secondsLeft}초)</p>
+        <AdSlot label="리워드 광고" />
+      </div>
+    );
+  }
 
   if (state !== "done") {
     return (
@@ -26,10 +36,9 @@ export default function SecretMindCard({ partnerLabel, teaser }: Props) {
         <p className="text-xs text-white/50">짧은 광고를 보면 확인할 수 있어요</p>
         <button
           onClick={() => watch(() => {})}
-          disabled={state === "playing"}
-          className="mt-1 w-full max-w-xs rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-6 py-3 text-sm font-bold text-[#241a08] transition enabled:hover:brightness-110 enabled:active:scale-95 disabled:opacity-60"
+          className="mt-1 w-full max-w-xs rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-6 py-3 text-sm font-bold text-[#241a08] transition hover:brightness-110 active:scale-95"
         >
-          {state === "playing" ? "엿보는 중…" : "광고 보고 확인하기"}
+          광고 보고 확인하기
         </button>
       </div>
     );
