@@ -34,8 +34,9 @@ export interface CompatibilityResult {
 /**
  * 두 일간의 오행 사이에 상생(서로 살려주는 관계)·상극(서로 견제하는 관계)이 있는지 설명한다.
  * data/five-elements.json의 생/극 순환표를 그대로 사용 — 별도 판단 기준을 새로 만들지 않는다.
+ * (테스트에서 조사(은/는) 처리를 직접 검증하기 위해 export한다.)
  */
-function describeElementRelation(elA: ElementId, elB: ElementId): { text: string; tier: ElementRelationTier } {
+export function describeElementRelation(elA: ElementId, elB: ElementId): { text: string; tier: ElementRelationTier } {
   const labelA = ELEMENT_LABEL[elA];
   const labelB = ELEMENT_LABEL[elB];
   if (elA === elB) {
@@ -59,12 +60,12 @@ function describeElementRelation(elA: ElementId, elB: ElementId): { text: string
   if (FIVE_ELEMENTS.controls[elA] === elB || FIVE_ELEMENTS.controls[elB] === elA) {
     return {
       tier: "controls",
-      text: `${labelA}와(과) ${labelB}는 서로 견제하는 상극(相剋) 관계예요. 부딪히는 지점이 있을 수 있지만, 명리학에서는 적당한 상극이 오히려 서로를 긴장하게 하고 성장시키는 자극이 된다고도 봐요. 다름을 인정하고 조율하는 만큼 관계가 단단해지는 조합이에요.`,
+      text: `${labelA}와(과) ${labelB}은(는) 서로 견제하는 상극(相剋) 관계예요. 부딪히는 지점이 있을 수 있지만, 명리학에서는 적당한 상극이 오히려 서로를 긴장하게 하고 성장시키는 자극이 된다고도 봐요. 다름을 인정하고 조율하는 만큼 관계가 단단해지는 조합이에요.`,
     };
   }
   return {
     tier: "neutral",
-    text: `${labelA}와(과) ${labelB}는 직접적인 생·극 관계는 없지만, 각자의 기운을 있는 그대로 존중해줄 때 무난하게 어울리는 조합이에요.`,
+    text: `${labelA}와(과) ${labelB}은(는) 직접적인 생·극 관계는 없지만, 각자의 기운을 있는 그대로 존중해줄 때 무난하게 어울리는 조합이에요.`,
   };
 }
 

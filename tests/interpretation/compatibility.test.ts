@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { computeSaju } from "@/lib/calc";
-import { computeCompatibility } from "@/lib/interpretation/compatibility";
+import { computeCompatibility, describeElementRelation } from "@/lib/interpretation/compatibility";
 import { computeCompatibilityAxes, getConflictPoint, getSecretMindTeaser } from "@/lib/interpretation/compatibility-axes";
 import compatibilitySummaryJson from "@/data/compatibility-summary.json";
 
@@ -44,6 +44,14 @@ describe("궁합 계산", () => {
     expect(r1.groupAtoB).toBe(r2.groupAtoB);
     expect(r1.textAtoB).toBe(r2.textAtoB);
     expect(r1.elementRelation).toBe(r2.elementRelation);
+  });
+
+  it("상극(controls) 문구는 받침 유무와 무관하게 '은(는)'으로 안전하게 처리한다", () => {
+    // 금극목(金剋木) — labelB가 금(金, 받침 있음)이라 예전엔 '금(金)는'으로 틀리게 나왔다.
+    const woodMetal = describeElementRelation("wood", "metal");
+    expect(woodMetal.tier).toBe("controls");
+    expect(woodMetal.text).toContain("목(木)와(과) 금(金)은(는)");
+    expect(woodMetal.text).not.toContain("금(金)는");
   });
 });
 
