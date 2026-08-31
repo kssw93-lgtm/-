@@ -1,0 +1,16 @@
+{
+  "name": "계산한눈에",
+  "short_name": "계산한눈에",
+  "description": "대출 이자, 퇴직금, 주택 취득세를 쉽고 빠르게 계산하는 생활 금융 계산기",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1B4DFF",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="계산한눈에 로고">
+  <rect width="32" height="32" rx="8" fill="#1B4DFF"/>
+  <rect x="8" y="7" width="16" height="18" rx="2.5" fill="white"/>
+  <rect x="10.5" y="10" width="11" height="3" rx="1" fill="#1B4DFF"/>
+  <circle cx="12" cy="17" r="1.4" fill="#1B4DFF"/>
+  <circle cx="16" cy="17" r="1.4" fill="#1B4DFF"/>
+  <circle cx="20" cy="17" r="1.4" fill="#1B4DFF"/>
+  <circle cx="12" cy="21.5" r="1.4" fill="#1B4DFF"/>
+  <circle cx="16" cy="21.5" r="1.4" fill="#1B4DFF"/>
+  <circle cx="20" cy="21.5" r="1.4" fill="#1B4DFF"/>
+</svg>
