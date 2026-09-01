@@ -22,9 +22,10 @@ export default function TarotGuideIndexPage() {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5 text-center">
-        <span className="text-4xl">🐯</span>
-        <p className="mt-2 text-sm leading-relaxed text-white/70">
+      <div className="flex flex-col items-center gap-3 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5 text-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/baekho-dosa.svg" alt="백호도사" width={140} height={182} className="rounded-xl" />
+        <p className="text-sm leading-relaxed text-white/70">
           "카드 한 장 한 장에는 다 뜻이 있느니라. 천천히 살펴보거라." — 백호도사
         </p>
       </div>

@@ -115,8 +115,9 @@ export default function TarotCardPage({ params }: { params: { slug: string } }) 
       </div>
 
       <div className="rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-b from-[color:var(--color-gold)]/15 to-white/5 p-5">
-        <div className="mb-2 flex items-center gap-2">
-          <span className="text-2xl">🐯</span>
+        <div className="mb-3 flex items-center gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/baekho-dosa.svg" alt="백호도사" width={48} height={62} className="rounded-lg" />
           <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">백호도사의 한마디</p>
         </div>
         <p className="text-base leading-relaxed text-white/90">{c.baekhoAdvice}</p>

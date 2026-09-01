@@ -648,7 +648,8 @@ export default function ResultScreen({
         href="/tarot-guide"
         className="no-print flex items-center gap-3 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-4 transition hover:border-[color:var(--color-gold)]/50"
       >
-        <span className="text-2xl">🐯</span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/baekho-dosa.svg" alt="백호도사" width={36} height={47} className="rounded-md" />
         <div className="flex-1">
           <p className="text-sm font-semibold text-[color:var(--color-gold-light)]">내 타로 카드가 궁금하다면?</p>
           <p className="text-xs text-white/50">백호도사의 타로 백과사전 보러가기</p>
