@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import SajuDial from "./SajuDial";
 
 interface Props {
@@ -49,6 +50,27 @@ export default function IntroScreen({ onStart, savedName, onQuickDaily }: Props)
         </button>
 
         <p className="text-xs text-white/40">로그인 없이 1분이면 확인할 수 있어요</p>
+
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+          <Link
+            href="/learn"
+            className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-white/70 transition hover:border-[color:var(--color-gold)]/50 hover:text-[color:var(--color-gold-light)]"
+          >
+            📖 사주 배우기
+          </Link>
+          <Link
+            href="/zodiac"
+            className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-white/70 transition hover:border-[color:var(--color-gold)]/50 hover:text-[color:var(--color-gold-light)]"
+          >
+            ♈ 별자리·띠 성격
+          </Link>
+          <Link
+            href="/tarot-guide"
+            className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-white/70 transition hover:border-[color:var(--color-gold)]/50 hover:text-[color:var(--color-gold-light)]"
+          >
+            🔮 타로 백과
+          </Link>
+        </div>
       </div>
     </div>
   );

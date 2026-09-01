@@ -10,6 +10,9 @@ export default function SiteFooter() {
       <Link href="/zodiac" className="hover:text-white/70 hover:underline">
         별자리·띠 성격
       </Link>
+      <Link href="/tarot-guide" className="hover:text-white/70 hover:underline">
+        타로 백과
+      </Link>
       <Link href="/about" className="hover:text-white/70 hover:underline">
         사이트 소개
       </Link>
