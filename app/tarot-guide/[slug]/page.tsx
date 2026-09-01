@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { TAROT_CARDS, getTarotCard } from "@/lib/content/tarot";
@@ -47,6 +48,22 @@ export default function TarotCardPage({ params }: { params: { slug: string } }) 
             {c.nameEn} · {c.element}
           </p>
         </div>
+      </div>
+
+      <div className="mx-auto w-full max-w-[240px]">
+        <div className="relative aspect-[11/19] w-full overflow-hidden rounded-2xl border border-[color:var(--color-gold)]/30 shadow-lg shadow-black/40">
+          <Image
+            src={`/tarot/${c.slug}.jpg`}
+            alt={`${c.nameKo}(${c.nameEn}) 타로카드 이미지`}
+            fill
+            priority
+            sizes="240px"
+            className="object-cover"
+          />
+        </div>
+        <p className="mt-2 text-center text-[10px] text-white/30">
+          Rider–Waite–Smith tarot deck (Public Domain, 1909)
+        </p>
       </div>
 
       <div className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5 text-center">

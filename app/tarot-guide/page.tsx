@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { TAROT_CARDS } from "@/lib/content/tarot";
 
@@ -35,11 +36,22 @@ export default function TarotGuideIndexPage() {
           <Link
             key={c.slug}
             href={`/tarot-guide/${c.slug}`}
-            className="flex flex-col items-center gap-1.5 rounded-xl border border-[color:var(--color-gold)]/20 bg-white/5 px-3 py-4 text-center transition hover:border-[color:var(--color-gold)]/60"
+            className="flex flex-col items-center gap-2 rounded-xl border border-[color:var(--color-gold)]/20 bg-white/5 p-3 text-center transition hover:border-[color:var(--color-gold)]/60"
           >
-            <span className="text-xs text-[color:var(--color-gold-light)]/70">{c.number}</span>
-            <span className="text-sm font-semibold text-white/85">{c.nameKo}</span>
-            <span className="text-[10px] text-white/30">{c.nameEn}</span>
+            <div className="relative aspect-[11/19] w-full overflow-hidden rounded-lg bg-black/20">
+              <Image
+                src={`/tarot/${c.slug}.jpg`}
+                alt={`${c.nameKo}(${c.nameEn}) 타로카드`}
+                fill
+                sizes="(max-width: 480px) 45vw, 200px"
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <span className="block text-xs text-[color:var(--color-gold-light)]/70">{c.number}</span>
+              <span className="block text-sm font-semibold text-white/85">{c.nameKo}</span>
+              <span className="block text-[10px] text-white/30">{c.nameEn}</span>
+            </div>
           </Link>
         ))}
       </div>
