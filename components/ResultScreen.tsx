@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import AdSlot from "./AdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
 import LifeGradeCard, { GRADE_COLOR } from "./LifeGradeCard";
@@ -642,6 +643,18 @@ export default function ResultScreen({
       {/* 화면별 광고 배치 원칙 09번: 결과 화면에 디스플레이 광고 1개 (결과 텍스트를 가리지 않는 위치) */}
       <AdSlot label="결과 화면 하단 디스플레이 광고" />
       <FreeAdsNotice />
+
+      <Link
+        href="/tarot-guide"
+        className="no-print flex items-center gap-3 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-4 transition hover:border-[color:var(--color-gold)]/50"
+      >
+        <span className="text-2xl">🐯</span>
+        <div className="flex-1">
+          <p className="text-sm font-semibold text-[color:var(--color-gold-light)]">내 타로 카드가 궁금하다면?</p>
+          <p className="text-xs text-white/50">백호도사의 타로 백과사전 보러가기</p>
+        </div>
+        <span className="text-white/30">→</span>
+      </Link>
 
       <div className="no-print mt-auto flex flex-col gap-3">
         <button
