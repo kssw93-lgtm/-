@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { ARTICLES } from "@/lib/content/articles";
 
@@ -19,6 +20,23 @@ export default function LearnIndexPage() {
         </h1>
         <p className="mt-2 text-sm text-white/50">
           결과를 더 잘 이해하고 싶다면, 사주의 기본 개념부터 차근차근 살펴보세요
+        </p>
+      </div>
+
+      <div className="overflow-hidden rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5">
+        <div className="relative aspect-[4/3] w-full">
+          <Image
+            src="/learn/seodang.jpg"
+            alt="김홍도 풍속화첩 中 서당 — 훈장님과 함께 글을 배우는 아이들"
+            fill
+            sizes="(max-width: 480px) 100vw, 480px"
+            className="object-cover object-top"
+            priority
+          />
+        </div>
+        <p className="px-4 py-3 text-center text-xs leading-relaxed text-white/50">
+          사주도 결국 배움이에요. 옛사람들이 서당에서 하나씩 글을 익혔듯,
+          아래 글들로 사주 용어를 차근차근 익혀보세요.
         </p>
       </div>
 
@@ -44,6 +62,10 @@ export default function LearnIndexPage() {
       >
         내 사주 무료로 보러 가기
       </Link>
+
+      <p className="text-center text-[11px] text-white/25">
+        일러스트 출처: 공유마당(gongu.copyright.or.kr) · 김홍도 作 (CC BY)
+      </p>
     </div>
   );
 }
