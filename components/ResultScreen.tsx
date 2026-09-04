@@ -640,6 +640,12 @@ export default function ResultScreen({
         </p>
       )}
 
+      <div className="rounded-2xl border border-[color:var(--color-gold)]/30 bg-[color:var(--color-gold)]/10 p-4 text-center">
+        <p className="text-sm leading-relaxed text-white/80">
+          💎 격국·평생 대운 흐름처럼 유료 사주 리포트에서 흔히 따로 파는 항목도, 여기선 처음부터 전부 무료예요.
+        </p>
+      </div>
+
       {/* 화면별 광고 배치 원칙 09번: 결과 화면에 디스플레이 광고 1개 (결과 텍스트를 가리지 않는 위치) */}
       <AdSlot label="결과 화면 하단 디스플레이 광고" />
       <FreeAdsNotice />

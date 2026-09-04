@@ -20,8 +20,9 @@ const sans = Noto_Sans_KR({
 });
 
 const SITE_URL = "https://cheongi-nuseol.vercel.app";
-const SITE_TITLE = "천기누설 | 연애운·직업운";
-const SITE_DESCRIPTION = "생년월일시로 보는 무료 사주 - 연애운과 직업운을 바로 확인하세요.";
+const SITE_TITLE = "천기누설 | 무료 사주팔자·만세력·타로";
+const SITE_DESCRIPTION =
+  "생년월일시로 보는 정확한 사주팔자와 만세력, 2026년 신년운세·재물운·연애운·재회운·궁합까지 타로 백과사전과 함께 무료로 확인하세요.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
