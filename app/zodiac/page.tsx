@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { STAR_SIGNS, ZODIAC_ANIMALS } from "@/lib/content/zodiac-pages";
 
@@ -18,6 +19,23 @@ export default function ZodiacIndexPage() {
           별자리 &amp; 띠 성격
         </h1>
         <p className="mt-2 text-sm text-white/50">궁금한 별자리나 띠를 눌러 성격과 특징을 확인해보세요</p>
+      </div>
+
+      <div className="overflow-hidden rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5">
+        <div className="relative aspect-[16/9] w-full">
+          <Image
+            src="/zodiac/night-sky.jpg"
+            alt="은하수가 흐르는 밤하늘 — 별자리를 읽던 옛사람들의 시선"
+            fill
+            sizes="(max-width: 480px) 100vw, 480px"
+            className="object-cover"
+            priority
+          />
+        </div>
+        <p className="px-4 py-3 text-center text-xs leading-relaxed text-white/50">
+          별과 띠는 오래전부터 사람들이 자신을 이해하는 언어였어요.
+          나의 별자리와 띠를 통해 타고난 성격을 들여다보세요.
+        </p>
       </div>
 
       <div>
@@ -58,6 +76,10 @@ export default function ZodiacIndexPage() {
       >
         내 사주로 연애운·궁합 보러 가기
       </Link>
+
+      <p className="text-center text-[11px] text-white/25">
+        사진 출처: 공유마당(gongu.copyright.or.kr) · 한국교육방송공사 作 (CC BY)
+      </p>
     </div>
   );
 }
