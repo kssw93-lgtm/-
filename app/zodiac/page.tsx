@@ -70,6 +70,21 @@ export default function ZodiacIndexPage() {
         </div>
       </div>
 
+      <div className="grid grid-cols-2 gap-2.5">
+        <Link
+          href="/zodiac/animal-compat"
+          className="rounded-xl border border-[color:var(--color-gold)]/20 bg-white/5 px-4 py-3 text-center text-xs font-semibold text-white/85 transition hover:border-[color:var(--color-gold)]/60"
+        >
+          🐾 띠 궁합 78가지 보기
+        </Link>
+        <Link
+          href="/zodiac/star-compat"
+          className="rounded-xl border border-[color:var(--color-gold)]/20 bg-white/5 px-4 py-3 text-center text-xs font-semibold text-white/85 transition hover:border-[color:var(--color-gold)]/60"
+        >
+          ♈ 별자리 궁합 78가지 보기
+        </Link>
+      </div>
+
       <Link
         href="/"
         className="mt-2 rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-8 py-4 text-center text-base font-bold text-[#241a08] transition hover:brightness-110"

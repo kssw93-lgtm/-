@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ARTICLES, getArticle } from "@/lib/content/articles";
+import { GYEOKGUK_ENTRIES } from "@/lib/content/gyeokguk-pages";
 import AdSlot from "@/components/AdSlot";
 
 export function generateStaticParams() {
@@ -44,6 +45,23 @@ export default function LearnArticlePage({ params }: { params: { slug: string } 
           </p>
         ))}
       </article>
+
+      {article.slug === "gyeokguk" && (
+        <div className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
+          <p className="mb-3 text-sm font-bold text-white/85">10가지 격국 살펴보기</p>
+          <div className="grid grid-cols-2 gap-2">
+            {GYEOKGUK_ENTRIES.map((g) => (
+              <Link
+                key={g.slug}
+                href={`/learn/gyeokguk/${g.slug}`}
+                className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/70 transition hover:border-[color:var(--color-gold)]/60"
+              >
+                {g.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       <AdSlot label="본문 하단 디스플레이 광고" />
 
