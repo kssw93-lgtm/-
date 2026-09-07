@@ -11,6 +11,8 @@ export interface StarSignEntry {
   endDay: number;
   symbol: string;
   text: string;
+  /** 연애 스타일·성장 포인트를 2문단으로 풀어쓴 본문(SEO/GEO용 콘텐츠 보강). */
+  body?: string[];
 }
 
 export interface ZodiacAnimalEntry {
@@ -18,6 +20,8 @@ export interface ZodiacAnimalEntry {
   animal: string;
   hanja: string;
   text: string;
+  /** 인간관계 스타일·성장 포인트를 2문단으로 풀어쓴 본문(SEO/GEO용 콘텐츠 보강). */
+  body?: string[];
 }
 
 /**

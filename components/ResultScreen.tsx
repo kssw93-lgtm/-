@@ -137,7 +137,7 @@ export default function ResultScreen({
   async function handleShare() {
     if (typeof navigator !== "undefined" && "share" in navigator) {
       try {
-        await navigator.share({ title: "천기누설 사주", text: resultText });
+        await navigator.share({ title: "사주달력", text: resultText });
         return;
       } catch {
         // 사용자가 공유를 취소한 경우 등 — 아래 복사 폴백으로 진행

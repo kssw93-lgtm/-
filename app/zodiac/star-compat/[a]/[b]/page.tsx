@@ -14,7 +14,7 @@ export function generateMetadata({ params }: { params: { a: string; b: string } 
   const starA = getStarEntry(params.a);
   const starB = getStarEntry(params.b);
   if (!starA || !starB) return {};
-  const title = `${starA.name} ${starB.name} 궁합 | 천기누설 사주`;
+  const title = `${starA.name} ${starB.name} 궁합 | 사주달력`;
   const description = `${starA.name}와 ${starB.name}의 궁합, 4원소 배속으로 실제 계산한 결과를 확인해보세요.`;
   return {
     title,

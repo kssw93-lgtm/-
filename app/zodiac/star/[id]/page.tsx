@@ -14,7 +14,7 @@ export function generateMetadata({ params }: { params: { id: string } }): Metada
   const s = getStarSignEntry(params.id);
   if (!s) return {};
   return {
-    title: `${s.name} 성격과 특징 | 천기누설 사주`,
+    title: `${s.name} 성격과 특징 | 사주달력`,
     description: `${s.name}(${formatDateRange(s)}) 성격, 강점과 약점을 알아보세요.`,
   };
 }
@@ -56,6 +56,16 @@ export default function StarSignPage({ params }: { params: { id: string } }) {
       <article className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
         <p className="text-[15px] leading-relaxed text-white/85">{s.text}</p>
       </article>
+
+      {s.body && s.body.length > 0 && (
+        <article className="flex flex-col gap-4 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
+          {s.body.map((paragraph, i) => (
+            <p key={i} className="text-[15px] leading-relaxed text-white/85">
+              {paragraph}
+            </p>
+          ))}
+        </article>
+      )}
 
       <AdSlot label="본문 하단 디스플레이 광고" />
 

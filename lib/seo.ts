@@ -6,8 +6,8 @@
 
 export const SITE_URL = "https://cheongi-nuseol.vercel.app";
 
-/** 프로그램명 "천기누설"과의 혼동을 피하기 위해 항상 "사주"를 붙여서 쓰는 사이트명. */
-export const SITE_NAME = "천기누설 사주";
+/** 메인 브랜드명. 옛 이름 "천기누설"은 동명 방송 프로그램과 겹쳐 브랜드 검색이 막혀 있어, 서브 타이틀로만 병기한다. */
+export const SITE_NAME = "사주달력";
 
 /** 아티클 개별 게시일 데이터가 없어, 개인정보처리방침 시행일(app/privacy/page.tsx, rss.xml과 동일)로 통일한 합리적 고정값. */
 export const SITE_LAUNCH_DATE = "2026-08-22";

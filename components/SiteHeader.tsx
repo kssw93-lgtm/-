@@ -11,8 +11,8 @@ export default function SiteHeader() {
       >
         <span className="text-lg text-[color:var(--color-gold)]">☯</span>
         <span className="font-brand flex items-baseline gap-1 text-lg font-bold tracking-wide text-[color:var(--color-gold-light)]">
-          천기누설
-          <span className="text-xs font-medium text-[color:var(--color-gold-light)]/70">사주</span>
+          사주달력
+          <span className="text-xs font-medium text-[color:var(--color-gold-light)]/70">천기누설</span>
         </span>
       </button>
     </header>

@@ -15,7 +15,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const c = getTarotCard(params.slug);
   if (!c) return {};
   return {
-    title: `${c.nameKo}(${c.nameEn}) 타로카드 의미 | 천기누설 사주`,
+    title: `${c.nameKo}(${c.nameEn}) 타로카드 의미 | 사주달력`,
     description: c.summary,
   };
 }

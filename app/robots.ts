@@ -13,6 +13,12 @@ const AI_CRAWLER_USER_AGENTS = [
   "CCBot",
 ];
 
+// app/sitemap.ts의 generateSitemaps()가 만드는 카테고리별 개수(0~4)와 반드시 맞춰야 한다.
+// Next.js는 generateSitemaps()를 쓰면 /sitemap.xml 통합 인덱스를 자동으로 만들어주지 않고
+// /sitemap/{id}.xml만 개별로 서빙하기 때문에(직접 빌드해서 확인함), robots.txt에 각 sitemap을
+// 전부 나열해서 Search Console이 카테고리별로 모두 찾을 수 있게 한다.
+const SITEMAP_IDS = [0, 1, 2, 3, 4];
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
@@ -27,6 +33,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: `${BASE_URL}/sitemap.xml`,
+    sitemap: SITEMAP_IDS.map((id) => `${BASE_URL}/sitemap/${id}.xml`),
   };
 }

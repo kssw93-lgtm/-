@@ -14,7 +14,7 @@ export function generateMetadata({ params }: { params: { branch: string } }): Me
   const z = getZodiacAnimalEntry(params.branch);
   if (!z) return {};
   return {
-    title: `${z.animal} 성격과 특징 | 천기누설 사주`,
+    title: `${z.animal} 성격과 특징 | 사주달력`,
     description: `${z.animal}(${z.hanja}) 성격, 강점과 약점, 잘 맞는 띠까지 알아보세요.`,
   };
 }
@@ -54,6 +54,16 @@ export default function ZodiacAnimalPage({ params }: { params: { branch: string 
       <article className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
         <p className="text-[15px] leading-relaxed text-white/85">{z.text}</p>
       </article>
+
+      {z.body && z.body.length > 0 && (
+        <article className="flex flex-col gap-4 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
+          {z.body.map((paragraph, i) => (
+            <p key={i} className="text-[15px] leading-relaxed text-white/85">
+              {paragraph}
+            </p>
+          ))}
+        </article>
+      )}
 
       <AdSlot label="본문 하단 디스플레이 광고" />
 

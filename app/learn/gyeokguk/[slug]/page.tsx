@@ -14,7 +14,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const g = getGyeokgukEntry(params.slug);
   if (!g) return {};
   return {
-    title: `${g.name}이란 무엇인가요? | 격국 | 천기누설 사주`,
+    title: `${g.name}이란 무엇인가요? | 격국 | 사주달력`,
     description: `${g.name}(${g.subtitle}) — 강점과 약점, 격국의 의미를 알아보세요.`,
   };
 }

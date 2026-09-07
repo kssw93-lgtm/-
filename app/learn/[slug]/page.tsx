@@ -15,7 +15,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const article = getArticle(params.slug);
   if (!article) return {};
   return {
-    title: `${article.title} | 사주 배우기 | 천기누설 사주`,
+    title: `${article.title} | 사주 배우기 | 사주달력`,
     description: article.summary,
   };
 }

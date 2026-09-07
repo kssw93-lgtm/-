@@ -19,7 +19,7 @@ export default function SiteFooter() {
       <Link href="/privacy" className="hover:text-white/70 hover:underline">
         개인정보처리방침
       </Link>
-      <span className="w-full text-center text-white/20">© 2026 천기누설 사주</span>
+      <span className="w-full text-center text-white/20">© 2026 사주달력 (전 천기누설)</span>
     </footer>
   );
 }

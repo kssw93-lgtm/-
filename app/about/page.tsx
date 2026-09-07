@@ -2,8 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "사이트 소개 | 천기누설 사주",
-  description: "천기누설은 어떤 사이트이고, 어떻게 무료로 운영되는지 소개합니다.",
+  title: "사이트 소개 | 사주달력",
+  description: "사주달력은 어떤 사이트이고, 어떻게 무료로 운영되는지 소개합니다.",
 };
 
 export default function AboutPage() {
@@ -14,19 +14,25 @@ export default function AboutPage() {
           About
         </span>
         <h1 className="font-brand mt-4 text-2xl font-bold text-[color:var(--color-gold-light)]">
-          천기누설 소개
+          사주달력 소개
         </h1>
       </div>
 
       <div className="flex flex-col gap-4 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5 text-[15px] leading-relaxed text-white/85">
         <p>
-          천기누설은 생년월일시를 입력하면 사주팔자를 계산하고, 그 결과를 연애운·재회운·직업운·재물운·종합사주·궁합 등
+          사주달력은 생년월일시를 입력하면 사주팔자를 계산하고, 그 결과를 연애운·재회운·직업운·재물운·종합사주·궁합 등
           다양한 주제로 풀어서 보여주는 무료 사주 서비스예요.
+        </p>
+        <p>
+          사주달력은 처음 <strong className="text-[color:var(--color-gold-light)]">천기누설</strong>이라는 이름으로 시작한
+          서비스예요. 다만 이 이름이 오랫동안 방송돼 온 프로그램명과 겹쳐 혼동을 주기 쉬워서, 지금은 사주달력을
+          메인 이름으로 쓰고 천기누설은 그동안 쌓아온 애착을 담아 서브 타이틀로 남겨두고 있어요.
         </p>
         <p>
           <strong className="text-[color:var(--color-gold-light)]">계산은 실제 명리학 규칙과 천문 데이터를 기반으로 해요.</strong>
           {" "}
-          연월일시로부터 천간·지지·오행·십신·격국·신살·대운/세운/월운까지 정해진 규칙에 따라 계산하고, 그 계산 결과에
+          사주의 월(月) 기둥을 정하는 절기 시각은 태양의 실제 운행을 계산하는 천문 알고리즘(VSOP87)으로 직접 구하고,
+          연월일시로부터 천간·지지·오행·십신·격국·신살·대운/세운/월운까지 정해진 규칙에 따라 계산해서 그 결과에
           맞춰 미리 준비된 해석 문장을 매칭해서 보여드려요. 그래서 같은 생년월일시와 같은 항목을 다시 확인해도 항상
           같은(또는 같은 범주의) 결과가 나와요 — 매번 다른 말을 지어내는 방식이 아니에요.
         </p>

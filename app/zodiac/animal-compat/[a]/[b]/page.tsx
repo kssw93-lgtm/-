@@ -14,7 +14,7 @@ export function generateMetadata({ params }: { params: { a: string; b: string } 
   const animalA = getAnimalEntry(params.a);
   const animalB = getAnimalEntry(params.b);
   if (!animalA || !animalB) return {};
-  const title = `${animalA.animal} ${animalB.animal} 궁합 | 천기누설 사주`;
+  const title = `${animalA.animal} ${animalB.animal} 궁합 | 사주달력`;
   const description = `${animalA.animal}와 ${animalB.animal}의 궁합, 12지지 관계로 실제 계산한 결과를 확인해보세요.`;
   return {
     title,

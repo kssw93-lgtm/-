@@ -24,14 +24,19 @@ export default function IntroScreen({ onStart, savedName, onQuickDaily }: Props)
         </span>
 
         <h1 className="font-brand flex items-baseline gap-2 text-4xl font-black leading-tight text-[color:var(--color-gold-light)] drop-shadow-[0_0_20px_rgba(201,163,92,0.35)]">
-          천기누설
-          <span className="text-2xl font-bold">사주</span>
+          사주달력
+          <span className="text-2xl font-bold">천기누설</span>
         </h1>
 
         <p className="text-lg leading-relaxed text-white/85">
           태어난 순간에 새겨진 사주,
           <br />
           오늘 당신의 운세가 궁금한가요?
+        </p>
+
+        <p className="max-w-xs text-sm leading-relaxed text-white/50">
+          생년월일시를 입력하면 사주팔자·만세력을 바탕으로 연애운·재물운·직업운·궁합까지 계산해서 보여드려요.
+          천문 데이터로 계산하기 때문에 같은 정보로 다시 확인해도 결과가 흔들리지 않아요.
         </p>
 
         {typeof savedName === "string" && onQuickDaily && (

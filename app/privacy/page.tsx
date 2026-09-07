@@ -2,8 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "개인정보처리방침 | 천기누설 사주",
-  description: "천기누설의 개인정보처리방침과 광고(쿠키) 사용에 대한 안내입니다.",
+  title: "개인정보처리방침 | 사주달력",
+  description: "사주달력의 개인정보처리방침과 광고(쿠키) 사용에 대한 안내입니다.",
 };
 
 const EFFECTIVE_DATE = "2026년 8월 22일";
@@ -25,7 +25,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="mb-1.5 text-sm font-bold text-[color:var(--color-gold-light)]">1. 수집하는 개인정보</h2>
           <p>
-            천기누설은 회원가입과 로그인 기능이 없어요. 사주 계산을 위해 입력하신 이름(선택), 생년월일시, 성별 등의
+            사주달력은 회원가입과 로그인 기능이 없어요. 사주 계산을 위해 입력하신 이름(선택), 생년월일시, 성별 등의
             정보는 서버로 전송되어 저장되지 않고, 이용 중인 기기의 브라우저(로컬 저장소) 안에서만 "오늘의 운세"처럼
             다시 입력하지 않고 바로 볼 수 있게 하는 용도로 보관돼요. 결과 화면의 "다른 사람 정보로 보기" 버튼을
             누르거나 브라우저 저장 데이터를 직접 지우면 함께 사라져요.

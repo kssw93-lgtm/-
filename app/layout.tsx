@@ -22,7 +22,7 @@ const sans = Noto_Sans_KR({
 });
 
 const SITE_URL = "https://cheongi-nuseol.vercel.app";
-const SITE_TITLE = "천기누설 | 무료 사주팔자·만세력·타로";
+const SITE_TITLE = "사주달력 | 무료 사주팔자·만세력·타로";
 const SITE_DESCRIPTION =
   "생년월일시로 보는 정확한 사주팔자와 만세력, 2026년 신년운세·재물운·연애운·재회운·궁합까지 타로 백과사전과 함께 무료로 확인하세요.";
 
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
-    siteName: "천기누설 사주",
+    siteName: "사주달력",
     locale: "ko_KR",
     type: "website",
     images: [{ url: "/thumbnail.png", width: 1200, height: 630, alt: SITE_TITLE }],
