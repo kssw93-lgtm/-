@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import AdSlot from "@/components/AdSlot";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/seo";
 import { allAnimalPairs, getAnimalEntry, getAnimalPairRelation } from "@/lib/content/zodiac-compat-pages";
 
 export function generateStaticParams() {
@@ -12,9 +14,16 @@ export function generateMetadata({ params }: { params: { a: string; b: string } 
   const animalA = getAnimalEntry(params.a);
   const animalB = getAnimalEntry(params.b);
   if (!animalA || !animalB) return {};
-  const title = `${animalA.animal} ${animalB.animal} 궁합 | 천기누설`;
+  const title = `${animalA.animal} ${animalB.animal} 궁합 | 천기누설 사주`;
   const description = `${animalA.animal}와 ${animalB.animal}의 궁합, 12지지 관계로 실제 계산한 결과를 확인해보세요.`;
-  return { title, description };
+  return {
+    title,
+    description,
+    // 애드센스 "가치가 별로 없는 콘텐츠" 반려 대응: 78쌍이 동일한 문단 구조를 공유하는
+    // 조합형 페이지라 대량으로 검색엔진에 노출되면 얇은 콘텐츠로 비칠 수 있다. 페이지
+    // 자체는 유지하고(링크로는 접근 가능) 색인에서만 잠시 뺀다 — 승인 후 재검토.
+    robots: { index: false, follow: true },
+  };
 }
 
 export default function AnimalCompatPairPage({ params }: { params: { a: string; b: string } }) {
@@ -30,6 +39,14 @@ export default function AnimalCompatPairPage({ params }: { params: { a: string; 
 
   return (
     <div className="flex flex-1 flex-col gap-6 px-6 py-8">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "홈", path: "/" },
+          { name: "별자리·띠 성격", path: "/zodiac" },
+          { name: "띠 궁합 전체 모음", path: "/zodiac/animal-compat" },
+          { name: `${animalA.animal} ${animalB.animal} 궁합`, path: `/zodiac/animal-compat/${sortedA}/${sortedB}` },
+        ])}
+      />
       <div>
         <Link href="/zodiac/animal-compat" className="text-xs text-[color:var(--color-gold-light)]/70 hover:underline">
           ← 띠 궁합 전체 모음

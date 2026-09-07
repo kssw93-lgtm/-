@@ -2,7 +2,6 @@ import type { MetadataRoute } from "next";
 import { ARTICLES } from "@/lib/content/articles";
 import { STAR_SIGNS, ZODIAC_ANIMALS } from "@/lib/content/zodiac-pages";
 import { TAROT_CARDS } from "@/lib/content/tarot";
-import { allAnimalPairs, allStarPairs } from "@/lib/content/zodiac-compat-pages";
 import { GYEOKGUK_ENTRIES } from "@/lib/content/gyeokguk-pages";
 
 const BASE_URL = "https://cheongi-nuseol.vercel.app";
@@ -43,18 +42,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  const animalCompatRoutes: MetadataRoute.Sitemap = allAnimalPairs().map(([a, b]) => ({
-    url: `${BASE_URL}/zodiac/animal-compat/${a}/${b}`,
-    changeFrequency: "monthly",
-    priority: 0.5,
-  }));
-
-  const starCompatRoutes: MetadataRoute.Sitemap = allStarPairs().map(([a, b]) => ({
-    url: `${BASE_URL}/zodiac/star-compat/${a}/${b}`,
-    changeFrequency: "monthly",
-    priority: 0.5,
-  }));
-
+  // 띠·별자리 궁합 조합 페이지(78+78개, /zodiac/animal-compat, /zodiac/star-compat)는
+  // 애드센스 "가치가 별로 없는 콘텐츠" 반려 대응으로 noindex 처리해서 sitemap에서도
+  // 뺐다. 페이지 자체(및 인덱스 2개)는 유지되고 링크로는 접근 가능 — 승인 후 재검토.
   const gyeokgukRoutes: MetadataRoute.Sitemap = GYEOKGUK_ENTRIES.map((g) => ({
     url: `${BASE_URL}/learn/gyeokguk/${g.slug}`,
     changeFrequency: "monthly",
@@ -67,8 +57,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...starRoutes,
     ...animalRoutes,
     ...tarotRoutes,
-    ...animalCompatRoutes,
-    ...starCompatRoutes,
     ...gyeokgukRoutes,
   ];
 }
