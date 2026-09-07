@@ -4,7 +4,7 @@ import { STAR_SIGNS, ZODIAC_ANIMALS } from "@/lib/content/zodiac-pages";
 import { TAROT_CARDS } from "@/lib/content/tarot";
 import { GYEOKGUK_ENTRIES } from "@/lib/content/gyeokguk-pages";
 
-const BASE_URL = "https://cheongi-nuseol.vercel.app";
+const BASE_URL = "https://www.sajudalyeok.co.kr";
 
 /**
  * 카테고리별로 사이트맵을 나눠서 Search Console의 Sitemaps 리포트에서 카테고리 단위로
@@ -35,6 +35,7 @@ export default function sitemap({ id }: { id: number }): MetadataRoute.Sitemap {
         { url: `${BASE_URL}/zodiac/star-compat`, changeFrequency: "weekly", priority: 0.7 },
         { url: `${BASE_URL}/tarot-guide`, changeFrequency: "weekly", priority: 0.8 },
         { url: `${BASE_URL}/about`, changeFrequency: "monthly", priority: 0.5 },
+        { url: `${BASE_URL}/faq`, changeFrequency: "monthly", priority: 0.6 },
         { url: `${BASE_URL}/privacy`, changeFrequency: "yearly", priority: 0.3 },
       ];
     case 1:

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE_URL = "https://cheongi-nuseol.vercel.app";
+const BASE_URL = "https://www.sajudalyeok.co.kr";
 
 const AI_CRAWLER_USER_AGENTS = [
   "GPTBot",

@@ -4,7 +4,7 @@
  * SITE_URL은 app/layout.tsx, app/robots.ts, app/sitemap.ts에 이미 박혀 있는 값과 동일하게 유지할 것.
  */
 
-export const SITE_URL = "https://cheongi-nuseol.vercel.app";
+export const SITE_URL = "https://www.sajudalyeok.co.kr";
 
 /** 메인 브랜드명. 옛 이름 "천기누설"은 동명 방송 프로그램과 겹쳐 브랜드 검색이 막혀 있어, 서브 타이틀로만 병기한다. */
 export const SITE_NAME = "사주달력";
@@ -50,6 +50,23 @@ export function articleJsonLd(params: {
     author: { "@type": "Organization", name: SITE_NAME },
     publisher: { "@type": "Organization", name: SITE_NAME },
     mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${path}` },
+  };
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export function faqJsonLd(items: FaqItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
   };
 }
 

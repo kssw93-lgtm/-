@@ -1,6 +1,6 @@
 import { ARTICLES } from "@/lib/content/articles";
 
-const BASE_URL = "https://cheongi-nuseol.vercel.app";
+const BASE_URL = "https://www.sajudalyeok.co.kr";
 // 아티클 개별 게시일 데이터가 없어 전체 배치 게시일로 통일한다(추후 새 글 추가 시 그 글만 최신 날짜로 갱신).
 const PUBLISHED_AT = new Date("2026-08-22T00:00:00+09:00").toUTCString();
 
