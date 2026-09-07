@@ -1,0 +1,7 @@
+{
+  "wood": { "color": "초록색", "direction": "동쪽" },
+  "fire": { "color": "빨간색", "direction": "남쪽" },
+  "earth": { "color": "노란색", "direction": "중앙" },
+  "metal": { "color": "흰색", "direction": "서쪽" },
+  "water": { "color": "검은색", "direction": "북쪽" }
+}

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "사이트 소개 | 천기누설",
+  title: "사이트 소개 | 천기누설 사주",
   description: "천기누설은 어떤 사이트이고, 어떻게 무료로 운영되는지 소개합니다.",
 };
 

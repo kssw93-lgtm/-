@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "개인정보처리방침 | 천기누설",
+  title: "개인정보처리방침 | 천기누설 사주",
   description: "천기누설의 개인정보처리방침과 광고(쿠키) 사용에 대한 안내입니다.",
 };
 

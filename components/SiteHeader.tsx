@@ -10,8 +10,9 @@ export default function SiteHeader() {
         className="flex items-center gap-2 transition hover:opacity-80"
       >
         <span className="text-lg text-[color:var(--color-gold)]">☯</span>
-        <span className="font-brand text-lg font-bold tracking-wide text-[color:var(--color-gold-light)]">
+        <span className="font-brand flex items-baseline gap-1 text-lg font-bold tracking-wide text-[color:var(--color-gold-light)]">
           천기누설
+          <span className="text-xs font-medium text-[color:var(--color-gold-light)]/70">사주</span>
         </span>
       </button>
     </header>

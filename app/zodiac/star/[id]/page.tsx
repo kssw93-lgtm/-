@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { STAR_SIGNS, getStarSignEntry, formatDateRange } from "@/lib/content/zodiac-pages";
 import AdSlot from "@/components/AdSlot";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return STAR_SIGNS.map((s) => ({ id: s.id }));
@@ -12,7 +14,7 @@ export function generateMetadata({ params }: { params: { id: string } }): Metada
   const s = getStarSignEntry(params.id);
   if (!s) return {};
   return {
-    title: `${s.name} 성격과 특징 | 천기누설`,
+    title: `${s.name} 성격과 특징 | 천기누설 사주`,
     description: `${s.name}(${formatDateRange(s)}) 성격, 강점과 약점을 알아보세요.`,
   };
 }
@@ -27,6 +29,13 @@ export default function StarSignPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="flex flex-1 flex-col gap-6 px-6 py-8">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "홈", path: "/" },
+          { name: "별자리·띠 성격", path: "/zodiac" },
+          { name: `${s.name} 성격과 특징`, path: `/zodiac/star/${s.id}` },
+        ])}
+      />
       <div>
         <Link href="/zodiac" className="text-xs text-[color:var(--color-gold-light)]/70 hover:underline">
           ← 별자리·띠 성격 목록

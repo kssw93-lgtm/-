@@ -296,6 +296,7 @@ export default function SajuFlow() {
           monthRhythm={interpretation.monthRhythm}
           daeunFlow={interpretation.daeunFlow}
           luckColor={interpretation.luckColor}
+          todayLuck={interpretation.todayLuck}
           starSign={interpretation.starSign}
           zodiacAnimal={interpretation.zodiacAnimal}
           gyeokguk={interpretation.gyeokguk}
@@ -307,6 +308,7 @@ export default function SajuFlow() {
           lifeStages={interpretation.lifeStages}
           meetingTiming={interpretation.meetingTiming}
           meetingChannel={interpretation.meetingChannel}
+          weeklyMeetingSuggestion={interpretation.weeklyMeetingSuggestion}
           workStyle={interpretation.workStyle}
           gyeokgukCareerFit={interpretation.gyeokgukCareerFit}
           gyeokgukWealthStyle={interpretation.gyeokgukWealthStyle}

@@ -22,6 +22,7 @@ import {
   type LifeStageDisplay,
   type LifeStageGrade,
   type LuckColorDisplay,
+  type TodayLuckWidget,
   type MeetingChannel,
   type MeetingTiming,
   type MonthRhythmDisplay,
@@ -49,6 +50,7 @@ interface Props {
   monthRhythm: MonthRhythmDisplay[];
   daeunFlow: DaeunFlowDisplay[];
   luckColor: LuckColorDisplay | null;
+  todayLuck: TodayLuckWidget | null;
   starSign: StarSign;
   zodiacAnimal: ZodiacAnimal;
   gyeokguk: Gyeokguk;
@@ -60,6 +62,7 @@ interface Props {
   lifeStages: LifeStageDisplay[];
   meetingTiming: MeetingTiming | null;
   meetingChannel: MeetingChannel | null;
+  weeklyMeetingSuggestion: string | null;
   workStyle: WorkStyle | null;
   gyeokgukCareerFit: GyeokgukCareerFit | null;
   gyeokgukWealthStyle: GyeokgukWealthStyle | null;
@@ -91,6 +94,7 @@ export default function ResultScreen({
   monthRhythm,
   daeunFlow,
   luckColor,
+  todayLuck,
   starSign,
   zodiacAnimal,
   gyeokguk,
@@ -102,6 +106,7 @@ export default function ResultScreen({
   lifeStages,
   meetingTiming,
   meetingChannel,
+  weeklyMeetingSuggestion,
   workStyle,
   gyeokgukCareerFit,
   gyeokgukWealthStyle,
@@ -132,7 +137,7 @@ export default function ResultScreen({
   async function handleShare() {
     if (typeof navigator !== "undefined" && "share" in navigator) {
       try {
-        await navigator.share({ title: "천기누설", text: resultText });
+        await navigator.share({ title: "천기누설 사주", text: resultText });
         return;
       } catch {
         // 사용자가 공유를 취소한 경우 등 — 아래 복사 폴백으로 진행
@@ -437,6 +442,12 @@ export default function ResultScreen({
                 <span className="text-white/50">🤍 잘 맞는 상대 </span>
                 {meetingChannel.matchType}
               </p>
+              {weeklyMeetingSuggestion && (
+                <div className="mt-3 rounded-lg bg-white/5 p-3">
+                  <p className="mb-1 text-xs font-semibold text-[color:var(--color-gold-light)]">📅 이번주는 이런 곳 어때요?</p>
+                  <p className="text-sm leading-relaxed text-white/80">{weeklyMeetingSuggestion}</p>
+                </div>
+              )}
             </div>
           )}
 
@@ -609,7 +620,7 @@ export default function ResultScreen({
 
           {luckColor && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">행운의 컬러 &amp; 숫자</p>
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">나에게 필요한 색 (평생 고정)</p>
               <div className="flex items-center gap-4">
                 <div>
                   <p className="text-lg font-bold">{luckColor.color}</p>
@@ -617,6 +628,23 @@ export default function ResultScreen({
                 </div>
                 <p className="flex-1 text-sm leading-relaxed text-white/80">
                   지금 원국에 가장 적은 오행을 보완해주는 색과 숫자예요. {luckColor.desc}.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {todayLuck && (
+            <div className="rounded-2xl bg-white/10 p-5">
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
+                오늘의 행운 컬러 · {todayLuck.dateLabel}
+              </p>
+              <div className="flex items-center gap-4">
+                <div>
+                  <p className="text-lg font-bold">{todayLuck.color}</p>
+                  <p className="text-sm text-white/60">{todayLuck.direction} · 행운의 숫자 {todayLuck.number}</p>
+                </div>
+                <p className="flex-1 text-sm leading-relaxed text-white/80">
+                  오늘의 일진(日辰) 오행을 기준으로 매일 바뀌는 색·방향이에요. 위 색과는 다른, 오늘 하루만의 기운이에요.
                 </p>
               </div>
             </div>

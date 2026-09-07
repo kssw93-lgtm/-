@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import AdSlot from "@/components/AdSlot";
+import JsonLd from "@/components/JsonLd";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { GYEOKGUK_ENTRIES, getGyeokgukEntry } from "@/lib/content/gyeokguk-pages";
 
 export function generateStaticParams() {
@@ -12,7 +14,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const g = getGyeokgukEntry(params.slug);
   if (!g) return {};
   return {
-    title: `${g.name}이란 무엇인가요? | 격국 | 천기누설`,
+    title: `${g.name}이란 무엇인가요? | 격국 | 천기누설 사주`,
     description: `${g.name}(${g.subtitle}) — 강점과 약점, 격국의 의미를 알아보세요.`,
   };
 }
@@ -27,6 +29,21 @@ export default function GyeokgukDetailPage({ params }: { params: { slug: string 
 
   return (
     <div className="flex flex-1 flex-col gap-6 px-6 py-8">
+      <JsonLd
+        data={articleJsonLd({
+          headline: `${g.name}이란 무엇인가요?`,
+          description: `${g.name}(${g.subtitle}) — 강점과 약점, 격국의 의미를 알아보세요.`,
+          path: `/learn/gyeokguk/${g.slug}`,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "홈", path: "/" },
+          { name: "사주 배우기", path: "/learn" },
+          { name: "격국(格局)이란 무엇인가요?", path: "/learn/gyeokguk" },
+          { name: `${g.name}이란 무엇인가요?`, path: `/learn/gyeokguk/${g.slug}` },
+        ])}
+      />
       <div>
         <Link href="/learn/gyeokguk" className="text-xs text-[color:var(--color-gold-light)]/70 hover:underline">
           ← 격국(格局)이란 무엇인가요?
@@ -55,6 +72,16 @@ export default function GyeokgukDetailPage({ params }: { params: { slug: string 
           </div>
         )}
       </article>
+
+      {g.body && g.body.length > 0 && (
+        <article className="flex flex-col gap-4 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
+          {g.body.map((paragraph, i) => (
+            <p key={i} className="text-[15px] leading-relaxed text-white/85">
+              {paragraph}
+            </p>
+          ))}
+        </article>
+      )}
 
       <p className="text-xs leading-relaxed text-white/40">
         격국은 사주 원국에서 월지(태어난 달의 지지) 속 본기가 일간을 기준으로 어떤 십신에 해당하는지로 정해요. 자세한 원리는{" "}

@@ -3,6 +3,8 @@ import { Noto_Serif_KR, Noto_Sans_KR } from "next/font/google";
 import Script from "next/script";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import JsonLd from "@/components/JsonLd";
+import { websiteJsonLd } from "@/lib/seo";
 import "./globals.css";
 
 const serif = Noto_Serif_KR({
@@ -45,7 +47,7 @@ export const metadata: Metadata = {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
-    siteName: "천기누설",
+    siteName: "천기누설 사주",
     locale: "ko_KR",
     type: "website",
     images: [{ url: "/thumbnail.png", width: 1200, height: 630, alt: SITE_TITLE }],
@@ -62,6 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={`${serif.variable} ${sans.variable}`}>
       <head>
+        <JsonLd data={websiteJsonLd()} />
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8704899603701516"

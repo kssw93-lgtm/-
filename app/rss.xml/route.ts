@@ -28,7 +28,7 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
-  <title>천기누설 - 사주 배우기</title>
+  <title>천기누설 사주 배우기</title>
   <link>${BASE_URL}/learn</link>
   <description>사주 명리학의 기본 개념을 쉽게 풀어쓴 글 모음</description>
   <language>ko</language>

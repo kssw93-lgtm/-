@@ -23,8 +23,9 @@ export default function IntroScreen({ onStart, savedName, onQuickDaily }: Props)
           四柱命理 · 무료
         </span>
 
-        <h1 className="font-brand text-4xl font-black leading-tight text-[color:var(--color-gold-light)] drop-shadow-[0_0_20px_rgba(201,163,92,0.35)]">
+        <h1 className="font-brand flex items-baseline gap-2 text-4xl font-black leading-tight text-[color:var(--color-gold-light)] drop-shadow-[0_0_20px_rgba(201,163,92,0.35)]">
           천기누설
+          <span className="text-2xl font-bold">사주</span>
         </h1>
 
         <p className="text-lg leading-relaxed text-white/85">

@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ZODIAC_ANIMALS, getZodiacAnimalEntry } from "@/lib/content/zodiac-pages";
 import AdSlot from "@/components/AdSlot";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return ZODIAC_ANIMALS.map((z) => ({ branch: z.branch }));
@@ -12,7 +14,7 @@ export function generateMetadata({ params }: { params: { branch: string } }): Me
   const z = getZodiacAnimalEntry(params.branch);
   if (!z) return {};
   return {
-    title: `${z.animal} 성격과 특징 | 천기누설`,
+    title: `${z.animal} 성격과 특징 | 천기누설 사주`,
     description: `${z.animal}(${z.hanja}) 성격, 강점과 약점, 잘 맞는 띠까지 알아보세요.`,
   };
 }
@@ -27,6 +29,13 @@ export default function ZodiacAnimalPage({ params }: { params: { branch: string 
 
   return (
     <div className="flex flex-1 flex-col gap-6 px-6 py-8">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "홈", path: "/" },
+          { name: "별자리·띠 성격", path: "/zodiac" },
+          { name: `${z.animal} 성격과 특징`, path: `/zodiac/animal/${z.branch}` },
+        ])}
+      />
       <div>
         <Link href="/zodiac" className="text-xs text-[color:var(--color-gold-light)]/70 hover:underline">
           ← 별자리·띠 성격 목록

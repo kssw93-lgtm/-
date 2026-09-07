@@ -2,6 +2,8 @@ import { extractDominantTenGodGroup, GROUP_BY_TEN_GOD } from "./feature-extract"
 import { computeStrengthScore } from "./strength-score";
 import { computeCurrentFlow, computeYearRhythm } from "./current-flow";
 import { computeLuckColor } from "./luck-color";
+import { computeTodayLuckWidget, type TodayLuckWidget } from "./daily-luck-widget";
+import { computeWeeklyMeetingSuggestion } from "./weekly-meeting-suggestion";
 import { getStarSignForSaju, getZodiacAnimalForSaju, type StarSign, type ZodiacAnimal } from "./zodiac";
 import { describeRelations } from "./relations-narrative";
 import { computeFiveElementsBalance } from "./five-elements-balance";
@@ -60,6 +62,8 @@ export * from "./template-select";
 export * from "./variable-substitute";
 export * from "./current-flow";
 export * from "./luck-color";
+export * from "./daily-luck-widget";
+export * from "./weekly-meeting-suggestion";
 export * from "./zodiac";
 export * from "./gyeokguk";
 export * from "./daily-fortune";
@@ -126,6 +130,9 @@ export interface InterpretationResult {
   monthRhythm: MonthRhythmDisplay[];
   daeunFlow: DaeunFlowDisplay[];
   luckColor: LuckColorDisplay | null;
+  /** 오늘의 행운 컬러·숫자·방향 — luckColor(원국에서 부족한 오행 보완색, 평생 고정)와 달리
+   * 오늘 일진(day pillar) 기준이라 날짜가 바뀌면 함께 바뀐다. luckColor가 채워지는 카테고리와 동일하게 채워진다. */
+  todayLuck: TodayLuckWidget | null;
   starSign: StarSign;
   zodiacAnimal: ZodiacAnimal;
   gyeokguk: Gyeokguk;
@@ -144,6 +151,8 @@ export interface InterpretationResult {
   incomeSource: IncomeSource | null;
   /** 인연이 들어오는 경로 — 연애운/재회운/종합사주에서만 채워진다 */
   meetingChannel: MeetingChannel | null;
+  /** 이번주 추천 활동/장소 — meetingChannel과 동일 조건(연애운/재회운, 연애중이 아닐 때)에서만 채워지고, 주 단위로 바뀐다 */
+  weeklyMeetingSuggestion: string | null;
   /** 업무 스타일·잘 맞는 환경 — 직업운/종합사주에서만 채워진다 */
   workStyle: WorkStyle | null;
   /** 격국별 직업 적성 — 직업운/종합사주에서만 채워진다 */
@@ -331,6 +340,7 @@ export function interpretSaju(
   });
 
   const luckColor = features.luckColor ? computeLuckColor(saju) : null;
+  const todayLuck = features.luckColor ? computeTodayLuckWidget(saju) : null;
   const sinsal: SinsalDisplay[] = features.sinsal
     ? computeSinsal(saju.pillars).map((hit) => {
         const base = SINSAL_INFO[hit.id];
@@ -354,6 +364,7 @@ export function interpretSaju(
     monthRhythm,
     daeunFlow,
     luckColor,
+    todayLuck,
     starSign,
     zodiacAnimal,
     gyeokguk,
@@ -367,6 +378,8 @@ export function interpretSaju(
     coreSummary,
     incomeSource: features.incomeSource ? getIncomeSource(group) : null,
     meetingChannel: features.meetingChannel && !isDatingLove ? getMeetingChannel(group) : null,
+    weeklyMeetingSuggestion:
+      features.meetingChannel && !isDatingLove ? computeWeeklyMeetingSuggestion(group, birthKey) : null,
     workStyle: features.workStyle ? getWorkStyle(group) : null,
     gyeokgukCareerFit: features.gyeokgukCareerFit ? getGyeokgukCareerFit(gyeokguk.tenGod) : null,
     gyeokgukWealthStyle: features.gyeokgukWealthStyle ? getGyeokgukWealthStyle(gyeokguk.tenGod) : null,

@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { ARTICLES } from "@/lib/content/articles";
 
 export const metadata: Metadata = {
-  title: "사주 배우기 | 천기누설",
+  title: "사주 배우기 | 천기누설 사주",
   description: "천간·지지·오행·십신·대운·격국까지, 사주 명리학의 기본 개념을 쉽게 풀어쓴 글 모음이에요.",
 };
 

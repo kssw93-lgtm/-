@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { TAROT_CARDS, getTarotCard } from "@/lib/content/tarot";
 import AdSlot from "@/components/AdSlot";
+import JsonLd from "@/components/JsonLd";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return TAROT_CARDS.map((c) => ({ slug: c.slug }));
@@ -13,7 +15,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const c = getTarotCard(params.slug);
   if (!c) return {};
   return {
-    title: `${c.nameKo}(${c.nameEn}) 타로카드 의미 | 천기누설`,
+    title: `${c.nameKo}(${c.nameEn}) 타로카드 의미 | 천기누설 사주`,
     description: c.summary,
   };
 }
@@ -35,6 +37,20 @@ export default function TarotCardPage({ params }: { params: { slug: string } }) 
 
   return (
     <div className="flex flex-1 flex-col gap-6 px-6 py-8">
+      <JsonLd
+        data={articleJsonLd({
+          headline: `${c.nameKo}(${c.nameEn}) 타로카드 의미`,
+          description: c.summary,
+          path: `/tarot-guide/${c.slug}`,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "홈", path: "/" },
+          { name: "타로 백과", path: "/tarot-guide" },
+          { name: `${c.nameKo}(${c.nameEn})`, path: `/tarot-guide/${c.slug}` },
+        ])}
+      />
       <div>
         <Link href="/tarot-guide" className="text-xs text-[color:var(--color-gold-light)]/70 hover:underline">
           ← 타로 카드 백과사전

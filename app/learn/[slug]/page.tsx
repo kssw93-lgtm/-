@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { ARTICLES, getArticle } from "@/lib/content/articles";
 import { GYEOKGUK_ENTRIES } from "@/lib/content/gyeokguk-pages";
 import AdSlot from "@/components/AdSlot";
+import JsonLd from "@/components/JsonLd";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return ARTICLES.map((a) => ({ slug: a.slug }));
@@ -13,7 +15,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const article = getArticle(params.slug);
   if (!article) return {};
   return {
-    title: `${article.title} | 사주 배우기 | 천기누설`,
+    title: `${article.title} | 사주 배우기 | 천기누설 사주`,
     description: article.summary,
   };
 }
@@ -28,6 +30,20 @@ export default function LearnArticlePage({ params }: { params: { slug: string } 
 
   return (
     <div className="flex flex-1 flex-col gap-6 px-6 py-8">
+      <JsonLd
+        data={articleJsonLd({
+          headline: article.title,
+          description: article.summary,
+          path: `/learn/${article.slug}`,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "홈", path: "/" },
+          { name: "사주 배우기", path: "/learn" },
+          { name: article.title, path: `/learn/${article.slug}` },
+        ])}
+      />
       <div>
         <Link href="/learn" className="text-xs text-[color:var(--color-gold-light)]/70 hover:underline">
           ← 사주 배우기 목록
@@ -37,6 +53,20 @@ export default function LearnArticlePage({ params }: { params: { slug: string } 
         </h1>
         <p className="mt-2 text-sm text-white/50">{article.summary}</p>
       </div>
+
+      {article.summaryBullets && article.summaryBullets.length > 0 && (
+        <div className="rounded-2xl border border-[color:var(--color-gold)]/30 bg-[color:var(--color-gold)]/[0.06] p-5">
+          <p className="mb-2 text-xs font-semibold tracking-wide text-[color:var(--color-gold-light)]">📌 핵심 요약</p>
+          <ul className="flex flex-col gap-1.5">
+            {article.summaryBullets.map((bullet, i) => (
+              <li key={i} className="flex gap-2 text-[14px] leading-relaxed text-white/85">
+                <span className="text-[color:var(--color-gold-light)]/70">·</span>
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <article className="flex flex-col gap-4 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
         {article.body.map((paragraph, i) => (
