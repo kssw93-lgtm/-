@@ -31,14 +31,15 @@ export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   verification: {
-    google: "5PEFXksjaJ9b4G9tqOhswubHrr7D7nmwwPjtoo1Xph4",
+    google: ["5PEFXksjaJ9b4G9tqOhswubHrr7D7nmwwPjtoo1Xph4", "zpUqEKBvYw9so_nI7jqGWnxeWNNKv6Zw3GdExSXXghY"],
     other: {
-      "naver-site-verification": "f92c5fd28f8220b9d3e25a0dd26a8e39b1d39006",
+      "naver-site-verification": ["f92c5fd28f8220b9d3e25a0dd26a8e39b1d39006", "8e8ccb8620920dfd20c08e51c0c050f9d1dc7b4e"],
       "google-adsense-account": "ca-pub-8704899603701516",
       "msvalidate.01": "F22E43777BFF94BDA559E17F65E0BBE6",
     },
   },
   alternates: {
+    canonical: "/",
     types: {
       "application/rss+xml": "/rss.xml",
     },
