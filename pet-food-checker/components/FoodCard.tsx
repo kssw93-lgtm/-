@@ -70,6 +70,36 @@ export default function FoodCard({
             </p>
           )}
           <p className="text-gray-500">{info.notes}</p>
+
+          {info.benefits && (
+            <p className="rounded-lg bg-green-50 p-2 text-green-800">
+              <span className="font-medium">영양 효능</span> {info.benefits}
+            </p>
+          )}
+
+          {species === "dog" && info.dose_by_size && (
+            <div className="rounded-lg bg-gray-50 p-2">
+              <p className="mb-1 font-medium text-gray-800">
+                체구별 위험 섭취량 참고치
+              </p>
+              <p>
+                <span className="font-medium">소형견(~5kg)</span>{" "}
+                {info.dose_by_size.small}
+              </p>
+              <p>
+                <span className="font-medium">중형견(~15kg)</span>{" "}
+                {info.dose_by_size.medium}
+              </p>
+              <p>
+                <span className="font-medium">대형견(~30kg)</span>{" "}
+                {info.dose_by_size.large}
+              </p>
+              <p className="mt-1 text-[11px] text-gray-400">
+                실제 체중에 비례해 조정하는 참고용 수치이며, 정확한 진단은
+                반드시 동물병원에 문의하세요.
+              </p>
+            </div>
+          )}
         </div>
       )}
     </button>
