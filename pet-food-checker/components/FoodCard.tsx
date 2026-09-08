@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import type { FoodItem } from "@/types/food";
+import type { FoodItem, SafetyLevel, Species } from "@/types/food";
 
 const SAFETY_STYLE: Record<
-  FoodItem["safety"],
+  SafetyLevel,
   { badge: string; border: string; icon: string }
 > = {
   치명적: { badge: "bg-red-600 text-white", border: "border-red-200", icon: "☠️" },
@@ -13,9 +13,16 @@ const SAFETY_STYLE: Record<
   안전: { badge: "bg-green-600 text-white", border: "border-green-200", icon: "✅" },
 };
 
-export default function FoodCard({ food }: { food: FoodItem }) {
+export default function FoodCard({
+  food,
+  species,
+}: {
+  food: FoodItem;
+  species: Species;
+}) {
   const [open, setOpen] = useState(false);
-  const style = SAFETY_STYLE[food.safety];
+  const info = food[species];
+  const style = SAFETY_STYLE[info.safety];
 
   return (
     <button
@@ -36,33 +43,33 @@ export default function FoodCard({ food }: { food: FoodItem }) {
         <span
           className={`shrink-0 rounded-full px-3 py-1 text-xs font-bold ${style.badge}`}
         >
-          {food.safety}
+          {info.safety}
         </span>
       </div>
 
       {open && (
         <div className="mt-3 space-y-1.5 border-t border-gray-100 pt-3 text-sm text-gray-600">
-          {food.toxic_component && (
+          {info.toxic_component && (
             <p>
               <span className="font-medium text-gray-800">위험 성분</span>{" "}
-              {food.toxic_component}
+              {info.toxic_component}
             </p>
           )}
           <p>
             <span className="font-medium text-gray-800">증상</span>{" "}
-            {food.symptoms}
+            {info.symptoms}
           </p>
           <p>
             <span className="font-medium text-gray-800">대처</span>{" "}
-            {food.emergency}
+            {info.emergency}
           </p>
-          {food.safe_amount && (
+          {info.safe_amount && (
             <p>
               <span className="font-medium text-gray-800">적정량</span>{" "}
-              {food.safe_amount}
+              {info.safe_amount}
             </p>
           )}
-          <p className="text-gray-500">{food.notes}</p>
+          <p className="text-gray-500">{info.notes}</p>
         </div>
       )}
     </button>

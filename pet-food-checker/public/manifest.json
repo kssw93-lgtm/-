@@ -1,7 +1,7 @@
 {
   "name": "Pet Food Checker - 펫푸드 체커",
   "short_name": "펫푸드체커",
-  "description": "강아지 음식 안전 검색기",
+  "description": "강아지·고양이 음식 안전 검색기",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
