@@ -3,6 +3,7 @@ import { Noto_Serif_KR, Noto_Sans_KR } from "next/font/google";
 import Script from "next/script";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import PartnerBanner from "@/components/PartnerBanner";
 import JsonLd from "@/components/JsonLd";
 import { websiteJsonLd } from "@/lib/seo";
 import "./globals.css";
@@ -97,6 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="mx-auto flex min-h-screen w-full max-w-md flex-col">
           <SiteHeader />
           {children}
+          <PartnerBanner />
           <SiteFooter />
         </div>
       </body>
