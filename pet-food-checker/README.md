@@ -21,11 +21,19 @@ npm run dev
 ```
 `http://localhost:3000` 에서 확인할 수 있습니다.
 
-## 빌드
+## 빌드 (정적 export)
+`next.config.js`에서 `output: "export"`를 사용해 완전한 정적 사이트로
+빌드합니다. 별도 서버 없이 Cloudflare Pages 등 정적 호스팅에 바로 올릴 수
+있습니다.
 ```bash
-npm run build
-npm run start
+npm run build   # → out/ 디렉토리 생성
+npm run start   # out/ 을 로컬에서 정적 서버로 미리보기
 ```
+
+## Cloudflare Pages 배포
+`docs/TOSS_SUBMISSION_CHECKLIST.md`의 "Cloudflare Pages 배포 가이드" 참고.
+요약: Build command `npm run build`, Output directory `out`, Root directory
+`pet-food-checker` (모노레포 하위 프로젝트이므로 반드시 지정).
 
 ## 프로젝트 구조
 ```
