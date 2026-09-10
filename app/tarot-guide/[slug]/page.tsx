@@ -14,10 +14,13 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const c = getTarotCard(params.slug);
   if (!c) return {};
+  const title = `${c.nameKo}(${c.nameEn}) 타로카드 의미 | 사주달력`;
+  const path = `/tarot-guide/${c.slug}`;
   return {
-    title: `${c.nameKo}(${c.nameEn}) 타로카드 의미 | 사주달력`,
+    title,
     description: c.summary,
-    alternates: { canonical: `/tarot-guide/${c.slug}` },
+    alternates: { canonical: path },
+    openGraph: { title, description: c.summary, url: path },
   };
 }
 

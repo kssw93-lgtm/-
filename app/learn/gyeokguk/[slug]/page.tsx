@@ -13,10 +13,14 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const g = getGyeokgukEntry(params.slug);
   if (!g) return {};
+  const title = `${g.name}이란 무엇인가요? | 격국 | 사주달력`;
+  const description = `${g.name}(${g.subtitle}) — 강점과 약점, 격국의 의미를 알아보세요.`;
+  const path = `/learn/gyeokguk/${g.slug}`;
   return {
-    title: `${g.name}이란 무엇인가요? | 격국 | 사주달력`,
-    description: `${g.name}(${g.subtitle}) — 강점과 약점, 격국의 의미를 알아보세요.`,
-    alternates: { canonical: `/learn/gyeokguk/${g.slug}` },
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: { title, description, url: path },
   };
 }
 

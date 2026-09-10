@@ -16,10 +16,12 @@ export function generateMetadata({ params }: { params: { a: string; b: string } 
   if (!starA || !starB) return {};
   const title = `${starA.name} ${starB.name} 궁합 | 사주달력`;
   const description = `${starA.name}와 ${starB.name}의 궁합, 4원소 배속으로 실제 계산한 결과를 확인해보세요.`;
+  const path = `/zodiac/star-compat/${params.a}/${params.b}`;
   return {
     title,
     description,
-    alternates: { canonical: `/zodiac/star-compat/${params.a}/${params.b}` },
+    alternates: { canonical: path },
+    openGraph: { title, description, url: path },
     // 애드센스 "가치가 별로 없는 콘텐츠" 반려 대응: 78쌍이 동일한 문단 구조를 공유하는
     // 조합형 페이지라 대량으로 검색엔진에 노출되면 얇은 콘텐츠로 비칠 수 있다. 페이지
     // 자체는 유지하고(링크로는 접근 가능) 색인에서만 잠시 뺀다 — 승인 후 재검토.

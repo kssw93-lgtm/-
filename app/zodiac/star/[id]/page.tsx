@@ -13,10 +13,14 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { id: string } }): Metadata {
   const s = getStarSignEntry(params.id);
   if (!s) return {};
+  const title = `${s.name} 성격과 특징 | 사주달력`;
+  const description = `${s.name}(${formatDateRange(s)}) 성격, 강점과 약점을 알아보세요.`;
+  const path = `/zodiac/star/${s.id}`;
   return {
-    title: `${s.name} 성격과 특징 | 사주달력`,
-    description: `${s.name}(${formatDateRange(s)}) 성격, 강점과 약점을 알아보세요.`,
-    alternates: { canonical: `/zodiac/star/${s.id}` },
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: { title, description, url: path },
   };
 }
 

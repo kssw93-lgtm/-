@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   title: "띠 궁합 전체 모음 | 12띠 조합 78가지 | 사주달력",
   description: "쥐띠부터 돼지띠까지, 12띠로 만들 수 있는 78가지 조합의 궁합을 육합·삼합·충·파·해·형 관계로 확인해보세요.",
   alternates: { canonical: "/zodiac/animal-compat" },
+  openGraph: {
+    title: "띠 궁합 전체 모음 | 12띠 조합 78가지 | 사주달력",
+    description: "쥐띠부터 돼지띠까지, 12띠로 만들 수 있는 78가지 조합의 궁합을 육합·삼합·충·파·해·형 관계로 확인해보세요.",
+    url: "/zodiac/animal-compat",
+  },
 };
 
 export default function AnimalCompatIndexPage() {

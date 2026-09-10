@@ -13,10 +13,14 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { branch: string } }): Metadata {
   const z = getZodiacAnimalEntry(params.branch);
   if (!z) return {};
+  const title = `${z.animal} 성격과 특징 | 사주달력`;
+  const description = `${z.animal}(${z.hanja}) 성격, 강점과 약점, 잘 맞는 띠까지 알아보세요.`;
+  const path = `/zodiac/animal/${z.branch}`;
   return {
-    title: `${z.animal} 성격과 특징 | 사주달력`,
-    description: `${z.animal}(${z.hanja}) 성격, 강점과 약점, 잘 맞는 띠까지 알아보세요.`,
-    alternates: { canonical: `/zodiac/animal/${z.branch}` },
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: { title, description, url: path },
   };
 }
 

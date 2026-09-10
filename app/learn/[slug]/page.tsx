@@ -14,10 +14,13 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const article = getArticle(params.slug);
   if (!article) return {};
+  const title = `${article.title} | 사주 배우기 | 사주달력`;
+  const path = `/learn/${article.slug}`;
   return {
-    title: `${article.title} | 사주 배우기 | 사주달력`,
+    title,
     description: article.summary,
-    alternates: { canonical: `/learn/${article.slug}` },
+    alternates: { canonical: path },
+    openGraph: { title, description: article.summary, url: path },
   };
 }
 
