@@ -17,6 +17,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return {
     title: `${c.nameKo}(${c.nameEn}) 타로카드 의미 | 사주달력`,
     description: c.summary,
+    alternates: { canonical: `/tarot-guide/${c.slug}` },
   };
 }
 

@@ -17,6 +17,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return {
     title: `${article.title} | 사주 배우기 | 사주달력`,
     description: article.summary,
+    alternates: { canonical: `/learn/${article.slug}` },
   };
 }
 

@@ -16,6 +16,7 @@ export function generateMetadata({ params }: { params: { branch: string } }): Me
   return {
     title: `${z.animal} 성격과 특징 | 사주달력`,
     description: `${z.animal}(${z.hanja}) 성격, 강점과 약점, 잘 맞는 띠까지 알아보세요.`,
+    alternates: { canonical: `/zodiac/animal/${z.branch}` },
   };
 }
 

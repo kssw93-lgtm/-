@@ -16,6 +16,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return {
     title: `${g.name}이란 무엇인가요? | 격국 | 사주달력`,
     description: `${g.name}(${g.subtitle}) — 강점과 약점, 격국의 의미를 알아보세요.`,
+    alternates: { canonical: `/learn/gyeokguk/${g.slug}` },
   };
 }
 

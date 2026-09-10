@@ -6,6 +6,7 @@ import { TAROT_CARDS } from "@/lib/content/tarot";
 export const metadata: Metadata = {
   title: "타로 카드 백과사전 · 메이저 아르카나 22장 | 사주달력",
   description: "메이저 아르카나 22장의 의미, 정방향·역방향 키워드, 연애·금전·직업·건강 해석을 백호도사와 함께 알아보세요.",
+  alternates: { canonical: "/tarot-guide" },
 };
 
 export default function TarotGuideIndexPage() {

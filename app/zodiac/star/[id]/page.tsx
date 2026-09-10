@@ -16,6 +16,7 @@ export function generateMetadata({ params }: { params: { id: string } }): Metada
   return {
     title: `${s.name} 성격과 특징 | 사주달력`,
     description: `${s.name}(${formatDateRange(s)}) 성격, 강점과 약점을 알아보세요.`,
+    alternates: { canonical: `/zodiac/star/${s.id}` },
   };
 }
 

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "개인정보처리방침 | 사주달력",
   description: "사주달력의 개인정보처리방침과 광고(쿠키) 사용에 대한 안내입니다.",
+  alternates: { canonical: "/privacy" },
 };
 
 const EFFECTIVE_DATE = "2026년 8월 22일";

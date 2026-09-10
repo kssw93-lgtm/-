@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "사이트 소개 | 사주달력",
   description: "사주달력은 어떤 사이트이고, 어떻게 무료로 운영되는지 소개합니다.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

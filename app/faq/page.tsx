@@ -6,6 +6,7 @@ import { breadcrumbJsonLd, faqJsonLd, type FaqItem } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "자주 묻는 질문 | 사주달력",
   description: "무료로 사주팔자를 볼 수 있는지, 계산이 정확한지, 태어난 시간을 모를 때는 어떻게 하는지 등 사주달력에 대해 자주 묻는 질문을 모았어요.",
+  alternates: { canonical: "/faq" },
 };
 
 /**
