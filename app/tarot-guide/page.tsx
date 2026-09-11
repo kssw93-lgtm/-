@@ -4,15 +4,24 @@ import type { Metadata } from "next";
 import { TAROT_CARDS } from "@/lib/content/tarot";
 
 export const metadata: Metadata = {
-  title: "타로 카드 백과사전 · 메이저 아르카나 22장 | 사주달력",
-  description: "메이저 아르카나 22장의 의미, 정방향·역방향 키워드, 연애·금전·직업·건강 해석을 백호도사와 함께 알아보세요.",
+  title: "타로 카드 백과사전 · 전체 78장(메이저+마이너 아르카나) | 사주달력",
+  description: "메이저 아르카나 22장과 마이너 아르카나 56장, 총 78장 전체의 의미와 정방향·역방향 키워드, 연애·금전·직업·건강 해석을 백호도사와 함께 알아보세요.",
   alternates: { canonical: "/tarot-guide" },
   openGraph: {
-    title: "타로 카드 백과사전 · 메이저 아르카나 22장 | 사주달력",
-    description: "메이저 아르카나 22장의 의미, 정방향·역방향 키워드, 연애·금전·직업·건강 해석을 백호도사와 함께 알아보세요.",
+    title: "타로 카드 백과사전 · 전체 78장(메이저+마이너 아르카나) | 사주달력",
+    description: "메이저 아르카나 22장과 마이너 아르카나 56장, 총 78장 전체의 의미와 정방향·역방향 키워드, 연애·금전·직업·건강 해석을 백호도사와 함께 알아보세요.",
     url: "/tarot-guide",
   },
 };
+
+/** 78장을 카드 id 구간으로 나눠 섹션 제목을 붙인다(0-21 메이저, 이후 수트별 14장씩). */
+const SECTIONS = [
+  { title: "메이저 아르카나 (22장)", from: 0, to: 21 },
+  { title: "마이너 아르카나 · 완드 (14장)", from: 22, to: 35 },
+  { title: "마이너 아르카나 · 컵 (14장)", from: 36, to: 49 },
+  { title: "마이너 아르카나 · 소드 (14장)", from: 50, to: 63 },
+  { title: "마이너 아르카나 · 펜타클 (14장)", from: 64, to: 77 },
+];
 
 export default function TarotGuideIndexPage() {
   return (
@@ -22,7 +31,7 @@ export default function TarotGuideIndexPage() {
           타로 백과사전
         </span>
         <h1 className="font-brand mt-4 text-2xl font-bold text-[color:var(--color-gold-light)]">
-          메이저 아르카나 22장
+          전체 78장 (메이저 22 + 마이너 56)
         </h1>
         <p className="mt-2 text-sm text-white/50">
           🐯 백호도사와 함께 카드 하나하나의 의미를 알아보세요
@@ -37,30 +46,35 @@ export default function TarotGuideIndexPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        {TAROT_CARDS.map((c) => (
-          <Link
-            key={c.slug}
-            href={`/tarot-guide/${c.slug}`}
-            className="flex flex-col items-center gap-2 rounded-xl border border-[color:var(--color-gold)]/20 bg-white/5 p-3 text-center transition hover:border-[color:var(--color-gold)]/60"
-          >
-            <div className="relative aspect-[11/19] w-full overflow-hidden rounded-lg bg-black/20">
-              <Image
-                src={`/tarot/${c.slug}.jpg`}
-                alt={`${c.nameKo}(${c.nameEn}) 타로카드`}
-                fill
-                sizes="(max-width: 480px) 45vw, 200px"
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <span className="block text-xs text-[color:var(--color-gold-light)]/70">{c.number}</span>
-              <span className="block text-sm font-semibold text-white/85">{c.nameKo}</span>
-              <span className="block text-[10px] text-white/30">{c.nameEn}</span>
-            </div>
-          </Link>
-        ))}
-      </div>
+      {SECTIONS.map((section) => (
+        <div key={section.title} className="flex flex-col gap-3">
+          <h2 className="text-sm font-semibold text-[color:var(--color-gold-light)]">{section.title}</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {TAROT_CARDS.filter((c) => c.id >= section.from && c.id <= section.to).map((c) => (
+              <Link
+                key={c.slug}
+                href={`/tarot-guide/${c.slug}`}
+                className="flex flex-col items-center gap-2 rounded-xl border border-[color:var(--color-gold)]/20 bg-white/5 p-3 text-center transition hover:border-[color:var(--color-gold)]/60"
+              >
+                <div className="relative aspect-[11/19] w-full overflow-hidden rounded-lg bg-black/20">
+                  <Image
+                    src={`/tarot/${c.slug}.jpg`}
+                    alt={`${c.nameKo}(${c.nameEn}) 타로카드`}
+                    fill
+                    sizes="(max-width: 480px) 45vw, 200px"
+                    className="object-cover"
+                  />
+                </div>
+                <div>
+                  <span className="block text-xs text-[color:var(--color-gold-light)]/70">{c.number}</span>
+                  <span className="block text-sm font-semibold text-white/85">{c.nameKo}</span>
+                  <span className="block text-[10px] text-white/30">{c.nameEn}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      ))}
 
       <Link
         href="/"
