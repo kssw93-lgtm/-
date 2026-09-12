@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { TAROT_CARDS } from "@/lib/content/tarot";
+import InFeedAdSlot from "@/components/InFeedAdSlot";
 
 export const metadata: Metadata = {
   title: "타로 카드 백과사전 · 전체 78장(메이저+마이너 아르카나) | 사주달력",
@@ -50,7 +51,7 @@ export default function TarotGuideIndexPage() {
         <div key={section.title} className="flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-[color:var(--color-gold-light)]">{section.title}</h2>
           <div className="grid grid-cols-2 gap-3">
-            {TAROT_CARDS.filter((c) => c.id >= section.from && c.id <= section.to).map((c) => (
+            {TAROT_CARDS.filter((c) => c.id >= section.from && c.id <= section.to).flatMap((c, i) => [
               <Link
                 key={c.slug}
                 href={`/tarot-guide/${c.slug}`}
@@ -70,8 +71,10 @@ export default function TarotGuideIndexPage() {
                   <span className="block text-sm font-semibold text-white/85">{c.nameKo}</span>
                   <span className="block text-[10px] text-white/30">{c.nameEn}</span>
                 </div>
-              </Link>
-            ))}
+              </Link>,
+              // 카드 6장마다 한 번씩, 피드 안에 자연스럽게 인피드 광고를 섞어 넣는다.
+              ...(i % 6 === 5 ? [<InFeedAdSlot key={`${c.slug}-ad`} label="타로 카드 목록 인피드 광고" />] : []),
+            ])}
           </div>
         </div>
       ))}

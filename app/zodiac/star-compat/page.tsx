@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { allStarPairs, getStarEntry, getStarPairRelation } from "@/lib/content/zodiac-compat-pages";
+import InFeedAdSlot from "@/components/InFeedAdSlot";
 
 export const metadata: Metadata = {
   title: "별자리 궁합 전체 모음 | 12별자리 조합 78가지 | 사주달력",
@@ -31,12 +32,12 @@ export default function StarCompatIndexPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        {pairs.map(([a, b]) => {
+        {pairs.flatMap(([a, b], i) => {
           const starA = getStarEntry(a);
           const starB = getStarEntry(b);
-          if (!starA || !starB) return null;
+          if (!starA || !starB) return [];
           const relation = getStarPairRelation(a, b);
-          return (
+          return [
             <Link
               key={`${a}-${b}`}
               href={`/zodiac/star-compat/${a}/${b}`}
@@ -49,8 +50,9 @@ export default function StarCompatIndexPage() {
                 <span>{relation.emoji}</span>
                 <span>{relation.label}</span>
               </span>
-            </Link>
-          );
+            </Link>,
+            ...(i % 20 === 19 ? [<InFeedAdSlot key={`${a}-${b}-ad`} label="별자리 궁합 목록 인피드 광고" />] : []),
+          ];
         })}
       </div>
 

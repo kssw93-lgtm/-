@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { STAR_SIGNS, ZODIAC_ANIMALS } from "@/lib/content/zodiac-pages";
+import InFeedAdSlot from "@/components/InFeedAdSlot";
 
 export const metadata: Metadata = {
   title: "별자리 성격 · 띠 성격 모음 | 사주달력",
@@ -59,6 +60,8 @@ export default function ZodiacIndexPage() {
           ))}
         </div>
       </div>
+
+      <InFeedAdSlot label="별자리·띠 목록 인피드 광고" />
 
       <div>
         <h2 className="mb-3 text-sm font-bold text-white/70">🐾 띠 성격</h2>

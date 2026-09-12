@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import AdSlot from "@/components/AdSlot";
+import InArticleAdSlot from "@/components/InArticleAdSlot";
 import JsonLd from "@/components/JsonLd";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { GYEOKGUK_ENTRIES, getGyeokgukEntry } from "@/lib/content/gyeokguk-pages";
@@ -80,11 +81,14 @@ export default function GyeokgukDetailPage({ params }: { params: { slug: string 
 
       {g.body && g.body.length > 0 && (
         <article className="flex flex-col gap-4 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
-          {g.body.map((paragraph, i) => (
+          {g.body.flatMap((paragraph, i) => [
             <p key={i} className="text-[15px] leading-relaxed text-white/85">
               {paragraph}
-            </p>
-          ))}
+            </p>,
+            ...(i === Math.floor(g.body!.length / 2)
+              ? [<InArticleAdSlot key="in-article-ad" label="본문 중간 인아티클 광고" />]
+              : []),
+          ])}
         </article>
       )}
 

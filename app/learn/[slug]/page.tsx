@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ARTICLES, getArticle } from "@/lib/content/articles";
 import { GYEOKGUK_ENTRIES } from "@/lib/content/gyeokguk-pages";
 import AdSlot from "@/components/AdSlot";
+import InArticleAdSlot from "@/components/InArticleAdSlot";
 import JsonLd from "@/components/JsonLd";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
@@ -73,11 +74,15 @@ export default function LearnArticlePage({ params }: { params: { slug: string } 
       )}
 
       <article className="flex flex-col gap-4 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
-        {article.body.map((paragraph, i) => (
+        {article.body.flatMap((paragraph, i) => [
           <p key={i} className="text-[15px] leading-relaxed text-white/85">
             {paragraph}
-          </p>
-        ))}
+          </p>,
+          // 문단 중간쯤(정확히 절반을 넘는 첫 지점)에 인아티클 광고를 한 번 끼워 넣는다.
+          ...(i === Math.floor(article.body.length / 2)
+            ? [<InArticleAdSlot key="in-article-ad" label="본문 중간 인아티클 광고" />]
+            : []),
+        ])}
       </article>
 
       {article.slug === "gyeokguk" && (

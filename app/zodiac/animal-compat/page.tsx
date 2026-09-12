@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { allAnimalPairs, getAnimalEntry, getAnimalPairRelation } from "@/lib/content/zodiac-compat-pages";
+import InFeedAdSlot from "@/components/InFeedAdSlot";
 
 export const metadata: Metadata = {
   title: "띠 궁합 전체 모음 | 12띠 조합 78가지 | 사주달력",
@@ -31,12 +32,12 @@ export default function AnimalCompatIndexPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        {pairs.map(([a, b]) => {
+        {pairs.flatMap(([a, b], i) => {
           const animalA = getAnimalEntry(a);
           const animalB = getAnimalEntry(b);
-          if (!animalA || !animalB) return null;
+          if (!animalA || !animalB) return [];
           const relation = getAnimalPairRelation(a, b);
-          return (
+          return [
             <Link
               key={`${a}-${b}`}
               href={`/zodiac/animal-compat/${a}/${b}`}
@@ -49,8 +50,9 @@ export default function AnimalCompatIndexPage() {
                 <span>{relation.emoji}</span>
                 <span>{relation.label}</span>
               </span>
-            </Link>
-          );
+            </Link>,
+            ...(i % 20 === 19 ? [<InFeedAdSlot key={`${a}-${b}-ad`} label="띠 궁합 목록 인피드 광고" />] : []),
+          ];
         })}
       </div>
 

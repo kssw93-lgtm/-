@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { ARTICLES } from "@/lib/content/articles";
+import InFeedAdSlot from "@/components/InFeedAdSlot";
 
 export const metadata: Metadata = {
   title: "사주 배우기 | 사주달력",
@@ -47,7 +48,7 @@ export default function LearnIndexPage() {
       </div>
 
       <div className="flex flex-col gap-3">
-        {ARTICLES.map((a) => (
+        {ARTICLES.flatMap((a, i) => [
           <Link
             key={a.slug}
             href={`/learn/${a.slug}`}
@@ -58,8 +59,9 @@ export default function LearnIndexPage() {
               <span className="text-xs text-white/30">{a.minuteRead}분</span>
             </div>
             <p className="text-sm leading-relaxed text-white/55">{a.summary}</p>
-          </Link>
-        ))}
+          </Link>,
+          ...(i === 5 ? [<InFeedAdSlot key="learn-list-ad" label="사주 배우기 목록 인피드 광고" />] : []),
+        ])}
       </div>
 
       <Link
