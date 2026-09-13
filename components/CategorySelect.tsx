@@ -104,6 +104,24 @@ export default function CategorySelect({ onSelect, onSelectCompatibility }: Prop
         ))}
       </div>
 
+      {/* 사주 계산 카테고리와 구분되는 별개 기능(타로 3장 뽑기)이라 위 그리드에 섞지 않고,
+          전체 폭 배너로 따로 눈에 띄게 둔다. */}
+      <Link
+        href="/tarot"
+        className="relative z-10 flex w-full items-center gap-4 rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-r from-[color:var(--color-gold)]/15 to-white/[0.02] px-5 py-4 transition hover:border-[color:var(--color-gold)]/60"
+      >
+        <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border border-[color:var(--color-gold)]/40 bg-black/30 text-2xl">
+          🔮
+        </span>
+        <div className="flex-1 text-left">
+          <p className="text-sm font-bold text-white/90">타로카드 보기</p>
+          <p className="mt-0.5 text-xs leading-snug text-white/50">
+            연애·궁합·시험·취업·금전 중 골라서 카드 3장으로 바로 확인해요
+          </p>
+        </div>
+        <span className="text-white/30">→</span>
+      </Link>
+
       <div className="relative z-10 w-full">
         <div className="mb-3 flex items-center justify-between">
           <p className="text-sm font-bold text-white/80">📖 알아두면 더 잘 맞는 사주 상식</p>

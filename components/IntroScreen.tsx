@@ -71,6 +71,12 @@ export default function IntroScreen({ onStart, savedName, onQuickDaily }: Props)
             ♈ 별자리·띠 성격
           </Link>
           <Link
+            href="/tarot"
+            className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-white/70 transition hover:border-[color:var(--color-gold)]/50 hover:text-[color:var(--color-gold-light)]"
+          >
+            🃏 타로카드 보기
+          </Link>
+          <Link
             href="/tarot-guide"
             className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-white/70 transition hover:border-[color:var(--color-gold)]/50 hover:text-[color:var(--color-gold-light)]"
           >

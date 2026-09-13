@@ -3,6 +3,7 @@ import { ARTICLES } from "@/lib/content/articles";
 import { STAR_SIGNS, ZODIAC_ANIMALS } from "@/lib/content/zodiac-pages";
 import { TAROT_CARDS } from "@/lib/content/tarot";
 import { GYEOKGUK_ENTRIES } from "@/lib/content/gyeokguk-pages";
+import { TAROT_TOPICS } from "@/lib/content/tarot-topics";
 import { SITE_LAUNCH_DATE } from "@/lib/seo";
 
 const BASE_URL = "https://www.sajudalyeok.co.kr";
@@ -54,6 +55,13 @@ export default function sitemap({ id }: { id: number }): MetadataRoute.Sitemap {
           priority: 0.8,
           lastModified: CONTENT_LAST_MODIFIED,
         },
+        { url: `${BASE_URL}/tarot`, changeFrequency: "weekly", priority: 0.8, lastModified: CONTENT_LAST_MODIFIED },
+        ...TAROT_TOPICS.map((t) => ({
+          url: `${BASE_URL}/tarot/${t.slug}`,
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+          lastModified: CONTENT_LAST_MODIFIED,
+        })),
         { url: `${BASE_URL}/about`, changeFrequency: "monthly", priority: 0.5, lastModified: CONTENT_LAST_MODIFIED },
         { url: `${BASE_URL}/faq`, changeFrequency: "monthly", priority: 0.6, lastModified: CONTENT_LAST_MODIFIED },
         {

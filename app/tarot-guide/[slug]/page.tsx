@@ -187,7 +187,7 @@ export default function TarotCardPage({ params }: { params: { slug: string } }) 
       </div>
 
       <Link
-        href="/"
+        href="/tarot"
         className="mt-2 rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-8 py-4 text-center text-base font-bold text-[#241a08] transition hover:brightness-110"
       >
         🔮 내 운명 백호도사 타로로 직접 뽑아보기
