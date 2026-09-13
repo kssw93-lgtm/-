@@ -70,6 +70,14 @@ export default function ZodiacAnimalPage({ params }: { params: { branch: string 
         </article>
       )}
 
+      <Link
+        href="/learn/samjae"
+        className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5 transition hover:border-[color:var(--color-gold)]/60"
+      >
+        <p className="text-sm font-bold text-white/85">🔮 내 띠의 삼재 시기가 궁금하다면?</p>
+        <p className="mt-1 text-xs text-white/50">삼재(三災)란 무엇인가요? 내 띠는 언제일까 →</p>
+      </Link>
+
       <AdSlot label="본문 하단 디스플레이 광고" />
 
       <div className="flex gap-3">

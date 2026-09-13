@@ -12,6 +12,14 @@ export function generateStaticParams() {
   return ARTICLES.map((a) => ({ slug: a.slug }));
 }
 
+/** 주제상 자연스럽게 이어지는 다른 글로 안내하는 내부 링크. 새 글(용신·삼재)이
+ * /learn 목록 말고는 어디서도 링크되지 않는 고아 페이지가 되지 않도록 한다. */
+const RELATED_READS: Record<string, string[]> = {
+  "singang-sinyak": ["yongsin"],
+  gyeokguk: ["yongsin"],
+  sinsal: ["samjae"],
+};
+
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const article = getArticle(params.slug);
   if (!article) return {};
@@ -84,6 +92,27 @@ export default function LearnArticlePage({ params }: { params: { slug: string } 
             : []),
         ])}
       </article>
+
+      {RELATED_READS[article.slug]?.length > 0 && (
+        <div className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
+          <p className="mb-3 text-sm font-bold text-white/85">이어서 읽으면 좋은 글</p>
+          <div className="flex flex-col gap-2">
+            {RELATED_READS[article.slug].map((slug) => {
+              const related = getArticle(slug);
+              if (!related) return null;
+              return (
+                <Link
+                  key={slug}
+                  href={`/learn/${slug}`}
+                  className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/70 transition hover:border-[color:var(--color-gold)]/60"
+                >
+                  {related.title} →
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {article.slug === "gyeokguk" && (
         <div className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
