@@ -55,6 +55,13 @@ export default function IntroScreen({ onStart, savedName, onQuickDaily }: Props)
           {typeof savedName === "string" ? "다른 운세 보기" : "무료로 사주 보기"}
         </button>
 
+        <Link
+          href="/tarot"
+          className="-mt-2 text-sm font-medium text-[color:var(--color-gold-light)]/75 transition hover:text-[color:var(--color-gold-light)]"
+        >
+          🃏 타로카드 보기 →
+        </Link>
+
         <p className="text-xs text-white/40">로그인 없이 1분이면 확인할 수 있어요</p>
 
         <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
@@ -69,12 +76,6 @@ export default function IntroScreen({ onStart, savedName, onQuickDaily }: Props)
             className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-white/70 transition hover:border-[color:var(--color-gold)]/50 hover:text-[color:var(--color-gold-light)]"
           >
             ♈ 별자리·띠 성격
-          </Link>
-          <Link
-            href="/tarot"
-            className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-white/70 transition hover:border-[color:var(--color-gold)]/50 hover:text-[color:var(--color-gold-light)]"
-          >
-            🃏 타로카드 보기
           </Link>
           <Link
             href="/tarot-guide"
