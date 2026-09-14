@@ -1,5 +1,5 @@
 import { validateBirthInput } from "./input-validation";
-import { normalizeToSolarDate, UnavailableLunarCalendarSource, type LunarCalendarSource } from "./calendar-convert";
+import { normalizeToSolarDate, KasiLunarCalendarSource, type LunarCalendarSource } from "./calendar-convert";
 import { normalizeBirthInstant } from "./timezone-normalize";
 import { computeYearPillar } from "./year-pillar";
 import { computeMonthPillar } from "./month-pillar";
@@ -15,7 +15,7 @@ import { computeTwelveStagesForPillars } from "./twelve-stages";
 import { computeLuckDirection, computeMajorLuck } from "./daeun";
 import { createDefaultSolarTermSource, SUPPORTED_BIRTH_YEAR_RANGE, type SolarTermSource } from "./solar-terms";
 import { branchById, sexagenaryIndexOf } from "./data";
-import lunarSampleJson from "@/data/lunar-calendar/sample.json";
+import lunarCalendarJson from "@/data/lunar-calendar/full-1950-2028.json";
 import type { LunarToSolarRecord } from "./calendar-convert";
 import type { BirthInput, FourPillars, SajuResult } from "./types";
 
@@ -23,8 +23,8 @@ export * from "./types";
 export * from "./twelve-stages";
 export { SUPPORTED_BIRTH_YEAR_RANGE };
 
-const DEFAULT_LUNAR_SOURCE: LunarCalendarSource = new UnavailableLunarCalendarSource(
-  lunarSampleJson as LunarToSolarRecord[]
+const DEFAULT_LUNAR_SOURCE: LunarCalendarSource = new KasiLunarCalendarSource(
+  lunarCalendarJson as LunarToSolarRecord[]
 );
 
 export interface ComputeSajuOptions {

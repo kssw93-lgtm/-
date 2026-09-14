@@ -64,21 +64,23 @@ export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: 
               <button
                 key={v}
                 type="button"
-                disabled={v === "lunar"}
                 onClick={() => update("calendarType", v)}
                 className={`flex-1 rounded-lg px-4 py-3 ${
                   form.calendarType === v
                     ? "bg-[color:var(--color-gold)] font-semibold text-[#241a08]"
                     : "bg-white/10"
-                } disabled:cursor-not-allowed disabled:opacity-40`}
+                }`}
               >
-                {v === "solar" ? "양력" : "음력 (준비중)"}
+                {v === "solar" ? "양력" : "음력"}
               </button>
             ))}
           </div>
-          <span className="text-xs text-white/50">
-            음력 생년월일 계산은 검증된 데이터 확보 후 곧 지원할 예정이에요. 지금은 양력으로 변환해서 입력해 주세요.
-          </span>
+          {form.calendarType === "lunar" && (
+            <span className="text-xs text-white/50">
+              위 생년월일 칸에 음력 날짜 그대로 입력해 주세요. KASI(한국천문연구원) 공식 음양력
+              데이터로 변환해요.
+            </span>
+          )}
         </div>
 
         {form.calendarType === "lunar" && (

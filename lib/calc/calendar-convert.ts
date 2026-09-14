@@ -13,16 +13,17 @@ export interface LunarToSolarRecord {
  * 계산 규칙서 06, 07번: 음력은 임의 산술 공식으로 변환하지 않고
  * 검증된 음양력 데이터 조회로만 변환한다.
  *
- * 아직 전체 연도 범위의 KASI 음양력 데이터가 수집되지 않았으므로,
- * 이 소스는 /data/lunar-calendar/sample.json 에 존재하는 날짜만 변환할 수 있다.
- * 없는 날짜는 임의로 계산하지 않고 명시적으로 오류를 던진다(69번 "외부 데이터 직접 의존 금지" +
- * 76번 DATA-002 "목 데이터를 Production으로 착각해 배포 금지" 원칙에 따름).
+ * /data/lunar-calendar/full-1950-2028.json에 KASI 음양력 API로 실측 수집한
+ * 1950~2028년 전체 날짜(SUPPORTED_BIRTH_YEAR_RANGE와 동일 범위, solar-terms.ts 참조)가
+ * 들어있다. 이 범위 밖의 날짜는 임의로 계산하지 않고 명시적으로 오류를 던진다
+ * (69번 "외부 데이터 직접 의존 금지" + 76번 DATA-002 "목 데이터를 Production으로
+ * 착각해 배포 금지" 원칙에 따름).
  */
 export interface LunarCalendarSource {
   lunarToSolar(year: number, month: number, day: number, isLeapMonth: boolean): { year: number; month: number; day: number };
 }
 
-export class UnavailableLunarCalendarSource implements LunarCalendarSource {
+export class KasiLunarCalendarSource implements LunarCalendarSource {
   private byKey: Map<string, LunarToSolarRecord>;
 
   constructor(records: LunarToSolarRecord[]) {
