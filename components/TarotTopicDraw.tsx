@@ -15,22 +15,25 @@ interface DrawnCard {
   orientation: Orientation;
 }
 
-function drawThreeCards(): DrawnCard[] {
-  const pool = [...TAROT_CARDS];
-  const picks: DrawnCard[] = [];
-  for (let i = 0; i < 3; i++) {
-    const idx = Math.floor(Math.random() * pool.length);
-    const [card] = pool.splice(idx, 1);
-    picks.push({ card, orientation: Math.random() < 0.5 ? "upright" : "reversed" });
-  }
-  return picks;
+const SPREAD_SIZE = 12;
+
+function drawRandomCard(excludeSlugs: string[]): DrawnCard {
+  const pool = TAROT_CARDS.filter((c) => !excludeSlugs.includes(c.slug));
+  const card = pool[Math.floor(Math.random() * pool.length)];
+  return { card, orientation: Math.random() < 0.5 ? "upright" : "reversed" };
 }
 
-function CardBack({ rotate }: { rotate: number }) {
+function CardBack({ picked, order, onClick }: { picked: boolean; order: number | null; onClick: () => void }) {
   return (
-    <div
-      className="relative aspect-[2/3] w-20 overflow-hidden rounded-xl border-2 border-[color:var(--color-gold)]/40 bg-[#161e30] shadow-lg shadow-black/40"
-      style={{ transform: `rotate(${rotate}deg)` }}
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={picked}
+      className={`group relative aspect-[2/3] w-full overflow-hidden rounded-lg border-2 bg-[#161e30] shadow-lg shadow-black/40 transition ${
+        picked
+          ? "-translate-y-2 border-[color:var(--color-gold-light)] opacity-50"
+          : "border-[color:var(--color-gold)]/40 active:scale-95 active:border-[color:var(--color-gold-light)]"
+      }`}
     >
       <div
         className="absolute inset-0 opacity-40"
@@ -39,49 +42,67 @@ function CardBack({ rotate }: { rotate: number }) {
             "repeating-linear-gradient(45deg, var(--color-gold) 0, var(--color-gold) 1px, transparent 1px, transparent 10px), repeating-linear-gradient(-45deg, var(--color-gold) 0, var(--color-gold) 1px, transparent 1px, transparent 10px)",
         }}
       />
-      <div className="absolute inset-1.5 rounded-lg border border-[color:var(--color-gold)]/50" />
+      <div className="absolute inset-1 rounded-md border border-[color:var(--color-gold)]/50" />
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-xl text-[color:var(--color-gold-light)] drop-shadow-[0_0_6px_rgba(201,163,92,0.6)]">
+        <span className="text-lg text-[color:var(--color-gold-light)] drop-shadow-[0_0_6px_rgba(201,163,92,0.6)]">
           ☯
         </span>
       </div>
-    </div>
+      {order !== null && (
+        <span className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--color-gold)] text-[11px] font-bold text-[#241a08]">
+          {order}
+        </span>
+      )}
+    </button>
   );
 }
 
-export default function TarotTopicDraw({ topic }: { topic: TarotTopic }) {
-  const [phase, setPhase] = useState<"intro" | "loading" | "result">("intro");
-  const [drawn, setDrawn] = useState<DrawnCard[]>([]);
+interface Pick extends DrawnCard {
+  slot: number;
+}
 
-  function handleDraw() {
-    setPhase("loading");
-    setTimeout(() => {
-      setDrawn(drawThreeCards());
-      setPhase("result");
-    }, 900);
+export default function TarotTopicDraw({ topic }: { topic: TarotTopic }) {
+  const [phase, setPhase] = useState<"picking" | "loading" | "result">("picking");
+  const [picks, setPicks] = useState<Pick[]>([]);
+
+  function handlePickSlot(slot: number) {
+    if (picks.length >= 3 || picks.some((p) => p.slot === slot)) return;
+    const excludeSlugs = picks.map((p) => p.card.slug);
+    const next = [...picks, { slot, ...drawRandomCard(excludeSlugs) }];
+    setPicks(next);
+
+    if (next.length === 3) {
+      setPhase("loading");
+      setTimeout(() => setPhase("result"), 900);
+    }
   }
 
   function handleRedraw() {
-    setDrawn([]);
-    setPhase("intro");
+    setPicks([]);
+    setPhase("picking");
   }
 
-  if (phase === "intro") {
+  if (phase === "picking") {
     return (
-      <div className="flex flex-col items-center gap-6 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-6 text-center">
-        <span className="text-5xl">{topic.emoji}</span>
+      <div className="flex flex-col items-center gap-5 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-6 text-center">
+        <span className="text-4xl">{topic.emoji}</span>
         <p className="text-sm leading-relaxed text-white/70">{topic.description}</p>
-        <div className="flex justify-center -space-x-6 py-2">
-          <CardBack rotate={-8} />
-          <CardBack rotate={0} />
-          <CardBack rotate={8} />
+        <p className="text-sm font-semibold text-[color:var(--color-gold-light)]">
+          마음에 드는 카드 3장을 골라보세요 ({picks.length}/3)
+        </p>
+        <div className="grid w-full grid-cols-4 gap-2.5">
+          {Array.from({ length: SPREAD_SIZE }, (_, slot) => {
+            const orderIndex = picks.findIndex((p) => p.slot === slot);
+            return (
+              <CardBack
+                key={slot}
+                picked={orderIndex !== -1}
+                order={orderIndex !== -1 ? orderIndex + 1 : null}
+                onClick={() => handlePickSlot(slot)}
+              />
+            );
+          })}
         </div>
-        <button
-          onClick={handleDraw}
-          className="rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-8 py-4 text-base font-bold text-[#241a08] transition hover:brightness-110"
-        >
-          카드 3장 뽑기
-        </button>
       </div>
     );
   }
@@ -90,7 +111,7 @@ export default function TarotTopicDraw({ topic }: { topic: TarotTopic }) {
     return (
       <div className="flex flex-col items-center gap-4 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 py-14 text-center">
         <span className="animate-pulse text-4xl">🔮</span>
-        <p className="text-sm text-white/60">카드를 섞고 있어요...</p>
+        <p className="text-sm text-white/60">카드를 살피고 있어요...</p>
       </div>
     );
   }
@@ -98,7 +119,7 @@ export default function TarotTopicDraw({ topic }: { topic: TarotTopic }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-3 gap-3">
-        {drawn.map(({ card, orientation }, i) => (
+        {picks.map(({ card, orientation }, i) => (
           <div key={card.slug} className="flex flex-col items-center gap-2">
             <div
               className={`relative aspect-[11/19] w-full overflow-hidden rounded-lg border border-[color:var(--color-gold)]/30 ${
@@ -119,7 +140,7 @@ export default function TarotTopicDraw({ topic }: { topic: TarotTopic }) {
       </div>
 
       <div className="flex flex-col gap-3">
-        {drawn.map(({ card, orientation }, i) => (
+        {picks.map(({ card, orientation }, i) => (
           <div key={card.slug} className="rounded-2xl bg-white/10 p-4">
             <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
               {topic.positions[i].label} · {card.nameKo}
@@ -137,7 +158,7 @@ export default function TarotTopicDraw({ topic }: { topic: TarotTopic }) {
           <img src="/baekho-dosa.svg" alt="백호도사" width={48} height={62} className="rounded-lg" />
           <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">백호도사의 한마디</p>
         </div>
-        <p className="text-base leading-relaxed text-white/90">{drawn[2].card.baekhoAdvice}</p>
+        <p className="text-base leading-relaxed text-white/90">{picks[2].card.baekhoAdvice}</p>
       </div>
 
       <AdSlot label="타로 3장 뽑기 결과 하단 디스플레이 광고" />
