@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { TAROT_CARDS, getTarotCard } from "@/lib/content/tarot";
+import { TAROT_CARDS, getTarotCard, getTarotAliases } from "@/lib/content/tarot";
 import AdSlot from "@/components/AdSlot";
 import JsonLd from "@/components/JsonLd";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
@@ -14,13 +14,17 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const c = getTarotCard(params.slug);
   if (!c) return {};
-  const title = `${c.nameKo}(${c.nameEn}) 타로카드 의미 | 사주달력`;
+  // 검색어 분석: 사람들은 "타로 힘카드", "여사제 카드"처럼 '타로 + 카드 이름 + 카드'로 찾는다.
+  const title = `타로 ${c.nameKo} 카드 의미 · 정방향 역방향 (${c.nameEn}) | 사주달력`;
+  const aliases = getTarotAliases(c);
+  const aliasText = aliases.length > 0 ? ` (${aliases.join("·")})` : "";
+  const description = `${c.nameKo} 타로카드${aliasText} 의미 — 정방향은 '${c.keywords.upright.slice(0, 3).join("·")}', 역방향은 '${c.keywords.reversed.slice(0, 3).join("·")}'. 연애·금전·직업·건강운 해석과 카드 속 상징을 한 번에 확인하세요.`;
   const path = `/tarot-guide/${c.slug}`;
   return {
     title,
-    description: c.summary,
+    description,
     alternates: { canonical: path },
-    openGraph: { title, description: c.summary, url: path },
+    openGraph: { title, description, url: path },
   };
 }
 
@@ -62,11 +66,14 @@ export default function TarotCardPage({ params }: { params: { slug: string } }) 
         <div className="mt-3 text-center">
           <span className="text-xs text-[color:var(--color-gold-light)]/70">{c.number}</span>
           <h1 className="font-brand mt-1 text-2xl font-bold leading-snug text-[color:var(--color-gold-light)]">
-            {c.nameKo}
+            {c.nameKo} 타로카드 의미
           </h1>
           <p className="mt-1 text-xs text-white/40">
             {c.nameEn} · {c.element}
           </p>
+          {getTarotAliases(c).length > 0 && (
+            <p className="mt-1 text-xs text-white/40">다른 이름: {getTarotAliases(c).join(", ")}</p>
+          )}
         </div>
       </div>
 
