@@ -1,5 +1,5 @@
 import { extractDominantTenGodGroup, GROUP_BY_TEN_GOD } from "./feature-extract";
-import { computeStrengthScore } from "./strength-score";
+import { computeStrengthScore, type Strength } from "./strength-score";
 import { computeCurrentFlow, computeYearRhythm } from "./current-flow";
 import { computeLuckColor } from "./luck-color";
 import { computeTodayLuckWidget, type TodayLuckWidget } from "./daily-luck-widget";
@@ -53,7 +53,7 @@ import { getTenGod } from "@/lib/calc/ten-gods";
 import dayMasterJson from "@/data/day-master.json";
 import type { ElementId, SajuResult, StemId } from "@/lib/calc/types";
 
-const DAY_MASTER_PROFILES = dayMasterJson as Record<StemId, string>;
+const DAY_MASTER_PROFILES = dayMasterJson as Record<StemId, Record<Strength, string>>;
 const SINSAL_INFO = sinsalJson as Record<SinsalId, { name: string; hanja: string; type: string; desc: string }>;
 
 export * from "./feature-extract";
@@ -277,7 +277,7 @@ export function interpretSaju(
   // 볼 때 매번 똑같은 문단이 반복된다는 피드백을 반영해, 겹치는 블록 자체를 없앴다.
   const sections = features.coreProfile
     ? [
-        { heading: "일간 총평 (나의 뿌리)", text: DAY_MASTER_PROFILES[saju.pillars.dayPillar.stem] },
+        { heading: "일간 총평 (나의 뿌리)", text: DAY_MASTER_PROFILES[saju.pillars.dayPillar.stem][strength] },
         { heading: "기본 성향", text: personalityText },
         { heading: "원국 속 특별한 관계", text: describeRelations(saju) },
         // 원국에 3개 이상 쏠렸거나 하나도 없는 오행이 있을 때만 보여준다 — 균형 잡힌
@@ -353,7 +353,7 @@ export function interpretSaju(
   const zodiacCompat = features.zodiacCompat ? getZodiacCompat(saju.pillars.yearPillar.branch, starSign.id) : null;
   const zodiacCareer = features.zodiacCareer ? getZodiacCareerFit(saju.pillars.yearPillar.branch, starSign.id) : null;
   const workRelationships = features.workRelationships ? getWorkRelationships(group) : null;
-  const loveDeepDive = features.loveDeepDive ? getLoveDeepDive(group) : null;
+  const loveDeepDive = features.loveDeepDive ? getLoveDeepDive(group, strength) : null;
   const categorySummary = getCategorySummary(category, group);
 
   return {
@@ -380,7 +380,7 @@ export function interpretSaju(
     meetingChannel: features.meetingChannel && !isDatingLove ? getMeetingChannel(group) : null,
     weeklyMeetingSuggestion:
       features.meetingChannel && !isDatingLove ? computeWeeklyMeetingSuggestion(group, birthKey) : null,
-    workStyle: features.workStyle ? getWorkStyle(group) : null,
+    workStyle: features.workStyle ? getWorkStyle(group, strength) : null,
     gyeokgukCareerFit: features.gyeokgukCareerFit ? getGyeokgukCareerFit(gyeokguk.tenGod) : null,
     gyeokgukWealthStyle: features.gyeokgukWealthStyle ? getGyeokgukWealthStyle(gyeokguk.tenGod) : null,
     wealthMonthRanking: features.wealthMonthRanking ? computeWealthMonthRanking(saju) : null,
