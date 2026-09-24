@@ -6,8 +6,7 @@ import StyleSelectScreen from "./StyleSelectScreen";
 import CategorySelect from "./CategorySelect";
 import RelationshipStatusScreen from "./RelationshipStatusScreen";
 import BirthInfoForm from "./BirthInfoForm";
-import AdWatchScreen from "./AdWatchScreen";
-import CalculatingLoader from "./CalculatingLoader";
+import ResultUnlockGate from "./ResultUnlockGate";
 import ResultScreen from "./ResultScreen";
 import CompatibilityResultScreen from "./CompatibilityResultScreen";
 import DailyFortuneScreen from "./DailyFortuneScreen";
@@ -20,6 +19,7 @@ import {
   type InterpretationResult,
 } from "@/lib/interpretation";
 import { computeCompatibility, type CompatibilityResult } from "@/lib/interpretation/compatibility";
+import { buildCompatResultKey, buildDailyResultKey, buildSoloResultKey, isResultUnlocked } from "@/lib/result-unlock";
 import {
   DEFAULT_BIRTH_FORM,
   clearBirthForm,
@@ -33,6 +33,13 @@ import {
   type Screen,
   type ToneStyleId,
 } from "@/lib/session";
+
+/** "오늘의 운세"가 날짜가 바뀌면 실제로 다른 결과가 되도록, 로컬 날짜 기준 키를 만든다.
+ * computeDailyFortune도 동일하게 new Date()의 로컬 연/월/일을 기준으로 하루를 가른다. */
+function todayDateKey(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+}
 
 function toBirthInput(form: BirthFormState): BirthInput {
   const [year, month, day] = form.birthDate.split("-").map(Number);
@@ -64,6 +71,11 @@ export default function SajuFlow() {
   const [interpretation, setInterpretation] = useState<InterpretationResult | null>(null);
   const [compatResult, setCompatResult] = useState<CompatibilityResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  /** 첫 화면에서 운세를 직접 고른 경우, 말투 선택 뒤 해당 주제로 바로 이어간다. */
+  const [introSelection, setIntroSelection] = useState<Category | "compatibility" | null>(null);
+  /** 지금 게이트(ResultUnlockGate)가 다루고 있는 결과를 가리키는 고유 키.
+   * 이 결과가 이미 이번 세션에 해제됐으면 게이트를 아예 거치지 않고 바로 결과 화면으로 간다. */
+  const [unlockKey, setUnlockKey] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = loadBirthForm();
@@ -80,11 +92,32 @@ export default function SajuFlow() {
   }
 
   function handleStart() {
+    setIntroSelection(null);
     setScreen("style");
   }
 
   function handleConfirmStyle() {
+    const selected = introSelection;
+    setIntroSelection(null);
+    if (selected === "compatibility") {
+      handleSelectCompatibility();
+      return;
+    }
+    if (selected) {
+      handleSelectCategory(selected);
+      return;
+    }
     setScreen("s2");
+  }
+
+  function handleStartCategory(selected: Category) {
+    setIntroSelection(selected);
+    setScreen("style");
+  }
+
+  function handleStartCompatibility() {
+    setIntroSelection("compatibility");
+    setScreen("style");
   }
 
   function handleSelectCategory(selected: Category) {
@@ -97,9 +130,9 @@ export default function SajuFlow() {
       setScreen("love-status");
       return;
     }
-    // 08번: 생년월일 등 정보가 이미 입력되어 있으면 S3를 건너뛰고 바로 광고 화면으로 이동한다.
+    // 08번: 생년월일 등 정보가 이미 입력되어 있으면 S3를 건너뛰고 바로 결과 준비로 이동한다.
     if (form.birthDate.trim().length > 0) {
-      setScreen("ad");
+      proceedSolo(form, selected, null);
     } else {
       setScreen("s3");
     }
@@ -109,7 +142,7 @@ export default function SajuFlow() {
     setRelationshipStatus(status);
     setErrorMessage(null);
     if (form.birthDate.trim().length > 0) {
-      setScreen("ad");
+      proceedSolo(form, "love", status);
     } else {
       setScreen("s3");
     }
@@ -126,58 +159,25 @@ export default function SajuFlow() {
     setForm(nextForm);
     saveBirthForm(nextForm);
     setErrorMessage(null);
-    setScreen(flowMode === "compatibility" ? "compat-partner" : "ad");
-  }
-
-  function handleSubmitPartnerForm(nextPartnerForm: BirthFormState) {
-    setPartnerForm(nextPartnerForm);
-    setErrorMessage(null);
-    setScreen("ad");
-  }
-
-  function handleAdWatched() {
-    setScreen("s4");
-  }
-
-  /** "오늘의 운세" 빠른 진입 — 저장된 정보로 말투/카테고리/생년월일 입력을 전부 건너뛴다. */
-  function handleQuickDaily() {
-    try {
-      const result = computeSaju(toBirthInput(form));
-      setSaju(result);
-      setErrorMessage(null);
-      setScreen("daily-ad");
-    } catch (err) {
-      console.error("오늘의 운세 계산 실패:", err);
-      setErrorMessage("저장된 정보로 계산할 수 없어요. 정보를 다시 입력해 주세요.");
-      setScreen("s3");
+    if (flowMode === "compatibility") {
+      setScreen("compat-partner");
+      return;
+    }
+    if (category) {
+      proceedSolo(nextForm, category, category === "love" ? relationshipStatus : null);
     }
   }
 
-  function handleDailyAdWatched() {
-    setScreen("daily-result");
-  }
-
-  function handleSeeFullResult() {
-    setScreen("s2");
-  }
-
-  function runCalculation() {
+  /**
+   * 계산은 여기서 바로(동기적으로) 끝내고 결과를 state에 저장해둔다 — 광고를 볼지 말지와
+   * 무관하게 "결과 준비"는 미리 끝내서, 광고 시청이 끝나는 즉시 결과로 넘어가게 한다.
+   * 이미 이번 세션에 같은 결과를 해제한 적 있으면(새로고침·뒤로가기 등) 게이트 자체를
+   * 건너뛰고 바로 결과 화면으로 간다.
+   */
+  function proceedSolo(targetForm: BirthFormState, targetCategory: Category, targetRelationshipStatus: RelationshipStatus | null) {
     try {
-      if (flowMode === "compatibility") {
-        const resultA = computeSaju(toBirthInput(form));
-        const resultB = computeSaju(toBirthInput(partnerForm));
-        const compat = computeCompatibility(resultA, resultB);
-        setSaju(resultA);
-        setSajuB(resultB);
-        setCompatResult(compat);
-        setErrorMessage(null);
-        setScreen("compat-result");
-        return;
-      }
-
-      if (!category) return;
-      const result = computeSaju(toBirthInput(form));
-      let interpreted = interpretSaju(result, category, relationshipStatus ?? undefined);
+      const result = computeSaju(toBirthInput(targetForm));
+      let interpreted = interpretSaju(result, targetCategory, targetRelationshipStatus ?? undefined);
       const birthKey = buildBirthKey({
         year: result.input.year,
         month: result.input.month,
@@ -186,24 +186,85 @@ export default function SajuFlow() {
         minute: result.input.minute,
         calendarType: result.input.calendarType,
       });
-      interpreted = applyToneStyle(interpreted, toneStyle, birthKey, category);
+      interpreted = applyToneStyle(interpreted, toneStyle, birthKey, targetCategory);
       setSaju(result);
       setInterpretation(interpreted);
       setErrorMessage(null);
-      setScreen("s5");
+
+      const key = buildSoloResultKey(targetForm, targetCategory, targetRelationshipStatus);
+      if (isResultUnlocked(key)) {
+        setScreen("s5");
+      } else {
+        setUnlockKey(key);
+        setScreen("ad");
+      }
     } catch (err) {
-      // 내부 기술 메시지(데이터 파일 경로 등)는 사용자에게 그대로 노출하지 않는다.
-      // 개발자가 원인을 알 수 있도록 콘솔에는 원본 오류를 남긴다.
-      console.error("사주 계산 실패:", err);
-      const message = err instanceof Error ? err.message : "";
-      const isSupportedRangeMessage = message.startsWith("현재 서비스는") || message.includes("음력 날짜에 대한 검증된");
-      setErrorMessage(
-        isSupportedRangeMessage
-          ? message
-          : "이 생년월일시는 아직 정확히 계산할 수 없어요. 날짜나 시간을 조금 조정해서 다시 시도해 주세요."
-      );
-      setScreen(flowMode === "compatibility" ? "compat-partner" : "s3");
+      handleCalculationError(err);
+      setScreen("s3");
     }
+  }
+
+  function handleSubmitPartnerForm(nextPartnerForm: BirthFormState) {
+    setPartnerForm(nextPartnerForm);
+    setErrorMessage(null);
+    try {
+      const resultA = computeSaju(toBirthInput(form));
+      const resultB = computeSaju(toBirthInput(nextPartnerForm));
+      const compat = computeCompatibility(resultA, resultB);
+      setSaju(resultA);
+      setSajuB(resultB);
+      setCompatResult(compat);
+      setErrorMessage(null);
+
+      const key = buildCompatResultKey(form, nextPartnerForm);
+      if (isResultUnlocked(key)) {
+        setScreen("compat-result");
+      } else {
+        setUnlockKey(key);
+        setScreen("ad");
+      }
+    } catch (err) {
+      handleCalculationError(err);
+      setScreen("compat-partner");
+    }
+  }
+
+  /** 내부 기술 메시지(데이터 파일 경로 등)는 사용자에게 그대로 노출하지 않는다.
+   * 개발자가 원인을 알 수 있도록 콘솔에는 원본 오류를 남긴다. */
+  function handleCalculationError(err: unknown) {
+    console.error("사주 계산 실패:", err);
+    const message = err instanceof Error ? err.message : "";
+    const isSupportedRangeMessage = message.startsWith("현재 서비스는") || message.includes("음력 날짜에 대한 검증된");
+    setErrorMessage(
+      isSupportedRangeMessage
+        ? message
+        : "이 생년월일시는 아직 정확히 계산할 수 없어요. 날짜나 시간을 조금 조정해서 다시 시도해 주세요."
+    );
+  }
+
+  /** "오늘의 운세" 빠른 진입 — 저장된 정보로 말투/카테고리/생년월일 입력을 전부 건너뛴다. */
+  function handleQuickDaily() {
+    try {
+      const result = computeSaju(toBirthInput(form));
+      setSaju(result);
+      setErrorMessage(null);
+
+      const key = buildDailyResultKey(form, todayDateKey());
+      if (isResultUnlocked(key)) {
+        setScreen("daily-result");
+      } else {
+        setUnlockKey(key);
+        setScreen("daily-ad");
+      }
+    } catch (err) {
+      console.error("오늘의 운세 계산 실패:", err);
+      setErrorMessage("저장된 정보로 계산할 수 없어요. 정보를 다시 입력해 주세요.");
+      setScreen("s3");
+    }
+  }
+
+  function handleSeeFullResult() {
+    setScreen("s2");
   }
 
   function handleOtherFortune() {
@@ -255,6 +316,8 @@ export default function SajuFlow() {
       {screen === "s1" && (
         <IntroScreen
           onStart={handleStart}
+          onSelectCategory={handleStartCategory}
+          onSelectCompatibility={handleStartCompatibility}
           savedName={form.birthDate.trim().length > 0 ? form.name : null}
           onQuickDaily={handleQuickDaily}
         />
@@ -284,8 +347,13 @@ export default function SajuFlow() {
           onBack={() => setScreen("s2")}
         />
       )}
-      {screen === "ad" && <AdWatchScreen onDone={handleAdWatched} />}
-      {screen === "s4" && <CalculatingLoader onDone={runCalculation} />}
+      {screen === "ad" && unlockKey && (
+        <ResultUnlockGate
+          resultKey={unlockKey}
+          onUnlocked={() => setScreen(flowMode === "compatibility" ? "compat-result" : "s5")}
+          onCancel={() => setScreen("s2")}
+        />
+      )}
       {screen === "s5" && interpretation && saju && (
         <ResultScreen
           name={form.name}
@@ -339,7 +407,13 @@ export default function SajuFlow() {
           onResetPerson={handleResetPerson}
         />
       )}
-      {screen === "daily-ad" && <AdWatchScreen onDone={handleDailyAdWatched} />}
+      {screen === "daily-ad" && unlockKey && (
+        <ResultUnlockGate
+          resultKey={unlockKey}
+          onUnlocked={() => setScreen("daily-result")}
+          onCancel={() => setScreen("s1")}
+        />
+      )}
       {screen === "daily-result" && saju && (
         <DailyFortuneScreen
           displayName={form.name.trim() || "당신"}

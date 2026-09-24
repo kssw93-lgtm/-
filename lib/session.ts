@@ -25,7 +25,7 @@ export const DEFAULT_BIRTH_FORM: BirthFormState = {
 };
 
 export type Screen =
-  | "s1" | "style" | "s2" | "love-status" | "s3" | "ad" | "s4" | "s5"
+  | "s1" | "style" | "s2" | "love-status" | "s3" | "ad" | "s5"
   | "compat-partner" | "compat-result" | "daily-ad" | "daily-result";
 
 /**

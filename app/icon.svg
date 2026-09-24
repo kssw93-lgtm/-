@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <radialGradient id="night" cx="0" cy="0" r="1" gradientTransform="matrix(0 94 -94 0 64 30)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#25213A"/>
+      <stop offset="1" stop-color="#0A0C16"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="25" x2="103" y1="24" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F1D99F"/>
+      <stop offset="1" stop-color="#B8873F"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="61" fill="url(#night)"/>
+  <circle cx="64" cy="64" r="58.5" stroke="url(#gold)" stroke-width="2"/>
+  <circle cx="64" cy="64" r="49" stroke="#C9A35C" stroke-opacity=".38"/>
+  <path d="M64 16v12m0 72v12M16 64h12m72 0h12M30.1 30.1l8.5 8.5m50.8 50.8 8.5 8.5m0-67.8-8.5 8.5m-50.8 50.8-8.5 8.5" stroke="#E8CD94" stroke-linecap="round" stroke-opacity=".55" stroke-width="1.5"/>
+  <path d="m64 34 7.7 22.3L94 64l-22.3 7.7L64 94l-7.7-22.3L34 64l22.3-7.7L64 34Z" fill="url(#gold)" fill-opacity=".92"/>
+  <circle cx="64" cy="64" r="7.5" fill="#0A0C16"/>
+  <circle cx="64" cy="64" r="3" fill="#F1D99F"/>
+  <circle cx="64" cy="17" r="2.5" fill="#F1D99F"/>
+  <circle cx="111" cy="64" r="2.5" fill="#C9A35C"/>
+  <circle cx="64" cy="111" r="2.5" fill="#C9A35C"/>
+  <circle cx="17" cy="64" r="2.5" fill="#C9A35C"/>
+</svg>

@@ -206,8 +206,6 @@ export default function ResultScreen({
         </div>
       </div>
 
-      <AdSlot label="결과 화면 상단 디스플레이 광고" />
-
       <div className="flex gap-3">
         <div className="flex flex-1 items-center gap-2 rounded-xl bg-white/10 px-3 py-2.5">
           <span className="text-xl">{starSign.symbol}</span>
@@ -253,6 +251,11 @@ export default function ResultScreen({
           </p>
         )}
       </div>
+
+      {/* 보상형 광고를 막 보고 들어온 화면 첫머리에 디스플레이 광고를 바로 이어 붙이지
+          않는다 — 첫 실제 풀이 섹션(freeSection)을 먼저 보여준 뒤, 다음 자연스러운
+          경계인 여기에 배치한다. */}
+      <AdSlot label="결과 화면 상단 디스플레이 광고" />
 
       <div className="flex flex-col gap-4">
           {datingAdvice && (

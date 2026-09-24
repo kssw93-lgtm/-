@@ -1,8 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useAdWatch } from "@/lib/ad";
-import AdSlot from "@/components/AdSlot";
 import type { CoreSummary, Gyeokguk, LuckColorDisplay } from "@/lib/interpretation";
 
 interface Props {
@@ -13,16 +11,19 @@ interface Props {
 }
 
 /**
- * 재미 콘텐츠: 광고를 보면 이미 계산된 값(행운의 컬러·숫자, 핵심 키워드, 격국)을
- * 부적 느낌으로 재구성해 보여준다. 새 계산 없음 — 전부 이미 화면 다른 곳에도 나오는
- * 값을 다시 조합해 "재미로 보는" 카드로 꾸민 것뿐이라 없는 사실을 지어내지 않는다.
+ * 재미 콘텐츠: 이미 계산된 값(행운의 컬러·숫자, 핵심 키워드, 격국)을 부적 느낌으로
+ * 재구성해 보여준다. 새 계산 없음 — 전부 이미 화면 다른 곳에도 나오는 값을 다시
+ * 조합해 "재미로 보는" 카드로 꾸민 것뿐이라 없는 사실을 지어내지 않는다.
  * 실제 부적(누런 종이 + 붉은 경면주사 먹 + 세로쓰기 + 낙관)의 시각 문법을 따라
  * 디자인하고, 정보성 텍스트(행운 컬러/키워드)는 부적 이미지 밖 캡션으로 분리해
- * 저장되는 이미지 자체는 실제 부적처럼 보이게 했다. 이미지 저장을 지원해
- * 광고 시청의 대가로 느껴지는 결과물을 남긴다.
+ * 저장되는 이미지 자체는 실제 부적처럼 보이게 했다.
+ *
+ * 예전엔 이 카드만 별도로 가짜 타이머 광고를 거쳐야 열렸는데, 결과 진입 자체가
+ * 이제 진짜 보상형 광고 게이트(ResultUnlockGate)를 한 번 거치므로 같은 결과 안에서
+ * 또 광고를 요구하지 않는다 — 정책상 "새로운 결과 1건당 보상형 광고 최대 1회"를
+ * 지키기 위해 잠금 없이 바로 연다.
  */
 export default function TalismanCard({ displayName, luckColor, coreSummary, gyeokguk }: Props) {
-  const { state, secondsLeft, watch } = useAdWatch();
   const cardRef = useRef<HTMLDivElement>(null);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "done">("idle");
 
@@ -41,31 +42,6 @@ export default function TalismanCard({ displayName, luckColor, coreSummary, gyeo
     } catch {
       setSaveState("idle");
     }
-  }
-
-  if (state === "playing") {
-    return (
-      <div className="flex w-full flex-col items-center gap-3 rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-b from-[color:var(--color-gold)]/10 to-transparent p-6 text-center">
-        <p className="text-xs text-white/50">광고가 끝나면 자동으로 열려요 ({secondsLeft}초)</p>
-        <AdSlot label="리워드 광고" />
-      </div>
-    );
-  }
-
-  if (state !== "done") {
-    return (
-      <div className="flex w-full flex-col items-center gap-3 rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-b from-[color:var(--color-gold)]/10 to-transparent p-6 text-center">
-        <span className="text-3xl">🧿</span>
-        <p className="font-brand text-base font-bold text-[color:var(--color-gold-light)]">나만의 개운 부적 받기</p>
-        <p className="text-xs text-white/50">짧은 광고를 보면 나만의 부적이 만들어져요</p>
-        <button
-          onClick={() => watch(() => {})}
-          className="mt-1 w-full max-w-xs rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-6 py-3 text-sm font-bold text-[#241a08] transition hover:brightness-110 active:scale-95"
-        >
-          광고 보고 부적 받기
-        </button>
-      </div>
-    );
   }
 
   return (
