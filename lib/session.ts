@@ -41,7 +41,15 @@ export function loadBirthForm(): BirthFormState | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as BirthFormState) : null;
+    if (!raw) return null;
+    const value = JSON.parse(raw);
+    if (!value || typeof value !== "object" || typeof value.name !== "string" ||
+        typeof value.birthDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.birthDate) ||
+        !["solar", "lunar"].includes(value.calendarType) || !["male", "female"].includes(value.gender) ||
+        typeof value.timeUnknown !== "boolean" || typeof value.isLeapMonth !== "boolean" ||
+        !Number.isInteger(value.hour) || value.hour < 0 || value.hour > 23 ||
+        !Number.isInteger(value.minute) || value.minute < 0 || value.minute > 59) return null;
+    return value as BirthFormState;
   } catch {
     return null;
   }
@@ -49,26 +57,30 @@ export function loadBirthForm(): BirthFormState | null {
 
 export function saveBirthForm(state: BirthFormState): void {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* 저장 제한이어도 계산은 계속한다. */ }
 }
 
 /** "다른 사람 정보로 보기" — 저장된 생년월일 정보를 지우고 처음부터 새로 입력받는다. */
 export function clearBirthForm(): void {
   if (typeof window === "undefined") return;
-  window.localStorage.removeItem(STORAGE_KEY);
+  try { window.localStorage.removeItem(STORAGE_KEY); } catch { /* 화면 상태는 별도로 초기화한다. */ }
 }
 
 const STYLE_KEY = "saju_tone_style_v1";
 
 export function loadToneStyle(): ToneStyleId {
   if (typeof window === "undefined") return "standard";
-  const raw = window.sessionStorage.getItem(STYLE_KEY);
-  return raw === "mz" || raw === "joseon" ? raw : "standard";
+  try {
+    const raw = window.sessionStorage.getItem(STYLE_KEY);
+    return raw === "mz" || raw === "joseon" ? raw : "standard";
+  } catch {
+    return "standard";
+  }
 }
 
 export function saveToneStyle(style: ToneStyleId): void {
   if (typeof window === "undefined") return;
-  window.sessionStorage.setItem(STYLE_KEY, style);
+  try { window.sessionStorage.setItem(STYLE_KEY, style); } catch { /* 현재 화면의 선택은 유지한다. */ }
 }
 
 export type { Category, ToneStyleId, RelationshipStatus };

@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { useAdEligibility } from "./AdRuntime";
+
 declare global {
   interface Window {
     adsbygoogle?: unknown[];
@@ -17,11 +19,13 @@ const AD_SLOT = "4161802900";
  * AdSlot.tsx와 동일한 방어 로직(폭이 잡힐 때까지 대기, 미채움 시 접기)을 그대로 쓴다.
  */
 export default function InArticleAdSlot({ label }: { label?: string }) {
+  const enabled = useAdEligibility();
   const insRef = useRef<HTMLModElement>(null);
   const pushedRef = useRef(false);
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
+    if (!enabled) return;
     let raf = 0;
     let attempts = 0;
 
@@ -47,9 +51,9 @@ export default function InArticleAdSlot({ label }: { label?: string }) {
     }
     raf = requestAnimationFrame(tryPush);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [enabled]);
 
-  if (collapsed) return null;
+  if (!enabled || collapsed) return null;
 
   return (
     <ins

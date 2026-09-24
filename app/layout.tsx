@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Serif_KR, Noto_Sans_KR } from "next/font/google";
 import Script from "next/script";
+import AdNavigationBoundary from "@/components/AdRuntime";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PartnerBanner from "@/components/PartnerBanner";
@@ -67,23 +68,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko" className={`${serif.variable} ${sans.variable}`}>
       <head>
         <JsonLd data={websiteJsonLd()} />
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8704899603701516"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+
         {/*
           네이버 웹로그분석. 원본 스니펫은 <script src="wcslog.js">와 wcs_do() 호출 스크립트를
           문서 순서대로 배치해 "먼저 로드되고 나서 실행됨"을 가정하는데, next/script의
           afterInteractive는 그 순서를 보장하지 않는다. 그래서 wcslog.js를 코드로 직접 로드하고
           onload 콜백 안에서만 wcs_do()를 호출해, 로드가 끝나기 전에 호출되는 경합을 없앤다.
         */}
-        <Script id="naver-wcslog" strategy="afterInteractive">
+        {process.env.NEXT_PUBLIC_CONTENT_PREVIEW !== "1" && <Script id="naver-wcslog" strategy="afterInteractive">
           {`
             window.wcs_add = window.wcs_add || {};
             window.wcs_add["wa"] = "1876a85e8213540";
             (function () {
+              if (window.location.hostname !== "www.sajudalyeok.co.kr") return;
               var s = document.createElement("script");
               s.src = "//wcs.pstatic.net/wcslog.js";
               s.onload = function () {
@@ -92,10 +89,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               document.head.appendChild(s);
             })();
           `}
-        </Script>
+        </Script>}
       </head>
       <body className="min-h-screen">
         <div className="mx-auto flex min-h-screen w-full max-w-md flex-col">
+          <AdNavigationBoundary />
           <SiteHeader />
           {children}
           <PartnerBanner />

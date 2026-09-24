@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { useAdEligibility } from "./AdRuntime";
+
 declare global {
   interface Window {
     adsbygoogle?: unknown[];
@@ -24,11 +26,13 @@ const AD_SLOT = "3567680618";
  * 아예 렌더링을 접어(display: none) 빈 공간이 남지 않도록 한다.
  */
 export default function AdSlot({ label }: { label?: string }) {
+  const enabled = useAdEligibility();
   const insRef = useRef<HTMLModElement>(null);
   const pushedRef = useRef(false);
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
+    if (!enabled) return;
     let raf = 0;
     let attempts = 0;
 
@@ -60,9 +64,9 @@ export default function AdSlot({ label }: { label?: string }) {
     }
     raf = requestAnimationFrame(tryPush);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [enabled]);
 
-  if (collapsed) return null;
+  if (!enabled || collapsed) return null;
 
   return (
     <ins

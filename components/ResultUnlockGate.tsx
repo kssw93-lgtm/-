@@ -46,7 +46,13 @@ export default function ResultUnlockGate({ resultKey, onUnlocked, onCancel }: Pr
   }
 
   useEffect(() => {
-    if (isResultUnlocked(resultKey)) resolveUnlocked();
+    // 광고 단위 자체가 설정 안 된 상태(=애드센스/광고 계정 승인 전)에서는 안내 화면도
+    // 없이 즉시 통과시킨다. 광고 단위가 실제로 설정된 뒤 일시적으로 못 불러온 경우의
+    // fail-open(안내 문구 + 짧은 대기)과는 다른 경우라 구분해서 처리한다.
+    if (!AD_UNIT_PATH || isResultUnlocked(resultKey)) {
+      resolveUnlocked();
+      return;
+    }
     return () => clearTimeout(failOpenTimerRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resultKey]);

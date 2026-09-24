@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { useAdEligibility } from "./AdRuntime";
+
 declare global {
   interface Window {
     adsbygoogle?: unknown[];
@@ -21,11 +23,13 @@ const AD_LAYOUT_KEY = "-6t+ed+2i-1n-4w";
  * 일정 시간 안에 채워지지 않으면 접어서 빈 카드 자리가 남지 않게 한다.
  */
 export default function InFeedAdSlot({ label }: { label?: string }) {
+  const enabled = useAdEligibility();
   const insRef = useRef<HTMLModElement>(null);
   const pushedRef = useRef(false);
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
+    if (!enabled) return;
     let raf = 0;
     let attempts = 0;
 
@@ -51,9 +55,9 @@ export default function InFeedAdSlot({ label }: { label?: string }) {
     }
     raf = requestAnimationFrame(tryPush);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [enabled]);
 
-  if (collapsed) return null;
+  if (!enabled || collapsed) return null;
 
   return (
     <ins

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import AdSlot from "./AdSlot";
 import { DEFAULT_BIRTH_FORM, type BirthFormState } from "@/lib/session";
 import { SUPPORTED_BIRTH_YEAR_RANGE } from "@/lib/calc";
 
@@ -161,7 +160,6 @@ export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: 
         >
           결과 보기
         </button>
-        <AdSlot />
       </div>
     </div>
   );

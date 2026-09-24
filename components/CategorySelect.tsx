@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import AdSlot from "./AdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
 import SajuDial from "./SajuDial";
 import { ARTICLES } from "@/lib/content/articles";
@@ -147,7 +146,6 @@ export default function CategorySelect({ onSelect, onSelectCompatibility }: Prop
         <p className="text-center text-[11px] text-white/30">
           모든 결과는 실제 사주 계산(만세력)을 기반으로 만들어져요
         </p>
-        <AdSlot />
         <FreeAdsNotice />
       </div>
     </div>
