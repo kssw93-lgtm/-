@@ -36,12 +36,12 @@ export default function IntroScreen({
   onQuickDaily,
 }: Props) {
   return (
-    <div className="relative flex flex-1 flex-col gap-8 overflow-hidden px-5 pb-10 pt-5 sm:px-6">
+    <div className="relative flex flex-1 flex-col gap-6 overflow-hidden px-5 pb-10 pt-5 sm:px-6">
       <div aria-hidden="true" className="pointer-events-none absolute -right-32 top-8 h-[390px] w-[390px] opacity-[0.12]">
         <SajuDial className="h-full w-full" />
       </div>
 
-      <section className="relative z-10 overflow-hidden rounded-[28px] border border-[color:var(--color-gold)]/20 bg-gradient-to-br from-[#211d30] via-[#111321] to-[#0a0c16] p-6 shadow-[0_18px_55px_rgba(0,0,0,0.24)] sm:p-7">
+      <section className="relative z-10 overflow-hidden rounded-[28px] border border-[color:var(--color-gold)]/20 bg-gradient-to-br from-[#211d30] via-[#111321] to-[#0a0c16] p-5 shadow-[0_18px_55px_rgba(0,0,0,0.24)] sm:p-6">
         <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-12 h-52 w-52 opacity-30">
           <SajuDial className="h-full w-full" />
         </div>
@@ -51,16 +51,16 @@ export default function IntroScreen({
             SAJU DALYEOK · 사주 원국 풀이
           </span>
 
-          <h1 className="font-brand mt-5 text-[30px] font-black leading-[1.35] text-[color:var(--color-ink)]">
+          <h1 className="font-brand mt-4 text-[30px] font-black leading-[1.35] text-[color:var(--color-ink)]">
             태어난 순간의 기운을
             <br />
             오늘의 흐름으로
           </h1>
-          <p className="mt-3 text-sm leading-6 text-white/65">
+          <p className="mt-2.5 text-sm leading-6 text-white/65">
             생년월일시로 사주 원국을 계산하고, 연애·재물·일·관계의 흐름을 주제별로 읽어드려요.
           </p>
 
-          <div className="mt-6 flex flex-col gap-2.5">
+          <div className="mt-4 flex flex-col gap-2.5">
             {typeof savedName === "string" && onQuickDaily && (
               <button
                 onClick={onQuickDaily}
@@ -77,7 +77,7 @@ export default function IntroScreen({
               <span aria-hidden="true" className="ml-2">→</span>
             </button>
           </div>
-          <p className="mt-3 text-[11px] text-white/40">로그인 없이 시작 · 자세한 결과는 광고 시청 후 확인</p>
+          <p className="mt-2 text-[11px] text-white/40">로그인 없이 시작 · 자세한 결과는 광고 시청 후 확인</p>
         </div>
       </section>
 
