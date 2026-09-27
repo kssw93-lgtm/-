@@ -10,11 +10,17 @@ export default function SiteFooter() {
       <Link href="/zodiac" className="hover:text-white/70 hover:underline">
         별자리·띠 성격
       </Link>
+      <Link href="/zodiac/today" className="hover:text-white/70 hover:underline">
+        오늘의 운세
+      </Link>
       <Link href="/tarot" className="hover:text-white/70 hover:underline">
         타로점 보기
       </Link>
       <Link href="/tarot-guide" className="hover:text-white/70 hover:underline">
         타로 백과
+      </Link>
+      <Link href="/name-compat" className="hover:text-white/70 hover:underline">
+        이름궁합
       </Link>
       <Link href="/about" className="hover:text-white/70 hover:underline">
         사이트 소개

@@ -37,6 +37,7 @@ export default function sitemap({ id }: { id: number }): MetadataRoute.Sitemap {
         { url: BASE_URL, changeFrequency: "daily", priority: 1, lastModified: new Date() },
         { url: `${BASE_URL}/learn`, changeFrequency: "weekly", priority: 0.8, lastModified: CONTENT_LAST_MODIFIED },
         { url: `${BASE_URL}/zodiac`, changeFrequency: "weekly", priority: 0.8, lastModified: CONTENT_LAST_MODIFIED },
+        { url: `${BASE_URL}/zodiac/today`, changeFrequency: "daily", priority: 0.8, lastModified: new Date() },
         {
           url: `${BASE_URL}/zodiac/animal-compat`,
           changeFrequency: "weekly",
@@ -56,6 +57,12 @@ export default function sitemap({ id }: { id: number }): MetadataRoute.Sitemap {
           lastModified: CONTENT_LAST_MODIFIED,
         },
         { url: `${BASE_URL}/tarot`, changeFrequency: "weekly", priority: 0.8, lastModified: CONTENT_LAST_MODIFIED },
+        {
+          url: `${BASE_URL}/name-compat`,
+          changeFrequency: "monthly",
+          priority: 0.6,
+          lastModified: CONTENT_LAST_MODIFIED,
+        },
         ...TAROT_TOPICS.map((t) => ({
           url: `${BASE_URL}/tarot/${t.slug}`,
           changeFrequency: "weekly" as const,
@@ -93,18 +100,19 @@ export default function sitemap({ id }: { id: number }): MetadataRoute.Sitemap {
         lastModified: CONTENT_LAST_MODIFIED,
       }));
     case 4:
+      // 오늘의 띠별·별자리 운세 섹션이 매일 갱신되므로 daily/최신 lastModified로 표시한다.
       return [
         ...STAR_SIGNS.map((s) => ({
           url: `${BASE_URL}/zodiac/star/${s.id}`,
-          changeFrequency: "monthly" as const,
+          changeFrequency: "daily" as const,
           priority: 0.6,
-          lastModified: CONTENT_LAST_MODIFIED,
+          lastModified: new Date(),
         })),
         ...ZODIAC_ANIMALS.map((z) => ({
           url: `${BASE_URL}/zodiac/animal/${z.branch}`,
-          changeFrequency: "monthly" as const,
+          changeFrequency: "daily" as const,
           priority: 0.6,
-          lastModified: CONTENT_LAST_MODIFIED,
+          lastModified: new Date(),
         })),
       ];
     default:

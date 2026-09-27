@@ -28,6 +28,14 @@ export default function ZodiacIndexPage() {
         <p className="mt-2 text-sm text-white/50">궁금한 별자리나 띠를 눌러 성격과 특징을 확인해보세요</p>
       </div>
 
+      <Link
+        href="/zodiac/today"
+        className="rounded-2xl border border-[color:var(--color-gold)]/35 bg-gradient-to-br from-[color:var(--color-gold)]/15 to-white/5 p-5 text-center transition hover:border-[color:var(--color-gold)]/60"
+      >
+        <p className="text-sm font-bold text-[color:var(--color-gold-light)]">☀️ 오늘의 띠별·별자리 운세 보기</p>
+        <p className="mt-1 text-xs text-white/50">매일 업데이트되는 12띠 · 12별자리 운세를 한눈에 →</p>
+      </Link>
+
       <div className="overflow-hidden rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5">
         <div className="relative aspect-[16/9] w-full">
           <Image
@@ -91,6 +99,12 @@ export default function ZodiacIndexPage() {
           className="rounded-xl border border-[color:var(--color-gold)]/20 bg-white/5 px-4 py-3 text-center text-xs font-semibold text-white/85 transition hover:border-[color:var(--color-gold)]/60"
         >
           ♈ 별자리 궁합 78가지 보기
+        </Link>
+        <Link
+          href="/name-compat"
+          className="col-span-2 rounded-xl border border-[color:var(--color-gold)]/20 bg-white/5 px-4 py-3 text-center text-xs font-semibold text-white/85 transition hover:border-[color:var(--color-gold)]/60"
+        >
+          💌 이름궁합 재미로 보기
         </Link>
       </div>
 

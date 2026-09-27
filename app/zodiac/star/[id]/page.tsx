@@ -2,9 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { STAR_SIGNS, getStarSignEntry, formatDateRange } from "@/lib/content/zodiac-pages";
+import { computeStarDailyMood } from "@/lib/interpretation/daily-star-mood";
 import AdSlot from "@/components/AdSlot";
 import JsonLd from "@/components/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/seo";
+
+/** 오늘의 별자리 무드는 날짜가 바뀌면 내용도 바뀌어야 하므로, 정적 페이지를 일정
+ * 주기로 다시 생성한다. */
+export const revalidate = 1800;
 
 export function generateStaticParams() {
   return STAR_SIGNS.map((s) => ({ id: s.id }));
@@ -13,8 +18,8 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { id: string } }): Metadata {
   const s = getStarSignEntry(params.id);
   if (!s) return {};
-  const title = `${s.name} 성격과 특징 | 사주달력`;
-  const description = `${s.name}(${formatDateRange(s)}) 성격, 강점과 약점을 알아보세요.`;
+  const title = `${s.name} 성격과 오늘의 운세 | 사주달력`;
+  const description = `${s.name}(${formatDateRange(s)}) 성격과 특징, 오늘의 별자리 운세까지 무료로 확인하세요.`;
   const path = `/zodiac/star/${s.id}`;
   return {
     title,
@@ -27,6 +32,7 @@ export function generateMetadata({ params }: { params: { id: string } }): Metada
 export default function StarSignPage({ params }: { params: { id: string } }) {
   const s = getStarSignEntry(params.id);
   if (!s) notFound();
+  const daily = computeStarDailyMood(params.id);
 
   const index = STAR_SIGNS.findIndex((x) => x.id === params.id);
   const prev = STAR_SIGNS[(index - 1 + STAR_SIGNS.length) % STAR_SIGNS.length];
@@ -57,6 +63,20 @@ export default function StarSignPage({ params }: { params: { id: string } }) {
           </div>
         </div>
       </div>
+
+      <section aria-labelledby="today-mood" className="rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-b from-[color:var(--color-gold)]/15 to-white/5 p-6 text-center">
+        <p className="text-xs text-white/40">{daily.dateLabel}</p>
+        <h2 id="today-mood" className="mt-1 text-sm font-semibold text-[color:var(--color-gold-light)]">
+          오늘의 {s.name} 무드
+        </h2>
+        <p className="mt-3 text-5xl font-black" style={{ color: "#e8cd94" }}>
+          {daily.score}
+          <span className="text-2xl">점</span>
+        </p>
+        <p className="mt-2 text-lg font-bold">{daily.mood}</p>
+        <p className="mt-3 text-sm leading-relaxed text-white/70">{daily.summary}</p>
+        <p className="mt-3 text-xs text-white/40">💡 {daily.tip}</p>
+      </section>
 
       <article className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
         <p className="text-[15px] leading-relaxed text-white/85">{s.text}</p>

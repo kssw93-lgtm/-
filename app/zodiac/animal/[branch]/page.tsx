@@ -2,9 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ZODIAC_ANIMALS, getZodiacAnimalEntry } from "@/lib/content/zodiac-pages";
+import { computeAnimalDailyFortune } from "@/lib/interpretation/daily-branch-fortune";
 import AdSlot from "@/components/AdSlot";
 import JsonLd from "@/components/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/seo";
+import type { BranchId } from "@/lib/calc/types";
+
+/** 오늘의 띠별 운세는 날짜가 바뀌면 내용도 바뀌어야 하므로, 정적 페이지를 일정
+ * 주기로 다시 생성한다(하루보다 촘촘히 잡아 자정 근처 지연도 크게 벌어지지 않게 함). */
+export const revalidate = 1800;
 
 export function generateStaticParams() {
   return ZODIAC_ANIMALS.map((z) => ({ branch: z.branch }));
@@ -13,8 +19,8 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { branch: string } }): Metadata {
   const z = getZodiacAnimalEntry(params.branch);
   if (!z) return {};
-  const title = `${z.animal} 성격과 특징 | 사주달력`;
-  const description = `${z.animal}(${z.hanja}) 성격, 강점과 약점, 잘 맞는 띠까지 알아보세요.`;
+  const title = `${z.animal} 성격과 오늘의 운세 | 사주달력`;
+  const description = `${z.animal}(${z.hanja})의 성격과 특징, 오늘의 띠별 운세까지 무료로 확인하세요.`;
   const path = `/zodiac/animal/${z.branch}`;
   return {
     title,
@@ -27,6 +33,7 @@ export function generateMetadata({ params }: { params: { branch: string } }): Me
 export default function ZodiacAnimalPage({ params }: { params: { branch: string } }) {
   const z = getZodiacAnimalEntry(params.branch);
   if (!z) notFound();
+  const daily = computeAnimalDailyFortune(params.branch as BranchId);
 
   const index = ZODIAC_ANIMALS.findIndex((x) => x.branch === params.branch);
   const prev = ZODIAC_ANIMALS[(index - 1 + ZODIAC_ANIMALS.length) % ZODIAC_ANIMALS.length];
@@ -55,6 +62,33 @@ export default function ZodiacAnimalPage({ params }: { params: { branch: string 
           </div>
         </div>
       </div>
+
+      <section aria-labelledby="today-fortune" className="rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-b from-[color:var(--color-gold)]/15 to-white/5 p-6 text-center">
+        <p className="text-xs text-white/40">{daily.dateLabel}</p>
+        <h2 id="today-fortune" className="mt-1 text-sm font-semibold text-[color:var(--color-gold-light)]">
+          오늘의 {z.animal} 운세
+        </h2>
+        <p className="mt-3 text-5xl font-black" style={{ color: "#e8cd94" }}>
+          {daily.score}
+          <span className="text-2xl">점</span>
+        </p>
+        <p className="mt-2 text-lg font-bold">
+          {daily.emoji} {daily.label}
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-white/80">{daily.headline}</p>
+        <p className="mt-3 text-sm leading-relaxed text-white/70">{daily.summary}</p>
+        <div className="mt-4 grid grid-cols-1 gap-2 text-left sm:grid-cols-2">
+          <div className="rounded-xl bg-white/10 p-3">
+            <p className="text-xs text-white/50">💕 연애</p>
+            <p className="mt-1 text-sm text-white/85">{daily.loveNote}</p>
+          </div>
+          <div className="rounded-xl bg-white/10 p-3">
+            <p className="text-xs text-white/50">💰 금전</p>
+            <p className="mt-1 text-sm text-white/85">{daily.moneyNote}</p>
+          </div>
+        </div>
+        <p className="mt-3 text-xs text-white/40">⚠️ {daily.caution}</p>
+      </section>
 
       <article className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
         <p className="text-[15px] leading-relaxed text-white/85">{z.text}</p>
