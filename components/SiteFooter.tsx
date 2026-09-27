@@ -22,6 +22,12 @@ export default function SiteFooter() {
       <Link href="/name-compat" className="hover:text-white/70 hover:underline">
         이름궁합
       </Link>
+      <Link href="/lucky-day" className="hover:text-white/70 hover:underline">
+        손없는날
+      </Link>
+      <Link href="/naming" className="hover:text-white/70 hover:underline">
+        아기 이름 짓기
+      </Link>
       <Link href="/about" className="hover:text-white/70 hover:underline">
         사이트 소개
       </Link>

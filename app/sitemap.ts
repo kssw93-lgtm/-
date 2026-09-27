@@ -63,6 +63,13 @@ export default function sitemap({ id }: { id: number }): MetadataRoute.Sitemap {
           priority: 0.6,
           lastModified: CONTENT_LAST_MODIFIED,
         },
+        { url: `${BASE_URL}/lucky-day`, changeFrequency: "weekly", priority: 0.7, lastModified: new Date() },
+        {
+          url: `${BASE_URL}/naming`,
+          changeFrequency: "monthly",
+          priority: 0.6,
+          lastModified: CONTENT_LAST_MODIFIED,
+        },
         ...TAROT_TOPICS.map((t) => ({
           url: `${BASE_URL}/tarot/${t.slug}`,
           changeFrequency: "weekly" as const,

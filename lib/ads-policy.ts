@@ -7,7 +7,8 @@ export function isAdEligiblePath(pathname: string): boolean {
   if (path.includes("-compat")) return false;
   return path === "/learn" || path.startsWith("/learn/") ||
     path === "/tarot-guide" || path.startsWith("/tarot-guide/") ||
-    path === "/zodiac" || path.startsWith("/zodiac/star/") || path.startsWith("/zodiac/animal/");
+    path === "/zodiac" || path.startsWith("/zodiac/star/") || path.startsWith("/zodiac/animal/") ||
+    path === "/zodiac/today" || path === "/lucky-day";
 }
 
 export function canRequestAds(pathname: string, hostname: string): boolean {
