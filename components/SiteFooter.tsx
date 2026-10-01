@@ -13,6 +13,9 @@ export default function SiteFooter() {
       <Link href="/zodiac/today" className="hover:text-white/70 hover:underline">
         오늘의 운세
       </Link>
+      <Link href="/newyear/2027" className="hover:text-white/70 hover:underline">
+        2027년 신년운세
+      </Link>
       <Link href="/tarot" className="hover:text-white/70 hover:underline">
         타로점 보기
       </Link>

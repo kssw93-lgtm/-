@@ -8,7 +8,7 @@ export function isAdEligiblePath(pathname: string): boolean {
   return path === "/learn" || path.startsWith("/learn/") ||
     path === "/tarot-guide" || path.startsWith("/tarot-guide/") ||
     path === "/zodiac" || path.startsWith("/zodiac/star/") || path.startsWith("/zodiac/animal/") ||
-    path === "/zodiac/today" || path === "/lucky-day";
+    path === "/zodiac/today" || path === "/lucky-day" || path.startsWith("/newyear/");
 }
 
 export function canRequestAds(pathname: string, hostname: string): boolean {

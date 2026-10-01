@@ -5,6 +5,7 @@ import { TAROT_CARDS } from "@/lib/content/tarot";
 import { GYEOKGUK_ENTRIES } from "@/lib/content/gyeokguk-pages";
 import { TAROT_TOPICS } from "@/lib/content/tarot-topics";
 import { SITE_LAUNCH_DATE } from "@/lib/seo";
+import { NEWYEAR_YEARS } from "@/lib/content/newyear-pages";
 
 const BASE_URL = "https://www.sajudalyeok.co.kr";
 /** 아티클 개별 게시일 데이터가 없어, 콘텐츠 최초 게시일로 통일한다(lib/seo.ts와 동일 기준). */
@@ -18,6 +19,7 @@ const CONTENT_LAST_MODIFIED = new Date(SITE_LAUNCH_DATE);
  *   2: 격국 상세(/learn/gyeokguk/[slug])
  *   3: 타로 카드(/tarot-guide/[slug])
  *   4: 별자리·띠 개별 페이지(/zodiac/star/[id], /zodiac/animal/[branch])
+ *   5: 연도별 신년운세 개별 페이지(/newyear/[year]/[branch])
  * 각 sitemap()은 /sitemap/{id}.xml로 서빙된다. 이 Next.js 버전은 generateSitemaps()를
  * 쓰면 통합 /sitemap.xml 인덱스를 자동 생성해주지 않아서(실제로 404), app/robots.ts에
  * 5개 하위 사이트맵 URL을 전부 직접 나열해 구글이 찾도록 한다.
@@ -27,7 +29,7 @@ const CONTENT_LAST_MODIFIED = new Date(SITE_LAUNCH_DATE);
  * 페이지 자체(및 인덱스 2개)는 유지되고 링크로는 접근 가능 — 승인 후 재검토.
  */
 export async function generateSitemaps() {
-  return [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+  return [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
 }
 
 export default function sitemap({ id }: { id: number }): MetadataRoute.Sitemap {
@@ -38,6 +40,12 @@ export default function sitemap({ id }: { id: number }): MetadataRoute.Sitemap {
         { url: `${BASE_URL}/learn`, changeFrequency: "weekly", priority: 0.8, lastModified: CONTENT_LAST_MODIFIED },
         { url: `${BASE_URL}/zodiac`, changeFrequency: "weekly", priority: 0.8, lastModified: CONTENT_LAST_MODIFIED },
         { url: `${BASE_URL}/zodiac/today`, changeFrequency: "daily", priority: 0.8, lastModified: new Date() },
+        ...NEWYEAR_YEARS.map((year) => ({
+          url: `${BASE_URL}/newyear/${year}`,
+          changeFrequency: "weekly" as const,
+          priority: 0.8,
+          lastModified: CONTENT_LAST_MODIFIED,
+        })),
         {
           url: `${BASE_URL}/zodiac/animal-compat`,
           changeFrequency: "weekly",
@@ -122,6 +130,15 @@ export default function sitemap({ id }: { id: number }): MetadataRoute.Sitemap {
           lastModified: new Date(),
         })),
       ];
+    case 5:
+      return NEWYEAR_YEARS.flatMap((year) =>
+        ZODIAC_ANIMALS.map((z) => ({
+          url: `${BASE_URL}/newyear/${year}/${z.branch}`,
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+          lastModified: CONTENT_LAST_MODIFIED,
+        }))
+      );
     default:
       return [];
   }
