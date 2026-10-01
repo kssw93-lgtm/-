@@ -5,12 +5,12 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "아기 이름 짓기 — 사주 오행 작명 가이드 | 사주달력",
-  description: "아기의 생년월일시로 사주에 부족한 오행을 찾아, 이름에 보완하면 좋은 발음오행과 예시 이름을 무료로 확인하세요.",
+  title: "아기 이름 짓기 — 출생 후 사주 오행 작명 가이드 | 사주달력",
+  description: "신생아 출생 신고 전, 정확한 생년월일시로 사주에 부족한 오행을 찾아 이름에 보완하면 좋은 발음오행과 예시 이름을 무료로 확인하세요.",
   alternates: { canonical: "/naming" },
   openGraph: {
-    title: "아기 이름 짓기 — 사주 오행 작명 가이드 | 사주달력",
-    description: "아기의 생년월일시로 사주에 부족한 오행을 찾아, 이름에 보완하면 좋은 발음오행과 예시 이름을 무료로 확인하세요.",
+    title: "아기 이름 짓기 — 출생 후 사주 오행 작명 가이드 | 사주달력",
+    description: "신생아 출생 신고 전, 정확한 생년월일시로 사주에 부족한 오행을 찾아 이름에 보완하면 좋은 발음오행과 예시 이름을 무료로 확인하세요.",
     url: "/naming",
   },
 };
@@ -29,8 +29,13 @@ export default function NamingPage() {
           아기 이름 짓기 — 사주 오행 작명 가이드
         </h1>
         <p className="mt-2 text-sm text-white/50">
-          아기의 생년월일시를 입력하면 사주 원국에 부족한 오행을 찾아, 이름에 담으면 좋은 소리(발음오행)와
-          예시 이름을 알려드려요.
+          출생 신고 전 아기의 정확한 생년월일시를 입력하면, 실제 사주 원국에 부족한 오행을 찾아 이름에
+          담으면 좋은 소리(발음오행)와 예시 이름을 알려드려요.
+        </p>
+        <p className="mt-2 text-xs text-white/35">
+          💡 사주 기반 작명은 실제 태어난 순간의 사주로 부족한 오행을 찾는 방식이라, 출산 전이 아니라
+          아기가 태어난 뒤(출생 신고 기한인 한 달 이내) 활용하는 도구예요. 정확한 시간을 모르면 &lsquo;시간
+          모름&rsquo;을 선택해도 계산할 수 있어요.
         </p>
       </div>
 
