@@ -165,7 +165,7 @@ export default function CompatibilityResultScreen({
           계산된 두 사람의 값을 그대로 비교했어요.
         </div>
 
-        <AdSlot />
+        <AdSlot spaContent />
       </div>
 
       <FreeAdsNotice />

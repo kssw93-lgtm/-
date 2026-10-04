@@ -5,9 +5,21 @@ import { DEFAULT_BIRTH_FORM, loadBirthForm, loadToneStyle, saveBirthForm, saveTo
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); vi.resetModules(); });
 
 describe("광고 요청 경계", () => {
-  it.each(["/", "/privacy", "/about", "/faq", "/does-not-exist", "/tarot/love", "/zodiac/animal-compat/zi/zi", ...REVIEW_ARTICLE_SLUGS.map((s) => `/learn/${s}`)])("%s에 광고를 요청하지 않는다", (path) => {
+  it.each(["/", "/privacy", "/about", "/faq", "/does-not-exist", "/name-compat", "/naming", "/zodiac/animal-compat/zi/zi", ...REVIEW_ARTICLE_SLUGS.map((s) => `/learn/${s}`)])("%s에 광고를 요청하지 않는다", (path) => {
     expect(isAdEligiblePath(path)).toBe(false);
     expect(canRequestAds(path, "www.sajudalyeok.co.kr")).toBe(false);
+  });
+  it("메인 앱(/)은 풀이 결과 화면이 spaContent를 넘길 때만 광고를 허용한다", () => {
+    vi.stubEnv("NEXT_PUBLIC_CONTENT_PREVIEW", "0");
+    vi.stubEnv("NEXT_PUBLIC_DISABLE_ADS", "0");
+    expect(isAdEligiblePath("/")).toBe(false);
+    expect(isAdEligiblePath("/", true)).toBe(true);
+    expect(canRequestAds("/", "www.sajudalyeok.co.kr", true)).toBe(true);
+    expect(canRequestAds("/", "localhost", true)).toBe(false);
+  });
+  it("타로 주제 페이지는 광고를 허용하고, 궁합 조합 페이지는 계속 제외한다", () => {
+    expect(isAdEligiblePath("/tarot/love")).toBe(true);
+    expect(isAdEligiblePath("/zodiac/animal-compat/zi/zi", true)).toBe(false);
   });
   it("로컬·프리뷰는 실광고를 요청하지 않는다", () => {
     expect(canRequestAds("/learn/saju-basics", "localhost")).toBe(false);

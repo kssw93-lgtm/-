@@ -25,8 +25,8 @@ const AD_SLOT = "3567680618";
  * 남는다. push 후 일정 시간 안에 data-ad-status가 "filled"로 바뀌지 않으면
  * 아예 렌더링을 접어(display: none) 빈 공간이 남지 않도록 한다.
  */
-export default function AdSlot({ label }: { label?: string }) {
-  const enabled = useAdEligibility();
+export default function AdSlot({ label, spaContent = false }: { label?: string; spaContent?: boolean }) {
+  const enabled = useAdEligibility(spaContent);
   const insRef = useRef<HTMLModElement>(null);
   const pushedRef = useRef(false);
   const [collapsed, setCollapsed] = useState(false);

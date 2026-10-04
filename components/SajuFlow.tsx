@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { hasAdScriptLoaded } from "./AdRuntime";
 import IntroScreen from "./IntroScreen";
 import StyleSelectScreen from "./StyleSelectScreen";
 import CategorySelect from "./CategorySelect";
@@ -85,6 +86,19 @@ export default function SajuFlow() {
     // 이전에는 localStorage에 방문 기록이 남으면 건너뛰었는데, 그러면 사용자가
     // "왜 첫 화면 없이 바로 넘어가냐"고 계속 헷갈려해서 그 분기를 제거했다.
   }, []);
+
+  // 결과 화면에서 광고 스크립트가 로드된 채로 입력·선택 화면으로 돌아가면 그 화면에도 광고가
+  // 붙을 수 있다(자동 광고 설정 시). 본문이 없는 화면에는 광고가 뜨지 않도록, 결과 화면을
+  // 벗어나는 순간 문서를 새로 열어 스크립트를 비운다. 입력값은 localStorage에 남아 있다.
+  const prevScreenRef = useRef<Screen>(screen);
+  useEffect(() => {
+    const AD_CONTENT_SCREENS: Screen[] = ["s5", "compat-result", "daily-result"];
+    const prev = prevScreenRef.current;
+    prevScreenRef.current = screen;
+    if (AD_CONTENT_SCREENS.includes(prev) && !AD_CONTENT_SCREENS.includes(screen) && hasAdScriptLoaded()) {
+      window.location.assign("/");
+    }
+  }, [screen]);
 
   function handleSelectToneStyle(style: ToneStyleId) {
     setToneStyle(style);

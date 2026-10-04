@@ -88,7 +88,7 @@ export default function DailyFortuneScreen({ displayName, saju, onSeeFullResult,
         </div>
       </div>
 
-      <AdSlot label="오늘의 운세 화면 디스플레이 광고" />
+      <AdSlot label="오늘의 운세 화면 디스플레이 광고" spaContent />
       <FreeAdsNotice />
 
       <div className="mt-auto flex flex-col gap-3">
