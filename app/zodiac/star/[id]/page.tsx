@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { STAR_SIGNS, getStarSignEntry, formatDateRange } from "@/lib/content/zodiac-pages";
 import { computeStarDailyMood } from "@/lib/interpretation/daily-star-mood";
 import AdSlot from "@/components/AdSlot";
+import InArticleAdSlot from "@/components/InArticleAdSlot";
 import JsonLd from "@/components/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
@@ -77,6 +78,8 @@ export default function StarSignPage({ params }: { params: { id: string } }) {
         <p className="mt-3 text-sm leading-relaxed text-white/70">{daily.summary}</p>
         <p className="mt-3 text-xs text-white/40">💡 {daily.tip}</p>
       </section>
+
+      <InArticleAdSlot label="별자리 운세 아래 인아티클 광고" />
 
       <article className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
         <p className="text-[15px] leading-relaxed text-white/85">{s.text}</p>

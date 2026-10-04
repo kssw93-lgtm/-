@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ZODIAC_ANIMALS, getZodiacAnimalEntry } from "@/lib/content/zodiac-pages";
 import { computeNewYearFortune } from "@/lib/interpretation/newyear-fortune";
 import AdSlot from "@/components/AdSlot";
+import InArticleAdSlot from "@/components/InArticleAdSlot";
 import JsonLd from "@/components/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/seo";
 import type { BranchId } from "@/lib/calc/types";
@@ -65,6 +66,8 @@ export default function NewYear2027AnimalPage({ params }: { params: { branch: st
         <p className="mt-2 text-sm leading-relaxed text-white/80">{fortune.headline}</p>
         <p className="mt-3 text-sm leading-relaxed text-white/70">{fortune.overall}</p>
       </section>
+
+      <InArticleAdSlot label="신년운세 종합운 아래 인아티클 광고" />
 
       <div className="flex flex-col gap-3">
         <div className="rounded-xl bg-white/10 p-4">

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import AdSlot from "./AdSlot";
+import InArticleAdSlot from "./InArticleAdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
 import LifeGradeCard, { GRADE_COLOR } from "./LifeGradeCard";
 import PastLifeCard from "./PastLifeCard";
@@ -521,6 +522,9 @@ export default function ResultScreen({
               </p>
             </div>
           )}
+
+          {/* 주제별 풀이가 끝나고 공통 해설(신살·월별 흐름·대운)이 시작되는 자연스러운 경계 */}
+          <InArticleAdSlot label="결과 화면 중간 인아티클 광고" spaContent />
 
           {sinsal.length > 0 && (
             <div className="rounded-2xl bg-white/10 p-5">

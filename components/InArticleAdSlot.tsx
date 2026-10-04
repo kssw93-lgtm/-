@@ -18,8 +18,8 @@ const AD_SLOT = "4161802900";
  * 공식 가이드: "문단과 문단 사이"), 목록/그리드용 InFeedAdSlot과는 다른 자리에 쓴다.
  * AdSlot.tsx와 동일한 방어 로직(폭이 잡힐 때까지 대기, 미채움 시 접기)을 그대로 쓴다.
  */
-export default function InArticleAdSlot({ label }: { label?: string }) {
-  const enabled = useAdEligibility();
+export default function InArticleAdSlot({ label, spaContent = false }: { label?: string; spaContent?: boolean }) {
+  const enabled = useAdEligibility(spaContent);
   const insRef = useRef<HTMLModElement>(null);
   const pushedRef = useRef(false);
   const [collapsed, setCollapsed] = useState(false);

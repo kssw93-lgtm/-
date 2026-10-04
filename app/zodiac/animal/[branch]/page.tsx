@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ZODIAC_ANIMALS, getZodiacAnimalEntry } from "@/lib/content/zodiac-pages";
 import { computeAnimalDailyFortune } from "@/lib/interpretation/daily-branch-fortune";
 import AdSlot from "@/components/AdSlot";
+import InArticleAdSlot from "@/components/InArticleAdSlot";
 import JsonLd from "@/components/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/seo";
 import type { BranchId } from "@/lib/calc/types";
@@ -89,6 +90,8 @@ export default function ZodiacAnimalPage({ params }: { params: { branch: string 
         </div>
         <p className="mt-3 text-xs text-white/40">⚠️ {daily.caution}</p>
       </section>
+
+      <InArticleAdSlot label="띠별 운세 아래 인아티클 광고" />
 
       <article className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-5">
         <p className="text-[15px] leading-relaxed text-white/85">{z.text}</p>
