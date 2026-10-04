@@ -9,6 +9,7 @@
 declare global {
   interface GoogletagSlot {
     getSlotElementId(): string;
+    addService(service: GoogletagPubAdsService): GoogletagSlot;
   }
 
   interface GoogletagRewardedSlotReadyEvent {

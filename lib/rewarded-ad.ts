@@ -75,6 +75,7 @@ export function useRewardedAd(adUnitPath: string | undefined) {
     ready?: (e: GoogletagRewardedSlotReadyEvent) => void;
     granted?: (e: GoogletagRewardedSlotGrantedEvent) => void;
     closed?: (e: GoogletagRewardedSlotClosedEvent) => void;
+    rendered?: (e: GoogletagSlotRenderEndedEvent) => void;
   }>({});
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const grantedRef = useRef(false);
@@ -97,6 +98,7 @@ export function useRewardedAd(adUnitPath: string | undefined) {
         if (listenersRef.current.ready) pubads.removeEventListener("rewardedSlotReady", listenersRef.current.ready);
         if (listenersRef.current.granted) pubads.removeEventListener("rewardedSlotGranted", listenersRef.current.granted);
         if (listenersRef.current.closed) pubads.removeEventListener("rewardedSlotClosed", listenersRef.current.closed);
+        if (listenersRef.current.rendered) pubads.removeEventListener("slotRenderEnded", listenersRef.current.rendered);
       }
     } catch {
       // GPT 내부 상태 문제 — 리스너 해제 실패가 화면 흐름을 막으면 안 된다
@@ -184,8 +186,19 @@ export function useRewardedAd(adUnitPath: string | undefined) {
             if (mountedRef.current) setStatus(wasGranted ? "granted" : "closed");
           };
 
+          // 채울 광고가 없다는 응답(isEmpty)이 오면 4초 타임아웃을 다 기다리지 않고 바로 포기한다.
+          const onRendered = (event: GoogletagSlotRenderEndedEvent) => {
+            if (event.slot !== slot || ownerRef.current !== owner || !event.isEmpty) return;
+            cleanupSlot();
+            if (mountedRef.current) setStatus("unavailable");
+          };
+
           try {
-            listenersRef.current = { ready: onReady, granted: onGranted, closed: onClosed };
+            // 슬롯을 광고 서비스에 연결해야 display()가 실제로 Ad Manager에 광고 요청을 보낸다.
+            // 이 연결이 없으면 요청이 한 건도 나가지 않아 광고가 영원히 "준비 중"으로 남는다.
+            slot.addService(pubads);
+            listenersRef.current = { ready: onReady, granted: onGranted, closed: onClosed, rendered: onRendered };
+            pubads.addEventListener("slotRenderEnded", onRendered);
             pubads.addEventListener("rewardedSlotReady", onReady);
             pubads.addEventListener("rewardedSlotGranted", onGranted);
             pubads.addEventListener("rewardedSlotClosed", onClosed);
