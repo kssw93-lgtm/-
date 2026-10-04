@@ -87,14 +87,22 @@ export function useRewardedAd(adUnitPath: string | undefined) {
   const cleanupSlot = useCallback(() => {
     clearTimeout(timeoutRef.current);
     const slot = slotRef.current;
-    const pubads = typeof window !== "undefined" ? window.googletag?.pubads() : undefined;
-    if (pubads) {
-      if (listenersRef.current.ready) pubads.removeEventListener("rewardedSlotReady", listenersRef.current.ready);
-      if (listenersRef.current.granted) pubads.removeEventListener("rewardedSlotGranted", listenersRef.current.granted);
-      if (listenersRef.current.closed) pubads.removeEventListener("rewardedSlotClosed", listenersRef.current.closed);
+    // gpt.js가 아직 로드 전이거나 광고 차단기에 막히면 window.googletag는 { cmd: [] } 스텁뿐이라
+    // pubads/destroySlots가 함수가 아니다 — 정리 단계에서 예외가 새면 화면 전체가 죽으므로
+    // 존재 여부를 확인하고 전부 감싼다.
+    try {
+      const gt = typeof window !== "undefined" ? window.googletag : undefined;
+      const pubads = gt && typeof gt.pubads === "function" ? gt.pubads() : undefined;
+      if (pubads) {
+        if (listenersRef.current.ready) pubads.removeEventListener("rewardedSlotReady", listenersRef.current.ready);
+        if (listenersRef.current.granted) pubads.removeEventListener("rewardedSlotGranted", listenersRef.current.granted);
+        if (listenersRef.current.closed) pubads.removeEventListener("rewardedSlotClosed", listenersRef.current.closed);
+      }
+    } catch {
+      // GPT 내부 상태 문제 — 리스너 해제 실패가 화면 흐름을 막으면 안 된다
     }
     listenersRef.current = {};
-    if (slot && typeof window !== "undefined" && window.googletag) {
+    if (slot && typeof window !== "undefined" && typeof window.googletag?.destroySlots === "function") {
       try {
         window.googletag.destroySlots([slot]);
       } catch {
