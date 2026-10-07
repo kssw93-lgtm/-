@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Serif_KR, Noto_Sans_KR } from "next/font/google";
 import Script from "next/script";
 import AdNavigationBoundary from "@/components/AdRuntime";
+import SideRailAds from "@/components/SideRailAds";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PartnerBanner from "@/components/PartnerBanner";
@@ -94,6 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen">
         <div className="mx-auto flex min-h-screen w-full max-w-md flex-col">
           <AdNavigationBoundary />
+          <SideRailAds />
           <SiteHeader />
           {children}
           <PartnerBanner />

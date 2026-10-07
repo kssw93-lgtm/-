@@ -1,6 +1,7 @@
 "use client";
 
 import AdSlot from "./AdSlot";
+import SideRailAds from "./SideRailAds";
 import FreeAdsNotice from "./FreeAdsNotice";
 import { describeDayMasterPair, type CompatibilityResult } from "@/lib/interpretation/compatibility";
 import { computeCompatibilityAxes, getConflictPoint, getSecretMindTeaser, type CompatTier } from "@/lib/interpretation/compatibility-axes";
@@ -166,6 +167,7 @@ export default function CompatibilityResultScreen({
         </div>
 
         <AdSlot spaContent />
+        <SideRailAds spaContent />
       </div>
 
       <FreeAdsNotice />

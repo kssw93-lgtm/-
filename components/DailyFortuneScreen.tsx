@@ -1,6 +1,7 @@
 "use client";
 
 import AdSlot from "./AdSlot";
+import SideRailAds from "./SideRailAds";
 import FreeAdsNotice from "./FreeAdsNotice";
 import { computeDailyFortune, computeLuckColor, getStarSignForSaju, getZodiacAnimalForSaju } from "@/lib/interpretation";
 import type { SajuResult } from "@/lib/calc/types";
@@ -89,6 +90,7 @@ export default function DailyFortuneScreen({ displayName, saju, onSeeFullResult,
       </div>
 
       <AdSlot label="오늘의 운세 화면 디스플레이 광고" spaContent />
+      <SideRailAds spaContent />
       <FreeAdsNotice />
 
       <div className="mt-auto flex flex-col gap-3">

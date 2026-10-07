@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import AdSlot from "./AdSlot";
+import SideRailAds from "./SideRailAds";
 import InArticleAdSlot from "./InArticleAdSlot";
 import FreeAdsNotice from "./FreeAdsNotice";
 import LifeGradeCard, { GRADE_COLOR } from "./LifeGradeCard";
@@ -257,6 +258,7 @@ export default function ResultScreen({
           않는다 — 첫 실제 풀이 섹션(freeSection)을 먼저 보여준 뒤, 다음 자연스러운
           경계인 여기에 배치한다. */}
       <AdSlot label="결과 화면 상단 디스플레이 광고" spaContent />
+      <SideRailAds spaContent />
 
       <div className="flex flex-col gap-4">
           {datingAdvice && (
