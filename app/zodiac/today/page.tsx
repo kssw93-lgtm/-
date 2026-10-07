@@ -1,3 +1,4 @@
+import { OG_IMAGES } from "@/lib/og";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { STAR_SIGNS, ZODIAC_ANIMALS } from "@/lib/content/zodiac-pages";
@@ -24,7 +25,7 @@ export function generateMetadata(): Metadata {
     title,
     description,
     alternates: { canonical: "/zodiac/today" },
-    openGraph: { title, description, url: "/zodiac/today" },
+    openGraph: { images: OG_IMAGES, title, description, url: "/zodiac/today" },
   };
 }
 

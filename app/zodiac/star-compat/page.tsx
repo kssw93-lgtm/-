@@ -1,3 +1,4 @@
+import { OG_IMAGES } from "@/lib/og";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { allStarPairs, getStarEntry, getStarPairRelation } from "@/lib/content/zodiac-compat-pages";
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   description: "양자리부터 물고기자리까지, 12별자리로 만들 수 있는 78가지 조합의 궁합을 4원소 배속으로 확인해보세요.",
   alternates: { canonical: "/zodiac/star-compat" },
   openGraph: {
+    images: OG_IMAGES,
     title: "별자리 궁합 전체 모음 | 12별자리 조합 78가지 | 사주달력",
     description: "양자리부터 물고기자리까지, 12별자리로 만들 수 있는 78가지 조합의 궁합을 4원소 배속으로 확인해보세요.",
     url: "/zodiac/star-compat",

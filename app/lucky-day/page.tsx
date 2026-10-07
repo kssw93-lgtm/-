@@ -1,3 +1,4 @@
+import { OG_IMAGES } from "@/lib/og";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getSonEomneunNalOfMonth } from "@/lib/calc/son-eomneun-nal";
@@ -21,7 +22,7 @@ export function generateMetadata(): Metadata {
     title,
     description,
     alternates: { canonical: "/lucky-day" },
-    openGraph: { title, description, url: "/lucky-day" },
+    openGraph: { images: OG_IMAGES, title, description, url: "/lucky-day" },
   };
 }
 

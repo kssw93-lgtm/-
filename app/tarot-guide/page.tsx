@@ -1,3 +1,4 @@
+import { OG_IMAGES } from "@/lib/og";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
   description: "메이저 아르카나 22장과 마이너 아르카나 56장, 총 78장 전체의 의미와 정방향·역방향 키워드, 연애·금전·직업·건강 해석을 백호도사와 함께 알아보세요.",
   alternates: { canonical: "/tarot-guide" },
   openGraph: {
+    images: OG_IMAGES,
     title: "타로 카드 백과사전 · 전체 78장(메이저+마이너 아르카나) | 사주달력",
     description: "메이저 아르카나 22장과 마이너 아르카나 56장, 총 78장 전체의 의미와 정방향·역방향 키워드, 연애·금전·직업·건강 해석을 백호도사와 함께 알아보세요.",
     url: "/tarot-guide",

@@ -1,3 +1,4 @@
+import { OG_IMAGES } from "@/lib/og";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -29,7 +30,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
     title,
     description: article.summary,
     alternates: { canonical: path },
-    openGraph: { title, description: article.summary, url: path },
+    openGraph: { images: OG_IMAGES, title, description: article.summary, url: path },
   };
 }
 

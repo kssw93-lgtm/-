@@ -1,3 +1,4 @@
+import { OG_IMAGES } from "@/lib/og";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
   description: "양자리부터 물고기자리까지, 쥐띠부터 돼지띠까지 — 별자리와 띠별 성격과 특징을 한눈에 확인하세요.",
   alternates: { canonical: "/zodiac" },
   openGraph: {
+    images: OG_IMAGES,
     title: "별자리 성격 · 띠 성격 모음 | 사주달력",
     description: "양자리부터 물고기자리까지, 쥐띠부터 돼지띠까지 — 별자리와 띠별 성격과 특징을 한눈에 확인하세요.",
     url: "/zodiac",

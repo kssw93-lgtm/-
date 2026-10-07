@@ -145,6 +145,31 @@ export default function IntroScreen({
         </div>
       </section>
 
+      <section aria-labelledby="popular-links" className="relative z-10">
+        <h2 id="popular-links" className="mb-3 text-sm font-bold">지금 많이 찾는 운세</h2>
+        <div className="grid grid-cols-2 gap-2.5">
+          {[
+            { href: "/newyear/2027", emoji: "🎊", label: "2027년 신년운세", desc: "띠별 정미년 한 해 운세" },
+            { href: "/zodiac/today", emoji: "☀️", label: "오늘의 운세", desc: "12띠·12별자리 매일 업데이트" },
+            { href: "/lucky-day", emoji: "🏠", label: "손없는날 계산기", desc: "이사·결혼 날짜 잡기" },
+            { href: "/name-compat", emoji: "💌", label: "이름궁합", desc: "두 사람 이름으로 재미로 보기" },
+            { href: "/naming", emoji: "👶", label: "아기 이름 짓기", desc: "사주 오행으로 보는 작명 가이드" },
+            { href: "/tarot", emoji: "🔮", label: "타로점 보기", desc: "주제별 3장 뽑기" },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="flex flex-col gap-0.5 rounded-2xl border border-white/10 bg-white/[0.03] p-3.5 transition hover:border-[color:var(--color-gold)]/40 active:scale-[0.98]"
+            >
+              <span className="text-sm font-bold text-white/90">
+                {item.emoji} {item.label}
+              </span>
+              <span className="text-[10px] leading-snug text-white/45">{item.desc}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <nav aria-label="더 둘러보기" className="relative z-10 grid grid-cols-3 gap-2">
         <Link href="/learn" className="rounded-xl border border-white/10 bg-white/[0.03] px-2 py-3 text-center text-[11px] font-medium text-white/65 transition hover:border-[color:var(--color-gold)]/35 hover:text-white">
           📖 사주 배우기

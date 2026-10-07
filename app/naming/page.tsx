@@ -1,3 +1,4 @@
+import { OG_IMAGES } from "@/lib/og";
 import Link from "next/link";
 import type { Metadata } from "next";
 import NamingGuideCalculator from "@/components/NamingGuideCalculator";
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
   description: "신생아 출생 신고 전, 정확한 생년월일시로 사주에 부족한 오행을 찾아 이름에 보완하면 좋은 발음오행과 예시 이름을 무료로 확인하세요.",
   alternates: { canonical: "/naming" },
   openGraph: {
+    images: OG_IMAGES,
     title: "아기 이름 짓기 — 출생 후 사주 오행 작명 가이드 | 사주달력",
     description: "신생아 출생 신고 전, 정확한 생년월일시로 사주에 부족한 오행을 찾아 이름에 보완하면 좋은 발음오행과 예시 이름을 무료로 확인하세요.",
     url: "/naming",

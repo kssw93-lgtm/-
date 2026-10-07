@@ -1,3 +1,4 @@
+import { OG_IMAGES } from "@/lib/og";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -6,6 +7,7 @@ export const metadata: Metadata = {
   description: "사주달력은 어떤 사이트이고, 어떻게 무료로 운영되는지 소개합니다.",
   alternates: { canonical: "/about" },
   openGraph: {
+    images: OG_IMAGES,
     title: "사이트 소개 | 사주달력",
     description: "사주달력은 어떤 사이트이고, 어떻게 무료로 운영되는지 소개합니다.",
     url: "/about",

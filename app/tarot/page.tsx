@@ -1,3 +1,4 @@
+import { OG_IMAGES } from "@/lib/og";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { TAROT_TOPICS } from "@/lib/content/tarot-topics";
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/tarot" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/tarot" },
+  openGraph: { images: OG_IMAGES, title: TITLE, description: DESCRIPTION, url: "/tarot" },
 };
 
 export default function TarotTopicListPage() {

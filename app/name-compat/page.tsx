@@ -1,3 +1,4 @@
+import { OG_IMAGES } from "@/lib/og";
 import Link from "next/link";
 import type { Metadata } from "next";
 import NameCompatCalculator from "@/components/NameCompatCalculator";
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
   description: "두 사람의 이름만으로 재미로 보는 이름궁합. 이름을 입력하면 궁합 점수와 한 줄 코멘트를 바로 확인할 수 있어요.",
   alternates: { canonical: "/name-compat" },
   openGraph: {
+    images: OG_IMAGES,
     title: "이름궁합 무료로 확인하기 | 사주달력",
     description: "두 사람의 이름만으로 재미로 보는 이름궁합. 이름을 입력하면 궁합 점수와 한 줄 코멘트를 바로 확인할 수 있어요.",
     url: "/name-compat",
