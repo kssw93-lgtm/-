@@ -5,8 +5,53 @@ import type { BirthFormState, Category, RelationshipStatus } from "@/lib/session
  * 뒤로 갔다 다시 들어오는 정도로는 광고를 반복하지 않되, 탭을 닫으면(세션 종료)
  * 초기화되도록 sessionStorage를 쓴다(localStorage가 아님 — 그러면 다음 날
  * 다시 와도 광고 없이 영구히 열려버린다).
+ *
+ * 이와 별개로, 보상형 광고를 끝까지 시청해 보상(rewardedSlotGranted)을 받으면 8시간 동안
+ * 모든 결과를 광고 없이 연다(이용권). 이용권은 탭을 닫아도 유지돼야 해서 localStorage에
+ * 만료 시각만 저장한다. 광고가 없어서(미충전·차단·오류) fail-open으로 열린 경우에는 이용권을
+ * 주지 않고, 대신 30분 동안만 광고 시도를 건너뛰어 결과마다 대기하지 않게 한다.
  */
 const STORAGE_KEY = "saju_result_unlock_v1";
+const PASS_KEY = "saju_access_pass_v1";
+const COOLDOWN_KEY = "saju_ad_cooldown_v1";
+
+export const ACCESS_PASS_MS = 8 * 60 * 60 * 1000;
+export const AD_COOLDOWN_MS = 30 * 60 * 1000;
+
+function readExpiry(key: string): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const value = Number(window.localStorage.getItem(key));
+    return Number.isFinite(value) ? value : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function writeExpiry(key: string, until: number): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(key, String(until));
+  } catch {
+    // 저장이 막힌 환경 — 이용권이 유지되지 않을 뿐 화면 흐름에는 영향이 없다.
+  }
+}
+
+export function hasAccessPass(now = Date.now()): boolean {
+  return readExpiry(PASS_KEY) > now;
+}
+
+export function grantAccessPass(now = Date.now()): void {
+  writeExpiry(PASS_KEY, now + ACCESS_PASS_MS);
+}
+
+export function isAdCooldownActive(now = Date.now()): boolean {
+  return readExpiry(COOLDOWN_KEY) > now;
+}
+
+export function startAdCooldown(now = Date.now()): void {
+  writeExpiry(COOLDOWN_KEY, now + AD_COOLDOWN_MS);
+}
 
 function readUnlockedSet(): Set<string> {
   if (typeof window === "undefined") return new Set();
@@ -31,7 +76,7 @@ function persistUnlockedSet(set: Set<string>): void {
 }
 
 export function isResultUnlocked(key: string): boolean {
-  return readUnlockedSet().has(key);
+  return hasAccessPass() || isAdCooldownActive() || readUnlockedSet().has(key);
 }
 
 export function markResultUnlocked(key: string): void {

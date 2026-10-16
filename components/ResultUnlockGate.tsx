@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRewardedAd } from "@/lib/rewarded-ad";
-import { isResultUnlocked, markResultUnlocked } from "@/lib/result-unlock";
+import { grantAccessPass, isResultUnlocked, markResultUnlocked, startAdCooldown } from "@/lib/result-unlock";
 
 const AD_UNIT_PATH = process.env.NEXT_PUBLIC_AD_MANAGER_REWARDED_UNIT_PATH;
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
@@ -61,11 +61,13 @@ export default function ResultUnlockGate({ resultKey, onUnlocked, onCancel }: Pr
     if (resolvedRef.current) return;
 
     if (ad.status === "granted") {
+      grantAccessPass();
       resolveUnlocked();
       return;
     }
 
     if (ad.status === "unavailable" && !failOpenMessage) {
+      startAdCooldown();
       setFailOpenMessage("현재 광고를 불러올 수 없어 이번 풀이는 바로 보여드릴게요.");
       failOpenTimerRef.current = setTimeout(resolveUnlocked, FAIL_OPEN_DISPLAY_MS);
     }
@@ -141,7 +143,7 @@ export default function ResultUnlockGate({ resultKey, onUnlocked, onCancel }: Pr
     <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
       <span className="text-3xl">🔮</span>
       <p className="text-lg font-bold text-white/90">풀이 보기</p>
-      <p className="text-sm leading-relaxed text-white/60">짧은 광고를 본 뒤 이번 풀이를 바로 확인할 수 있어요.</p>
+      <p className="text-sm leading-relaxed text-white/60">짧은 광고를 한 번 보면 8시간 동안 모든 풀이를 바로 확인할 수 있어요.</p>
       <div className="flex w-full max-w-xs flex-col gap-2">
         <button
           onClick={handleWatchAd}
