@@ -2,9 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { canRequestAds, isAdEligiblePath } from "@/lib/ads-policy";
+import { canLoadAdTag, canRequestAds, isAdEligiblePath } from "@/lib/ads-policy";
 
 const AD_SCRIPT_ID = "saju-adsense-script";
+const AD_SCRIPT_SRC = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8704899603701516";
+
+function injectAdTag() {
+  if (hasAdScriptLoaded()) return;
+  const script = document.createElement("script");
+  script.id = AD_SCRIPT_ID;
+  script.async = true;
+  script.crossOrigin = "anonymous";
+  script.src = AD_SCRIPT_SRC;
+  document.head.appendChild(script);
+}
 
 export function hasAdScriptLoaded(): boolean {
   return typeof document !== "undefined" && !!document.getElementById(AD_SCRIPT_ID);
@@ -20,33 +31,19 @@ export function useAdEligibility(spaContent = false) {
   useEffect(() => {
     const allowed = canRequestAds(pathname, window.location.hostname, spaContent);
     setEnabled(allowed);
-    if (!allowed || hasAdScriptLoaded()) return;
-    const script = document.createElement("script");
-    script.id = AD_SCRIPT_ID;
-    script.async = true;
-    script.crossOrigin = "anonymous";
-    script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8704899603701516";
-    document.head.appendChild(script);
+    if (allowed) injectAdTag();
   }, [pathname, spaContent]);
   return enabled && isAdEligiblePath(pathname, spaContent);
 }
 
-/** SPA에 남은 자동 광고 스크립트가 입력 화면으로 따라오지 않도록 경계를 넘을 때 문서를 새로 연다. */
-export default function AdNavigationBoundary() {
+/**
+ * 모든 페이지에서 애드센스 태그를 처음부터 불러온다. 구글 오퍼월("광고 한 번 보면 N시간 이용")
+ * 같은 메시지는 이 태그가 있어야 방문 직후에 뜨기 때문이다. 광고 칸은 따로 isAdEligiblePath인
+ * 화면에서만 그린다.
+ */
+export default function AdSenseTag() {
   useEffect(() => {
-    function navigate(event: MouseEvent) {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      const anchor = event.target instanceof Element ? event.target.closest("a[href]") : null;
-      if (!(anchor instanceof HTMLAnchorElement) || anchor.download || (anchor.target && anchor.target !== "_self")) return;
-      const next = new URL(anchor.href, window.location.href);
-      if (next.origin !== window.location.origin || next.pathname === window.location.pathname) return;
-      if (!document.getElementById("saju-adsense-script") && isAdEligiblePath(next.pathname) === isAdEligiblePath(window.location.pathname)) return;
-      event.preventDefault();
-      event.stopPropagation();
-      window.location.assign(next.href);
-    }
-    document.addEventListener("click", navigate, true);
-    return () => document.removeEventListener("click", navigate, true);
+    if (canLoadAdTag(window.location.hostname)) injectAdTag();
   }, []);
   return null;
 }

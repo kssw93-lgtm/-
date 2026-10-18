@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { canRequestAds, isAdEligiblePath, REVIEW_ARTICLE_SLUGS } from "@/lib/ads-policy";
+import { canLoadAdTag, canRequestAds, isAdEligiblePath, REVIEW_ARTICLE_SLUGS } from "@/lib/ads-policy";
 import { DEFAULT_BIRTH_FORM, loadBirthForm, loadToneStyle, saveBirthForm, saveToneStyle, clearBirthForm } from "@/lib/session";
 
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); vi.resetModules(); });
@@ -31,6 +31,21 @@ describe("광고 요청 경계", () => {
     vi.stubEnv("NEXT_PUBLIC_CONTENT_PREVIEW", "0");
     vi.stubEnv("NEXT_PUBLIC_DISABLE_ADS", "0");
     expect(canRequestAds("/learn/saju-basics", "www.sajudalyeok.co.kr")).toBe(true);
+  });
+});
+
+describe("애드센스 태그 로드(오퍼월용)", () => {
+  it("운영 도메인에서는 어떤 페이지든 태그를 불러온다(광고 칸 허용 여부와 별개)", () => {
+    vi.stubEnv("NEXT_PUBLIC_CONTENT_PREVIEW", "0");
+    vi.stubEnv("NEXT_PUBLIC_DISABLE_ADS", "0");
+    expect(canLoadAdTag("www.sajudalyeok.co.kr")).toBe(true);
+    expect(isAdEligiblePath("/")).toBe(false);
+  });
+  it("로컬·프리뷰·광고 끄기 설정에서는 태그를 불러오지 않는다", () => {
+    expect(canLoadAdTag("localhost")).toBe(false);
+    expect(canLoadAdTag("preview.vercel.app")).toBe(false);
+    vi.stubEnv("NEXT_PUBLIC_DISABLE_ADS", "1");
+    expect(canLoadAdTag("www.sajudalyeok.co.kr")).toBe(false);
   });
 });
 

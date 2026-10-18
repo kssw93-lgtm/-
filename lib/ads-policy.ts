@@ -23,3 +23,14 @@ export function canRequestAds(pathname: string, hostname: string, spaContent = f
     process.env.NEXT_PUBLIC_DISABLE_ADS !== "1" &&
     hostname === "www.sajudalyeok.co.kr" && isAdEligiblePath(pathname, spaContent);
 }
+
+/**
+ * 애드센스 태그(adsbygoogle.js) 자체를 불러와도 되는지. 오퍼월 같은 구글 메시지는 이 태그가 있어야
+ * 첫 화면부터 뜬다. 태그를 불러오는 것과 광고 칸(ins)을 그리는 것은 별개라서, 광고는 여전히
+ * isAdEligiblePath인 화면에서만 그리고 입력·안내 화면에는 광고 칸이 없다. 로컬·프리뷰는 불러오지 않는다.
+ */
+export function canLoadAdTag(hostname: string): boolean {
+  return process.env.NEXT_PUBLIC_CONTENT_PREVIEW !== "1" &&
+    process.env.NEXT_PUBLIC_DISABLE_ADS !== "1" &&
+    hostname === "www.sajudalyeok.co.kr";
+}
