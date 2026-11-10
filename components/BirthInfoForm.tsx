@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { DEFAULT_BIRTH_FORM, type BirthFormState } from "@/lib/session";
 import { SUPPORTED_BIRTH_YEAR_RANGE } from "@/lib/calc";
+import { useSiteLocale } from "@/lib/i18n/site-locale";
+import { t } from "@/lib/i18n/messages";
 
 interface Props {
   introText: string;
@@ -13,6 +15,8 @@ interface Props {
 
 /** S3. 정보 입력 화면 (화면 흐름 설계서 04번) */
 export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: Props) {
+  const locale = useSiteLocale();
+  const isEnglish = locale === "en";
   const [form, setForm] = useState<BirthFormState>(initial);
 
   const isValid = form.birthDate.trim().length > 0 && !!form.calendarType && !!form.gender;
@@ -24,25 +28,28 @@ export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: 
   return (
     <div className="flex flex-1 flex-col gap-5 px-6 py-8">
       <button onClick={onBack} className="self-start text-sm text-white/40 hover:text-white/70">
-        ← 뒤로
+        ← {t(locale, "뒤로")}
       </button>
 
       <p className="text-center text-sm text-white/70">{introText}</p>
+      {isEnglish && <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs leading-5 text-white/50">
+        This reading uses Korean calendar rules and Korea Standard Time (KST). If you were born outside South Korea, the time-zone convention may not match your local birth time.
+      </p>}
 
       <div className="flex flex-col gap-4">
         <label className="flex flex-col gap-1 text-sm">
-          이름 (선택)
+          {t(locale, "이름 (선택)")}
           <input
             type="text"
             value={form.name}
             onChange={(e) => update("name", e.target.value)}
-            placeholder="입력하지 않으면 '당신'으로 표시돼요"
+            placeholder={isEnglish ? "Leave blank to use ‘you’ in the reading" : "입력하지 않으면 '당신'으로 표시돼요"}
             className="rounded-lg bg-white/10 px-4 py-3 text-base outline-none placeholder:text-white/40"
           />
         </label>
 
         <label className="flex flex-col gap-1 text-sm">
-          생년월일
+          {t(locale, "생년월일")}
           <input
             type="date"
             value={form.birthDate}
@@ -52,12 +59,14 @@ export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: 
             className="rounded-lg bg-white/10 px-4 py-3 text-base outline-none [color-scheme:dark]"
           />
           <span className="text-xs text-white/50">
-            현재 {SUPPORTED_BIRTH_YEAR_RANGE.min}~{SUPPORTED_BIRTH_YEAR_RANGE.max}년 출생자만 계산할 수 있어요.
+            {isEnglish
+              ? `Supported birth years: ${SUPPORTED_BIRTH_YEAR_RANGE.min}–${SUPPORTED_BIRTH_YEAR_RANGE.max}.`
+              : `현재 ${SUPPORTED_BIRTH_YEAR_RANGE.min}~${SUPPORTED_BIRTH_YEAR_RANGE.max}년 출생자만 계산할 수 있어요.`}
           </span>
         </label>
 
         <div className="flex flex-col gap-1 text-sm">
-          양력 / 음력
+          {t(locale, "양력 / 음력")}
           <div className="flex gap-3">
             {(["solar", "lunar"] as const).map((v) => (
               <button
@@ -70,14 +79,15 @@ export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: 
                     : "bg-white/10"
                 }`}
               >
-                {v === "solar" ? "양력" : "음력"}
+                {v === "solar" ? t(locale, "양력") : t(locale, "음력")}
               </button>
             ))}
           </div>
           {form.calendarType === "lunar" && (
             <span className="text-xs text-white/50">
-              위 생년월일 칸에 음력 날짜 그대로 입력해 주세요. KASI(한국천문연구원) 공식 음양력
-              데이터로 변환해요.
+              {isEnglish
+                ? "Enter the lunar date above. We convert it using official Korean lunar–solar calendar data from the Korea Astronomy and Space Science Institute (KASI)."
+                : "위 생년월일 칸에 음력 날짜 그대로 입력해 주세요. KASI(한국천문연구원) 공식 음양력 데이터로 변환해요."}
             </span>
           )}
         </div>
@@ -89,19 +99,19 @@ export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: 
               checked={form.isLeapMonth}
               onChange={(e) => update("isLeapMonth", e.target.checked)}
             />
-            윤달이에요
+              {isEnglish ? "This is a leap month" : "윤달이에요"}
           </label>
         )}
 
         <div className="flex flex-col gap-2 text-sm">
-          출생시간
+          {isEnglish ? "Time of birth" : "출생시간"}
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
               checked={form.timeUnknown}
               onChange={(e) => update("timeUnknown", e.target.checked)}
             />
-            시간 모름
+            {isEnglish ? "I don't know the birth time" : "시간 모름"}
           </label>
           {!form.timeUnknown && (
             <div className="flex gap-3">
@@ -112,7 +122,7 @@ export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: 
               >
                 {Array.from({ length: 24 }, (_, h) => (
                   <option key={h} value={h} className="bg-slate-800 text-white">
-                    {String(h).padStart(2, "0")}시
+                    {String(h).padStart(2, "0")}{isEnglish ? ":00" : "시"}
                   </option>
                 ))}
               </select>
@@ -123,7 +133,7 @@ export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: 
               >
                 {Array.from({ length: 60 }, (_, m) => (
                   <option key={m} value={m} className="bg-slate-800 text-white">
-                    {String(m).padStart(2, "0")}분
+                    {String(m).padStart(2, "0")}{isEnglish ? " min" : "분"}
                   </option>
                 ))}
               </select>
@@ -132,7 +142,7 @@ export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: 
         </div>
 
         <div className="flex flex-col gap-1 text-sm">
-          성별
+          {t(locale, "성별")}
           <div className="flex gap-3">
             {(["female", "male"] as const).map((v) => (
               <button
@@ -145,7 +155,7 @@ export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: 
                     : "bg-white/10"
                 }`}
               >
-                {v === "female" ? "여성" : "남성"}
+                {v === "female" ? t(locale, "여성") : t(locale, "남성")}
               </button>
             ))}
           </div>
@@ -158,7 +168,7 @@ export default function BirthInfoForm({ introText, initial, onSubmit, onBack }: 
           onClick={() => onSubmit(form)}
           className="w-full rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-8 py-4 text-lg font-bold text-[#241a08] shadow-[0_8px_30px_rgba(201,163,92,0.35)] transition enabled:hover:brightness-110 enabled:active:scale-95 disabled:cursor-not-allowed disabled:from-white/10 disabled:to-white/10 disabled:text-white/30 disabled:shadow-none"
         >
-          결과 보기
+          {isEnglish ? "Continue to my reading" : "결과 보기"}
         </button>
       </div>
     </div>

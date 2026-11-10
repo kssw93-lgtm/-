@@ -19,6 +19,9 @@ import {
   type InterpretationResult,
 } from "@/lib/interpretation";
 import { computeCompatibility, type CompatibilityResult } from "@/lib/interpretation/compatibility";
+import { loadEnglishContent, localizeEnglishContent, localizeEnglishText } from "@/lib/i18n/english-content";
+import { useSiteLocale } from "@/lib/i18n/site-locale";
+import { t } from "@/lib/i18n/messages";
 import { buildCompatResultKey, buildDailyResultKey, buildSoloResultKey, isResultUnlocked } from "@/lib/result-unlock";
 import {
   DEFAULT_BIRTH_FORM,
@@ -59,6 +62,9 @@ function toBirthInput(form: BirthFormState): BirthInput {
 type FlowMode = "solo" | "compatibility";
 
 export default function SajuFlow() {
+  const locale = useSiteLocale();
+  const isEnglish = locale === "en";
+  const [englishCatalogState, setEnglishCatalogState] = useState<"loading" | "ready" | "error">("loading");
   const [screen, setScreen] = useState<Screen>("s1");
   const [flowMode, setFlowMode] = useState<FlowMode>("solo");
   const [form, setForm] = useState<BirthFormState>(DEFAULT_BIRTH_FORM);
@@ -78,13 +84,43 @@ export default function SajuFlow() {
   const [unlockKey, setUnlockKey] = useState<string | null>(null);
 
   useEffect(() => {
+    let active = true;
+    if (isEnglish) {
+      setEnglishCatalogState("loading");
+      void loadEnglishContent().then(
+        () => { if (active) setEnglishCatalogState("ready"); },
+        (error) => {
+          console.error("English reading catalogue failed to load:", error);
+          if (active) setEnglishCatalogState("error");
+        },
+      );
+    } else {
+      setEnglishCatalogState("ready");
+    }
     const saved = loadBirthForm();
     if (saved) setForm(saved);
     setToneStyle(loadToneStyle());
     // 방문할 때마다(새로고침 포함) 브랜드 인트로 화면을 항상 먼저 보여준다 —
     // 이전에는 localStorage에 방문 기록이 남으면 건너뛰었는데, 그러면 사용자가
     // "왜 첫 화면 없이 바로 넘어가냐"고 계속 헷갈려해서 그 분기를 제거했다.
-  }, []);
+    return () => { active = false; };
+  }, [isEnglish]);
+
+  async function ensureEnglishCatalog(): Promise<boolean> {
+    if (!isEnglish) return true;
+    if (englishCatalogState === "ready") return true;
+    setEnglishCatalogState("loading");
+    try {
+      await loadEnglishContent();
+      setEnglishCatalogState("ready");
+      return true;
+    } catch (error) {
+      console.error("English reading catalogue failed to load:", error);
+      setEnglishCatalogState("error");
+      setErrorMessage("We couldn't load the English reading content. Please check your connection and try again.");
+      return false;
+    }
+  }
 
   function handleSelectToneStyle(style: ToneStyleId) {
     setToneStyle(style);
@@ -93,7 +129,7 @@ export default function SajuFlow() {
 
   function handleStart() {
     setIntroSelection(null);
-    setScreen("style");
+    setScreen(isEnglish ? "s2" : "style");
   }
 
   function handleConfirmStyle() {
@@ -112,12 +148,22 @@ export default function SajuFlow() {
 
   function handleStartCategory(selected: Category) {
     setIntroSelection(selected);
-    setScreen("style");
+    if (isEnglish) {
+      setIntroSelection(null);
+      handleSelectCategory(selected);
+    } else {
+      setScreen("style");
+    }
   }
 
   function handleStartCompatibility() {
     setIntroSelection("compatibility");
-    setScreen("style");
+    if (isEnglish) {
+      setIntroSelection(null);
+      handleSelectCompatibility();
+    } else {
+      setScreen("style");
+    }
   }
 
   function handleSelectCategory(selected: Category) {
@@ -174,10 +220,12 @@ export default function SajuFlow() {
    * 이미 이번 세션에 같은 결과를 해제한 적 있으면(새로고침·뒤로가기 등) 게이트 자체를
    * 건너뛰고 바로 결과 화면으로 간다.
    */
-  function proceedSolo(targetForm: BirthFormState, targetCategory: Category, targetRelationshipStatus: RelationshipStatus | null) {
+  async function proceedSolo(targetForm: BirthFormState, targetCategory: Category, targetRelationshipStatus: RelationshipStatus | null) {
     try {
+      if (!(await ensureEnglishCatalog())) return;
       const result = computeSaju(toBirthInput(targetForm));
       let interpreted = interpretSaju(result, targetCategory, targetRelationshipStatus ?? undefined);
+      if (isEnglish) interpreted = localizeEnglishContent(interpreted);
       const birthKey = buildBirthKey({
         year: result.input.year,
         month: result.input.month,
@@ -186,7 +234,7 @@ export default function SajuFlow() {
         minute: result.input.minute,
         calendarType: result.input.calendarType,
       });
-      interpreted = applyToneStyle(interpreted, toneStyle, birthKey, targetCategory);
+      if (!isEnglish) interpreted = applyToneStyle(interpreted, toneStyle, birthKey, targetCategory);
       setSaju(result);
       setInterpretation(interpreted);
       setErrorMessage(null);
@@ -204,13 +252,15 @@ export default function SajuFlow() {
     }
   }
 
-  function handleSubmitPartnerForm(nextPartnerForm: BirthFormState) {
+  async function handleSubmitPartnerForm(nextPartnerForm: BirthFormState) {
     setPartnerForm(nextPartnerForm);
     setErrorMessage(null);
     try {
+      if (!(await ensureEnglishCatalog())) return;
       const resultA = computeSaju(toBirthInput(form));
       const resultB = computeSaju(toBirthInput(nextPartnerForm));
-      const compat = computeCompatibility(resultA, resultB);
+      const calculatedCompat = computeCompatibility(resultA, resultB);
+      const compat = isEnglish ? localizeEnglishContent(calculatedCompat) : calculatedCompat;
       setSaju(resultA);
       setSajuB(resultB);
       setCompatResult(compat);
@@ -237,14 +287,17 @@ export default function SajuFlow() {
     const isSupportedRangeMessage = message.startsWith("현재 서비스는") || message.includes("음력 날짜에 대한 검증된");
     setErrorMessage(
       isSupportedRangeMessage
-        ? message
-        : "이 생년월일시는 아직 정확히 계산할 수 없어요. 날짜나 시간을 조금 조정해서 다시 시도해 주세요."
+        ? isEnglish ? localizeEnglishText(message) : message
+        : isEnglish
+          ? "We can't calculate this birth date and time accurately yet. Please check the date and time and try again."
+          : "이 생년월일시는 아직 정확히 계산할 수 없어요. 날짜나 시간을 조금 조정해서 다시 시도해 주세요."
     );
   }
 
   /** "오늘의 운세" 빠른 진입 — 저장된 정보로 말투/카테고리/생년월일 입력을 전부 건너뛴다. */
-  function handleQuickDaily() {
+  async function handleQuickDaily() {
     try {
+      if (!(await ensureEnglishCatalog())) return;
       const result = computeSaju(toBirthInput(form));
       setSaju(result);
       setErrorMessage(null);
@@ -258,7 +311,7 @@ export default function SajuFlow() {
       }
     } catch (err) {
       console.error("오늘의 운세 계산 실패:", err);
-      setErrorMessage("저장된 정보로 계산할 수 없어요. 정보를 다시 입력해 주세요.");
+      setErrorMessage(isEnglish ? "We couldn't use the saved birth details. Please enter them again." : "저장된 정보로 계산할 수 없어요. 정보를 다시 입력해 주세요.");
       setScreen("s3");
     }
   }
@@ -289,18 +342,31 @@ export default function SajuFlow() {
     setScreen("s2");
   }
 
+  function retryEnglishCatalog() {
+    setErrorMessage(null);
+    setEnglishCatalogState("loading");
+    void loadEnglishContent().then(
+      () => setEnglishCatalogState("ready"),
+      (error) => {
+        console.error("English reading catalogue failed to load:", error);
+        setEnglishCatalogState("error");
+        setErrorMessage("We couldn't load the English reading content. Please check your connection and try again.");
+      },
+    );
+  }
+
   const FALLBACK_INTRO: Record<Category, string> = {
-    love: "연애 이야기를 해볼까요? 먼저 당신의 사주를 살펴볼게요.",
-    career: "일과 관련된 이야기를 시작하기 전에, 당신의 타고난 기질부터 살펴볼게요.",
-    wealth: "돈의 흐름이 궁금하신가요? 먼저 당신의 사주부터 살펴볼게요.",
-    reunion: "다시 이어질 인연인지 궁금하시죠? 사주에 담긴 흐름을 살펴볼게요.",
-    overall: "당신의 인생 전체를 관통하는 흐름을 살펴볼게요.",
+    love: t(locale, "연애 이야기를 해볼까요? 먼저 당신의 사주를 살펴볼게요."),
+    career: t(locale, "일과 관련된 이야기를 시작하기 전에, 당신의 타고난 기질부터 살펴볼게요."),
+    wealth: t(locale, "돈의 흐름이 궁금하신가요? 먼저 당신의 사주부터 살펴볼게요."),
+    reunion: t(locale, "다시 이어질 인연인지 궁금하시죠? 사주에 담긴 흐름을 살펴볼게요."),
+    overall: t(locale, "당신의 인생 전체를 관통하는 흐름을 살펴볼게요."),
   };
   const introText =
     flowMode === "compatibility"
-      ? "먼저 당신의 정보를 입력해주세요. 다음 화면에서 상대방 정보를 입력받아요."
+      ? t(locale, "먼저 당신의 정보를 입력해주세요. 다음 화면에서 상대방 정보를 입력받아요.")
       : category && saju
-        ? introFor(category, saju)
+        ? (isEnglish ? localizeEnglishText(introFor(category, saju)) : introFor(category, saju))
         : category
           ? FALLBACK_INTRO[category]
           : "";
@@ -308,9 +374,14 @@ export default function SajuFlow() {
   return (
     <>
       {errorMessage && (
-        <div className="mx-6 mt-4 rounded-lg bg-red-500/20 px-4 py-3 text-sm text-red-200">
+          <div className="mx-6 mt-4 rounded-lg bg-red-500/20 px-4 py-3 text-sm text-red-200">
           {errorMessage}
         </div>
+      )}
+      {isEnglish && englishCatalogState === "error" && (
+        <button onClick={retryEnglishCatalog} className="mx-6 rounded-lg border border-white/15 px-4 py-2 text-sm text-white/70">
+          Retry loading English content
+        </button>
       )}
 
       {screen === "s1" && (
@@ -341,7 +412,7 @@ export default function SajuFlow() {
       )}
       {screen === "compat-partner" && (
         <BirthInfoForm
-          introText="이번엔 상대방 정보를 입력해주세요."
+          introText={t(locale, "이번엔 상대방 정보를 입력해주세요.")}
           initial={partnerForm}
           onSubmit={handleSubmitPartnerForm}
           onBack={() => setScreen("s2")}
@@ -358,7 +429,7 @@ export default function SajuFlow() {
         <ResultScreen
           name={form.name}
           category={interpretation.category}
-          toneStyle={toneStyle}
+          toneStyle={isEnglish ? "standard" : toneStyle}
           saju={saju}
           sections={interpretation.sections}
           monthRhythm={interpretation.monthRhythm}
@@ -416,7 +487,7 @@ export default function SajuFlow() {
       )}
       {screen === "daily-result" && saju && (
         <DailyFortuneScreen
-          displayName={form.name.trim() || "당신"}
+          displayName={form.name.trim() || (isEnglish ? "You" : "당신")}
           saju={saju}
           onSeeFullResult={handleSeeFullResult}
           onResetPerson={handleResetPerson}

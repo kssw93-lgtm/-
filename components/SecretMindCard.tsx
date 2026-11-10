@@ -1,5 +1,7 @@
 "use client";
 
+import { useSiteLocale } from "@/lib/i18n/site-locale";
+
 interface Props {
   partnerLabel: string;
   teaser: string;
@@ -17,14 +19,15 @@ interface Props {
  * 지키기 위해 잠금 없이 바로 연다.
  */
 export default function SecretMindCard({ partnerLabel, teaser }: Props) {
+  const isEnglish = useSiteLocale() === "en";
   return (
     <div className="rounded-2xl border border-[color:var(--color-gold)]/40 bg-gradient-to-b from-[color:var(--color-gold)]/10 to-transparent p-6">
       <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
-        🔮 {partnerLabel}의 속마음, 살짝 엿보면
+        🔮 {isEnglish ? `A glimpse into ${partnerLabel}'s perspective` : `${partnerLabel}의 속마음, 살짝 엿보면`}
       </p>
       <p className="text-base leading-relaxed">{teaser}</p>
       <p className="mt-3 text-xs text-white/40">
-        {partnerLabel}의 사주로 계산된 십신 관계를 재미있게 풀어본 내용이에요. 가볍게 즐겨주세요 :)
+        {isEnglish ? "A lighthearted interpretation of the Ten Gods relationship calculated from your partner's chart. For entertainment." : `${partnerLabel}의 사주로 계산된 십신 관계를 재미있게 풀어본 내용이에요. 가볍게 즐겨주세요 :)`}
       </p>
     </div>
   );

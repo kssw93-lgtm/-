@@ -76,7 +76,7 @@ export default function WhatIsSajuPage() {
         <div className="mt-8 rounded-2xl border border-[color:var(--color-gold)]/20 bg-[color:var(--color-gold)]/[0.05] p-4">
           <h2 className="text-base font-bold">Explore your chart</h2>
           <p className="mt-1 text-xs leading-5 text-white/50">See the Four Pillars, Day Master, and visible Five Elements in the free English calculator.</p>
-          <Link href="/en#calculator" className="mt-3 inline-flex rounded-full bg-[color:var(--color-gold)] px-4 py-2.5 text-xs font-bold text-[#241a08] hover:brightness-110">Open the Saju calculator →</Link>
+          <Link href="/en" className="mt-3 inline-flex rounded-full bg-[color:var(--color-gold)] px-4 py-2.5 text-xs font-bold text-[#241a08] hover:brightness-110">Start a Saju reading →</Link>
         </div>
       </article>
     </main>

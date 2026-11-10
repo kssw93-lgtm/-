@@ -5,6 +5,9 @@ import SideRailAds from "./SideRailAds";
 import FreeAdsNotice from "./FreeAdsNotice";
 import { computeDailyFortune, computeLuckColor, getStarSignForSaju, getZodiacAnimalForSaju } from "@/lib/interpretation";
 import type { SajuResult } from "@/lib/calc/types";
+import { localizeEnglishContent } from "@/lib/i18n/english-content";
+import { useSiteLocale } from "@/lib/i18n/site-locale";
+import { t } from "@/lib/i18n/messages";
 
 interface Props {
   displayName: string;
@@ -21,15 +24,17 @@ interface Props {
  * 매일 확인할 이유가 없다는 피드백을 반영했다.
  */
 export default function DailyFortuneScreen({ displayName, saju, onSeeFullResult, onResetPerson }: Props) {
-  const dailyFortune = computeDailyFortune(saju);
-  const starSign = getStarSignForSaju(saju);
-  const zodiacAnimal = getZodiacAnimalForSaju(saju);
-  const luckColor = computeLuckColor(saju);
+  const locale = useSiteLocale();
+  const isEnglish = locale === "en";
+  const dailyFortune = isEnglish ? localizeEnglishContent(computeDailyFortune(saju)) : computeDailyFortune(saju);
+  const starSign = isEnglish ? localizeEnglishContent(getStarSignForSaju(saju)) : getStarSignForSaju(saju);
+  const zodiacAnimal = isEnglish ? localizeEnglishContent(getZodiacAnimalForSaju(saju)) : getZodiacAnimalForSaju(saju);
+  const luckColor = isEnglish ? localizeEnglishContent(computeLuckColor(saju)) : computeLuckColor(saju);
 
   return (
     <div className="flex flex-1 flex-col gap-6 px-6 py-8">
       <div className="text-center">
-        <h1 className="text-2xl font-bold">{displayName}님의 오늘의 운세</h1>
+        <h1 className="text-2xl font-bold">{isEnglish ? `${displayName}'s ${t(locale, "오늘의 운세")}` : `${displayName}님의 오늘의 운세`}</h1>
         <p className="mt-1 text-xs text-white/50">{dailyFortune.dateLabel}</p>
       </div>
 
@@ -47,39 +52,39 @@ export default function DailyFortuneScreen({ displayName, saju, onSeeFullResult,
       <div className="rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-b from-[color:var(--color-gold)]/15 to-white/5 p-6 text-center">
         <p className="text-5xl font-black" style={{ color: "#e8cd94" }}>
           {dailyFortune.score}
-          <span className="text-2xl">점</span>
+          <span className="text-2xl">{isEnglish ? "pts" : "점"}</span>
         </p>
         <p className="mt-2 text-lg font-bold">{dailyFortune.label}</p>
         <p className="mt-1 text-sm leading-relaxed text-white/80">{dailyFortune.oneliner}</p>
-        <p className="mt-3 text-xs text-white/40">일진(日辰) {dailyFortune.dayPillarHanja}</p>
+        <p className="mt-3 text-xs text-white/40">{isEnglish ? "Daily Pillar" : "일진(日辰)"} {dailyFortune.dayPillarHanja}</p>
       </div>
 
       <div className="rounded-2xl bg-white/10 p-5">
-        <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">오늘의 총평</p>
+        <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "오늘의 총평")}</p>
         <p className="text-sm leading-relaxed text-white/80">{dailyFortune.summary}</p>
       </div>
 
       <div className="flex flex-col gap-3">
         <div className="rounded-xl bg-white/10 p-4">
-          <p className="text-xs text-white/50">💕 오늘의 연애운 · {dailyFortune.loveTag}</p>
+          <p className="text-xs text-white/50">💕 {t(locale, "오늘의 연애운")} · {dailyFortune.loveTag}</p>
           <p className="mt-1 text-sm leading-relaxed text-white/80">{dailyFortune.loveDetail}</p>
         </div>
         <div className="rounded-xl bg-white/10 p-4">
-          <p className="text-xs text-white/50">💰 오늘의 금전운 · {dailyFortune.moneyTag}</p>
+          <p className="text-xs text-white/50">💰 {t(locale, "오늘의 금전운")} · {dailyFortune.moneyTag}</p>
           <p className="mt-1 text-sm leading-relaxed text-white/80">{dailyFortune.moneyDetail}</p>
         </div>
         <div className="rounded-xl bg-white/10 p-4">
-          <p className="text-xs text-white/50">🌿 오늘의 컨디션 관리</p>
+          <p className="text-xs text-white/50">🌿 {t(locale, "오늘의 컨디션 관리")}</p>
           <p className="mt-1 text-sm leading-relaxed text-white/80">{dailyFortune.healthTip}</p>
         </div>
         <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-          <p className="text-xs text-white/50">⚠️ 오늘 이런 점을 조심하세요</p>
+          <p className="text-xs text-white/50">⚠️ {t(locale, "오늘 이런 점을 조심하세요")}</p>
           <p className="mt-1 text-sm leading-relaxed text-white/80">{dailyFortune.caution}</p>
         </div>
       </div>
 
       <div className="rounded-2xl bg-white/10 p-5">
-        <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">오늘의 행운 컬러 &amp; 숫자</p>
+        <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "오늘의 행운 컬러 & 숫자")}</p>
         <div className="flex items-center gap-4">
           <div>
             <p className="text-lg font-bold">{luckColor.color}</p>
@@ -89,7 +94,7 @@ export default function DailyFortuneScreen({ displayName, saju, onSeeFullResult,
         </div>
       </div>
 
-      <AdSlot label="오늘의 운세 화면 디스플레이 광고" spaContent />
+      <AdSlot label={isEnglish ? "Display ad on today's reading" : "오늘의 운세 화면 디스플레이 광고"} spaContent />
       <SideRailAds spaContent />
       <FreeAdsNotice />
 
@@ -98,15 +103,15 @@ export default function DailyFortuneScreen({ displayName, saju, onSeeFullResult,
           onClick={onSeeFullResult}
           className="w-full rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-8 py-4 text-base font-semibold text-[#241a08] transition hover:brightness-110 active:scale-95"
         >
-          연애운·직업운 등 자세히 보기
+          {t(locale, "연애운·직업운 등 자세히 보기")}
         </button>
         <button
           onClick={() => {
-            if (confirm("입력한 생년월일 정보를 지우고 다른 사람 정보로 새로 볼까요?")) onResetPerson();
+            if (confirm(t(locale, "입력한 생년월일 정보를 지우고 다른 사람 정보로 새로 볼까요?"))) onResetPerson();
           }}
           className="text-center text-xs text-white/40 underline-offset-4 transition hover:text-white/70 hover:underline"
         >
-          🔄 다른 사람 정보로 보기
+          🔄 {t(locale, "다른 사람 정보로 보기")}
         </button>
       </div>
     </div>

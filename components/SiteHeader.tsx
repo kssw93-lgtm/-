@@ -8,7 +8,7 @@ export default function SiteHeader() {
   const pathname = usePathname();
   const isEnglish = pathname === "/en" || pathname.startsWith("/en/");
   const languageHref = isEnglish ? "/" : "/en";
-  const languageLabel = isEnglish ? "한국어" : "English";
+  const languageLabel = isEnglish ? "Korean" : "English";
   const compactLanguageLabel = isEnglish ? "KO" : "EN";
 
   return (
@@ -25,7 +25,9 @@ export default function SiteHeader() {
         {isEnglish ? (
           <>
             <Link href="/en/what-is-saju" className="hidden rounded-full px-2.5 py-2 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">What is Saju?</Link>
-            <Link href={languageHref} lang="ko" aria-label="한국어 사이트로 전환" title="한국어 사이트" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-[color:var(--color-gold)]/35 bg-[color:var(--color-gold)]/[0.08] px-3 text-[color:var(--color-gold-light)] transition hover:bg-[color:var(--color-gold)]/15">
+            <Link href="/en/tarot" className="hidden rounded-full px-2.5 py-2 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">Tarot</Link>
+            <Link href="/en/about" className="hidden rounded-full px-2.5 py-2 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">About</Link>
+            <Link href={languageHref} lang="ko" aria-label="Switch to Korean" title="Korean version" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-[color:var(--color-gold)]/35 bg-[color:var(--color-gold)]/[0.08] px-3 text-[color:var(--color-gold-light)] transition hover:bg-[color:var(--color-gold)]/15">
               <span className="sm:hidden">{compactLanguageLabel}</span>
               <span className="hidden sm:inline">{languageLabel}</span>
             </Link>

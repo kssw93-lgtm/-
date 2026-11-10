@@ -69,6 +69,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko" className={`${serif.variable} ${sans.variable}`}>
       <head>
         <JsonLd data={websiteJsonLd()} />
+        <Script id="site-document-language" strategy="beforeInteractive">
+          {`if (window.location.pathname === "/en" || window.location.pathname.startsWith("/en/")) document.documentElement.lang = "en";`}
+        </Script>
 
         {/*
           네이버 웹로그분석. 원본 스니펫은 <script src="wcslog.js">와 wcs_do() 호출 스크립트를
@@ -93,7 +96,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>}
       </head>
       <body className="min-h-screen">
-        <div className="mx-auto flex min-h-screen w-full max-w-md flex-col">
+        <div className="site-shell mx-auto flex min-h-screen w-full max-w-md flex-col">
           <AdSenseTag />
           <SideRailAds />
           <SiteHeader />

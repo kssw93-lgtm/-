@@ -1,5 +1,8 @@
 "use client";
 
+import { useSiteLocale } from "@/lib/i18n/site-locale";
+import { t } from "@/lib/i18n/messages";
+
 export type ReliabilityTier = "core" | "interpretive" | "fun";
 
 const TIER_META: Record<ReliabilityTier, { emoji: string; label: string; color: string }> = {
@@ -15,13 +18,14 @@ const TIER_META: Record<ReliabilityTier, { emoji: string; label: string; color: 
  * 사용자가 어디까지 진지하게 볼지 스스로 판단할 수 있게 한다.
  */
 export default function ReliabilityBadge({ tier }: { tier: ReliabilityTier }) {
+  const locale = useSiteLocale();
   const meta = TIER_META[tier];
   return (
     <span
       className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
       style={{ backgroundColor: `${meta.color}22`, color: meta.color }}
     >
-      {meta.emoji} {meta.label}
+      {meta.emoji} {t(locale, meta.label)}
     </span>
   );
 }
