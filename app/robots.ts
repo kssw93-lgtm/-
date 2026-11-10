@@ -33,6 +33,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: SITEMAP_IDS.map((id) => `${BASE_URL}/sitemap/${id}.xml`),
+    sitemap: [...SITEMAP_IDS.map((id) => `${BASE_URL}/sitemap/${id}.xml`), `${BASE_URL}/en/sitemap.xml`],
   };
 }

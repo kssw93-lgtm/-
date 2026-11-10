@@ -1,7 +1,25 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 /** 서비스 안내와 관련 콘텐츠를 찾기 위한 하단 링크 모음. */
 export default function SiteFooter() {
+  const pathname = usePathname();
+  const isEnglish = pathname === "/en" || pathname.startsWith("/en/");
+
+  if (isEnglish) {
+    return (
+      <footer className="no-print mt-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-white/10 px-6 py-5 text-[11px] text-white/35">
+        <Link href="/en#calculator" className="hover:text-white/70 hover:underline">Free Saju calculator</Link>
+        <Link href="/en/what-is-saju" className="hover:text-white/70 hover:underline">What is Saju?</Link>
+        <Link href="/en/privacy" className="hover:text-white/70 hover:underline">Privacy</Link>
+        <Link href="/" lang="ko" className="hover:text-white/70 hover:underline">한국어 사이트</Link>
+        <span className="w-full text-center text-white/20">© 2026 Saju Dalyeok · Korean Saju</span>
+      </footer>
+    );
+  }
+
   return (
     <footer className="no-print mt-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-white/10 px-6 py-5 text-[11px] text-white/35">
       <Link href="/learn" className="hover:text-white/70 hover:underline">
