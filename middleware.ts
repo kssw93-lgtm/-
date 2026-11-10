@@ -24,7 +24,10 @@ export function middleware(request: NextRequest) {
     url.port = "";
     return NextResponse.redirect(url, 308);
   }
-  return NextResponse.next();
+  const response = NextResponse.next();
+  const pathname = request.nextUrl.pathname;
+  response.headers.set("Content-Language", pathname === "/en" || pathname.startsWith("/en/") ? "en" : "ko");
+  return response;
 }
 
 export const config = {

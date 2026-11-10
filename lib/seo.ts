@@ -37,14 +37,15 @@ export function articleJsonLd(params: {
   path: string;
   datePublished?: string;
   dateModified?: string;
+  inLanguage?: string;
 }) {
-  const { headline, description, path, datePublished = SITE_LAUNCH_DATE, dateModified = SITE_LAUNCH_DATE } = params;
+  const { headline, description, path, datePublished = SITE_LAUNCH_DATE, dateModified = SITE_LAUNCH_DATE, inLanguage = "ko-KR" } = params;
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline,
     description,
-    inLanguage: "ko-KR",
+    inLanguage,
     datePublished,
     dateModified,
     author: { "@type": "Organization", name: SITE_NAME },
@@ -58,10 +59,11 @@ export interface FaqItem {
   answer: string;
 }
 
-export function faqJsonLd(items: FaqItem[]) {
+export function faqJsonLd(items: FaqItem[], inLanguage = "ko-KR") {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    inLanguage,
     mainEntity: items.map((item) => ({
       "@type": "Question",
       name: item.question,
@@ -74,8 +76,9 @@ export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: SITE_NAME,
+    name: "Saju Dalyeok",
+    alternateName: [SITE_NAME],
     url: SITE_URL,
-    inLanguage: "ko-KR",
+    inLanguage: ["ko-KR", "en"],
   };
 }

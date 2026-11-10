@@ -3,11 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { languageSwitchPath } from "@/lib/i18n/locale-routes";
 
 export default function SiteHeader() {
   const pathname = usePathname();
   const isEnglish = pathname === "/en" || pathname.startsWith("/en/");
-  const languageHref = isEnglish ? "/" : "/en";
+  const languageHref = languageSwitchPath(pathname ?? "/");
   const languageLabel = isEnglish ? "Korean" : "English";
   const compactLanguageLabel = isEnglish ? "KO" : "EN";
 
@@ -24,7 +25,7 @@ export default function SiteHeader() {
       <nav aria-label={isEnglish ? "Main navigation" : "주요 메뉴"} className="flex flex-none items-center gap-1.5 text-[11px] font-medium text-white/60">
         {isEnglish ? (
           <>
-            <Link href="/en/what-is-saju" className="hidden rounded-full px-2.5 py-2 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">What is Saju?</Link>
+            <Link href="/en/learn" className="hidden rounded-full px-2.5 py-2 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">Learn Saju</Link>
             <Link href="/en/tarot" className="hidden rounded-full px-2.5 py-2 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">Tarot</Link>
             <Link href="/en/about" className="hidden rounded-full px-2.5 py-2 transition hover:bg-white/[0.06] hover:text-white sm:inline-flex">About</Link>
             <Link href={languageHref} lang="ko" aria-label="Switch to Korean" title="Korean version" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-[color:var(--color-gold)]/35 bg-[color:var(--color-gold)]/[0.08] px-3 text-[color:var(--color-gold-light)] transition hover:bg-[color:var(--color-gold)]/15">

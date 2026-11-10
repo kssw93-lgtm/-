@@ -12,7 +12,10 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "/tarot" },
+  alternates: {
+    canonical: "/tarot",
+    languages: { ko: "https://www.sajudalyeok.co.kr/tarot", en: "https://www.sajudalyeok.co.kr/en/tarot" },
+  },
   openGraph: { images: OG_IMAGES, title: TITLE, description: DESCRIPTION, url: "/tarot" },
 };
 

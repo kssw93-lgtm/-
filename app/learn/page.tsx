@@ -8,7 +8,10 @@ import InFeedAdSlot from "@/components/InFeedAdSlot";
 export const metadata: Metadata = {
   title: "사주 배우기 | 사주달력",
   description: "천간·지지·오행·십신·대운·격국까지, 사주 명리학의 기본 개념을 쉽게 풀어쓴 글 모음이에요.",
-  alternates: { canonical: "/learn" },
+  alternates: {
+    canonical: "/learn",
+    languages: { ko: "https://www.sajudalyeok.co.kr/learn", en: "https://www.sajudalyeok.co.kr/en/learn" },
+  },
   openGraph: {
     images: OG_IMAGES,
     title: "사주 배우기 | 사주달력",

@@ -1,22 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { englishPageMetadata } from "@/lib/i18n/english-metadata";
 
-export const metadata: Metadata = {
+export const metadata = englishPageMetadata({
   title: "What Is Korean Saju? A Guide to the Four Pillars",
-  description:
-    "Learn what Korean Saju means, how the Four Pillars and Five Elements are arranged, and what a Day Master represents in a birth chart.",
-  alternates: {
-    canonical: "/en/what-is-saju",
-  },
-  openGraph: {
-    title: "What Is Korean Saju? A Guide to the Four Pillars",
-    description: "A practical introduction to the pillars, stems, branches, and Five Elements in a Korean Saju chart.",
-    url: "https://www.sajudalyeok.co.kr/en/what-is-saju",
-    siteName: "Saju Dalyeok",
-    locale: "en_US",
-    type: "article",
-  },
-};
+  description: "Learn what Korean Saju means, how the Four Pillars and Five Elements are arranged, and what a Day Master represents in a birth chart.",
+  path: "/en/what-is-saju",
+  koreanPath: "/learn/saju-basics",
+  type: "article",
+});
 
 const TERMS = [
   ["Four Pillars", "The year, month, day, and hour of birth. Each pillar is made of one Heavenly Stem and one Earthly Branch."],
@@ -67,7 +58,7 @@ export default function WhatIsSajuPage() {
 
         <h2 className="font-brand mt-8 text-xl font-bold">Why birth time and calendar boundaries matter</h2>
         <p className="mt-3 text-sm leading-7 text-white/65">
-          A chart depends on more than the date written on a birth certificate. In Saju, the year and month pillars follow solar-term boundaries; the year pillar commonly changes at Ipchun, or the Beginning of Spring. Historical time-zone and daylight-saving changes can also affect the recorded local time. For that reason, a calculator needs a clear calendar and time-zone convention.
+          A chart depends on more than the date written on a birth certificate. In Saju, the year and month pillars follow solar-term boundaries; the year pillar commonly changes at Ipchun, or the Beginning of Spring. Historical time-zone and daylight-saving changes can also affect the recorded local time. Saju Dalyeok lets you select the time zone where you were born, applies that region's historical clock rules, and converts the birth moment to Korea Standard Time for the chart. It does not adjust for local solar time based on longitude.
         </p>
         <p className="mt-3 text-sm leading-7 text-white/65">
           Saju is a cultural and interpretive practice rather than a scientifically established way to predict events. Use a reading as a prompt for reflection, not as a substitute for professional advice or your own judgment.

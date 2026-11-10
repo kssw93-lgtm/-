@@ -12,6 +12,7 @@ export default function SiteFooter() {
     return (
       <footer className="no-print mt-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-white/10 px-6 py-5 text-[11px] text-white/35">
         <Link href="/en" className="hover:text-white/70 hover:underline">Free Saju readings</Link>
+        <Link href="/en/learn" className="hover:text-white/70 hover:underline">Learn Saju</Link>
         <Link href="/en/what-is-saju" className="hover:text-white/70 hover:underline">What is Saju?</Link>
         <Link href="/en/tarot" className="hover:text-white/70 hover:underline">Three-card Tarot</Link>
         <Link href="/en/about" className="hover:text-white/70 hover:underline">About</Link>

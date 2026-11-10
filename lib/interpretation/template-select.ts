@@ -85,8 +85,10 @@ export function buildBirthKey(input: {
   hour: number | null;
   minute: number;
   calendarType: string;
+  timeZone?: string;
 }): string {
-  return `${input.year}-${input.month}-${input.day}-${input.hour ?? "unknown"}-${input.minute}-${input.calendarType}`;
+  const base = `${input.year}-${input.month}-${input.day}-${input.hour ?? "unknown"}-${input.minute}-${input.calendarType}`;
+  return input.timeZone && input.timeZone !== "Asia/Seoul" ? `${base}-${input.timeZone}` : base;
 }
 
 export function selectTemplate(

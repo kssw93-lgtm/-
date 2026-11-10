@@ -56,6 +56,7 @@ function toBirthInput(form: BirthFormState): BirthInput {
     gender: form.gender,
     calendarType: form.calendarType,
     isLeapMonth: form.calendarType === "lunar" ? form.isLeapMonth : false,
+    timeZone: form.timeZone ?? "Asia/Seoul",
   };
 }
 
@@ -233,6 +234,7 @@ export default function SajuFlow() {
         hour: result.input.hour,
         minute: result.input.minute,
         calendarType: result.input.calendarType,
+        timeZone: result.input.timeZone ?? "Asia/Seoul",
       });
       if (!isEnglish) interpreted = applyToneStyle(interpreted, toneStyle, birthKey, targetCategory);
       setSaju(result);
@@ -285,9 +287,14 @@ export default function SajuFlow() {
     console.error("사주 계산 실패:", err);
     const message = err instanceof Error ? err.message : "";
     const isSupportedRangeMessage = message.startsWith("현재 서비스는") || message.includes("음력 날짜에 대한 검증된");
+    const isTimeZoneMessage = message.startsWith("Choose a valid time zone") || message.startsWith("That local time did not occur");
     setErrorMessage(
       isSupportedRangeMessage
         ? isEnglish ? localizeEnglishText(message) : message
+        : isTimeZoneMessage
+          ? isEnglish ? message : message.startsWith("Choose a valid time zone")
+            ? "출생지가 있는 지역의 시간대를 선택해 주세요."
+            : "해당 지역에서 시계가 바뀌는 날에는 입력한 시각이 존재하지 않을 수 있어요. 출생 기록 시각을 확인해 주세요."
         : isEnglish
           ? "We can't calculate this birth date and time accurately yet. Please check the date and time and try again."
           : "이 생년월일시는 아직 정확히 계산할 수 없어요. 날짜나 시간을 조금 조정해서 다시 시도해 주세요."
