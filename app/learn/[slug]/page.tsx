@@ -8,6 +8,7 @@ import AdSlot from "@/components/AdSlot";
 import InArticleAdSlot from "@/components/InArticleAdSlot";
 import JsonLd from "@/components/JsonLd";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { getEnglishGuidePathForKoreanArticle } from "@/lib/i18n/english-guides";
 
 export function generateStaticParams() {
   return ARTICLES.map((a) => ({ slug: a.slug }));
@@ -26,10 +27,21 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   if (!article) return {};
   const title = `${article.title} | 사주 배우기 | 사주달력`;
   const path = `/learn/${article.slug}`;
+  const englishGuideSlug = getEnglishGuidePathForKoreanArticle(article.slug);
+  const englishPath = article.slug === "saju-basics"
+    ? "/en/what-is-saju"
+    : englishGuideSlug
+      ? `/en/learn/${englishGuideSlug}`
+      : undefined;
   return {
     title,
     description: article.summary,
-    alternates: { canonical: path },
+    alternates: {
+      canonical: path,
+      ...(englishPath
+        ? { languages: { ko: `https://www.sajudalyeok.co.kr${path}`, en: `https://www.sajudalyeok.co.kr${englishPath}` } }
+        : {}),
+    },
     openGraph: { images: OG_IMAGES, title, description: article.summary, url: path },
   };
 }

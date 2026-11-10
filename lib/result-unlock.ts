@@ -95,7 +95,7 @@ export function markResultUnlocked(key: string): void {
  * 뿐이라 키에 포함하지 않는다 — 말투만 바꿔도 광고를 또 보게 하지 않기 위함.
  */
 function birthFormKeyPart(form: BirthFormState) {
-  return {
+  const keyPart = {
     name: form.name.trim(),
     birthDate: form.birthDate,
     calendarType: form.calendarType,
@@ -105,6 +105,9 @@ function birthFormKeyPart(form: BirthFormState) {
     minute: form.timeUnknown ? null : form.minute,
     gender: form.gender,
   };
+  return form.timeZone && form.timeZone !== "Asia/Seoul"
+    ? { ...keyPart, timeZone: form.timeZone }
+    : keyPart;
 }
 
 export function buildSoloResultKey(

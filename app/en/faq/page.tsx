@@ -1,11 +1,14 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
+import { englishPageMetadata } from "@/lib/i18n/english-metadata";
+import { breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = englishPageMetadata({
   title: "Frequently Asked Questions | Saju Dalyeok",
   description: "Answers about Saju chart calculations, birth times, privacy, advertising, Tarot, and compatibility.",
-  alternates: { canonical: "/en/faq" },
-};
+  path: "/en/faq",
+  koreanPath: "/faq",
+});
 
 const FAQS = [
   { question: "Can I get a Saju reading for free?", answer: "Yes. Saju Dalyeok calculates your Four Pillars chart and provides readings at no charge. Display ads may appear on result or content pages. If a rewarded-ad unit is enabled, you may be asked to watch an ad before opening a new reading. If an ad cannot be served, the reading can still open." },
@@ -15,13 +18,15 @@ const FAQS = [
   { question: "Can I use Saju and Tarot on the same site?", answer: "Yes. In addition to Saju readings, Saju Dalyeok offers three-card Tarot readings for topics including love, compatibility, exams, career, and money. The readings use traditional card symbolism for reflection and entertainment." },
   { question: "Can I check compatibility with birth details?", answer: "Yes. Enter both people's birth details for a Saju compatibility reading. Each chart is calculated separately before the two are compared." },
   { question: "Does Saju Dalyeok save my information?", answer: "There is no account and birth details are not sent to a Saju calculation server. Your own birth details may be saved in this browser's local storage so you do not have to re-enter them. Use “Read for someone else” or the deletion button on the Privacy page to remove them." },
-  { question: "Does the English calculator account for my local time zone?", answer: "The English reading applies Korean calendar conventions and Korea Standard Time (KST). It does not ask for a birthplace or automatically adjust for other time zones, so a birth time recorded outside South Korea may not match the convention used by the calculation." },
+  { question: "Does the English calculator account for my local time zone?", answer: "Yes. Choose the time zone where the birth time was recorded. The calculator applies that region's historical time-zone and daylight-saving rules, then converts the birth moment to Korea Standard Time for the chart. It does not adjust for local solar time based on longitude. If clocks repeated the entered time during an autumn time change, the earlier occurrence is used. If the birth time is unknown, local noon is used only to place the date and the Hour Pillar is omitted." },
   { question: "Is a Saju reading a guaranteed prediction?", answer: "No. Saju is a traditional interpretive practice, not a scientifically established way to predict events. Use readings as a prompt for reflection, not as a substitute for your judgment or professional advice." },
 ];
 
 export default function EnglishFaqPage() {
   return (
     <main className="flex flex-1 flex-col gap-6 px-5 py-8 sm:px-6">
+      <JsonLd data={faqJsonLd(FAQS, "en")} />
+      <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/en" }, { name: "FAQ", path: "/en/faq" }])} />
       <header className="text-center">
         <p className="text-[10px] font-semibold tracking-[0.16em] text-[color:var(--color-gold-light)]/75">HELP</p>
         <h1 className="font-brand mt-3 text-2xl font-bold text-[color:var(--color-gold-light)]">Frequently asked questions</h1>

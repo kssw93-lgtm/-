@@ -31,6 +31,8 @@ export interface BirthInput {
   gender: Gender;
   calendarType: CalendarType;
   isLeapMonth: boolean;
+  /** IANA zone for the recorded birth date/time. Omit or use Asia/Seoul for legacy KST input. */
+  timeZone?: string;
 }
 
 export interface NormalizedBirth {

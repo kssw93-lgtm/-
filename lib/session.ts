@@ -11,6 +11,8 @@ export interface BirthFormState {
   hour: number;
   minute: number;
   gender: "male" | "female";
+  /** IANA zone for the place where this birth time was recorded. */
+  timeZone?: string;
 }
 
 export const DEFAULT_BIRTH_FORM: BirthFormState = {
@@ -22,6 +24,7 @@ export const DEFAULT_BIRTH_FORM: BirthFormState = {
   hour: 12,
   minute: 0,
   gender: "female",
+  timeZone: "Asia/Seoul",
 };
 
 export type Screen =
@@ -49,7 +52,11 @@ export function loadBirthForm(): BirthFormState | null {
         typeof value.timeUnknown !== "boolean" || typeof value.isLeapMonth !== "boolean" ||
         !Number.isInteger(value.hour) || value.hour < 0 || value.hour > 23 ||
         !Number.isInteger(value.minute) || value.minute < 0 || value.minute > 59) return null;
-    return value as BirthFormState;
+    const timeZone = typeof value.timeZone === "string" ? value.timeZone : undefined;
+    if (timeZone) {
+      try { new Intl.DateTimeFormat("en", { timeZone }); } catch { return null; }
+    }
+    return { ...DEFAULT_BIRTH_FORM, ...value, timeZone } as BirthFormState;
   } catch {
     return null;
   }

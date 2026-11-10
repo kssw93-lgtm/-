@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import ClearSavedData from "@/components/ClearSavedData";
+import { englishPageMetadata } from "@/lib/i18n/english-metadata";
 
-export const metadata: Metadata = {
+export const metadata = englishPageMetadata({
   title: "Privacy | Saju Dalyeok",
   description: "How Saju Dalyeok handles birth details, browser storage, advertising, and visit statistics.",
-  alternates: { canonical: "/en/privacy" },
-};
+  path: "/en/privacy",
+  koreanPath: "/privacy",
+});
 
 export default function EnglishPrivacyPage() {
   return (
@@ -18,13 +19,13 @@ export default function EnglishPrivacyPage() {
 
         <section className="mt-6 space-y-2">
           <h2 className="text-base font-bold">1. Birth details and reading results</h2>
-          <p className="text-sm leading-6 text-white/60">Saju Dalyeok is a web service that does not require an account. Your optional name, date of birth, solar or lunar calendar choice, leap-month selection, birth time (or unknown-time choice), and gender are used for calculations in your browser. These details are not sent to a calculation server or stored in an account. A partner's details and relationship status are used for the current compatibility reading.</p>
+          <p className="text-sm leading-6 text-white/60">Saju Dalyeok is a web service that does not require an account. Your optional name, date of birth, solar or lunar calendar choice, leap-month selection, birth time (or unknown-time choice), selected birth time zone, and gender are used for calculations in your browser. These details are not sent to a calculation server or stored in an account. A partner's details and relationship status are used for the current compatibility reading.</p>
           <p className="text-sm leading-6 text-white/60">If you save or share a result image, it may include the name and reading shown in that image. Review it before sharing and do not share another person's information without permission.</p>
         </section>
 
         <section className="mt-5 space-y-2">
           <h2 className="text-base font-bold">2. Browser storage and deletion</h2>
-          <p className="text-sm leading-6 text-white/60">Your birth details are kept in this browser's local storage so you do not have to enter them again on a later visit. They do not have an automatic expiration and may remain until you delete them or your browser clears this site's data. Your selected reading style is kept in session storage; how long it remains depends on your browser's tab and session behavior. If browser storage is blocked, the details may not be restored on a later visit.</p>
+          <p className="text-sm leading-6 text-white/60">Your birth details, including the selected time zone, are kept in this browser's local storage so you do not have to enter them again on a later visit. They do not have an automatic expiration and may remain until you delete them or your browser clears this site's data. Your selected reading style is kept in session storage; how long it remains depends on your browser's tab and session behavior. If browser storage is blocked, the details may not be restored on a later visit.</p>
           <p className="text-sm leading-6 text-white/60">Choose “Read for someone else” in a result to clear the saved birth details. The button below removes the birth details and reading-style values used by this site. Downloaded images, data stored on another device, and advertising cookies must be removed separately.</p>
           <ClearSavedData />
         </section>

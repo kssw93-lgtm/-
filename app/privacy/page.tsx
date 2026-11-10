@@ -5,23 +5,26 @@ import ClearSavedData from "@/components/ClearSavedData";
 export const metadata: Metadata = {
   title: "개인정보처리방침 | 사주달력",
   description: "사주 입력값의 브라우저 저장, 광고·방문 통계의 데이터 처리, 저장 정보 삭제 방법을 안내해요.",
-  alternates: { canonical: "/privacy" },
+  alternates: {
+    canonical: "/privacy",
+    languages: { ko: "https://www.sajudalyeok.co.kr/privacy", en: "https://www.sajudalyeok.co.kr/en/privacy" },
+  },
 };
 
 export default function PrivacyPage() {
   return (
     <main className="flex flex-1 flex-col gap-6 px-6 py-8">
       <h1 className="font-brand text-2xl font-bold text-[color:var(--color-gold-light)]">개인정보처리방침</h1>
-      <p className="text-xs text-white/50">최초 시행: 2026년 8월 22일 · 내용 수정: 2026년 9월 22일</p>
+      <p className="text-xs text-white/50">최초 시행: 2026년 8월 22일 · 내용 수정: 2026년 11월 10일</p>
       <div className="space-y-6 rounded-2xl border border-white/10 bg-white/5 p-5 text-[15px] leading-relaxed text-white/85">
         <section className="space-y-2">
           <h2 className="font-bold">1. 사주 입력과 결과 처리</h2>
-          <p>사주달력은 회원가입 없이 사용하는 웹 서비스예요. 이름(선택), 생년월일, 양력·음력과 윤달 여부, 출생시간 또는 시간 미상, 성별을 브라우저에서 계산에 사용해요. 사주 입력값을 별도 계산 서버에 보내거나 계정에 저장하는 기능은 없어요. 궁합의 상대방 입력과 관계 상태도 현재 화면의 계산에 사용해요.</p>
+          <p>사주달력은 회원가입 없이 사용하는 웹 서비스예요. 이름(선택), 생년월일, 양력·음력과 윤달 여부, 출생시간 또는 시간 미상, 성별, 영어 페이지에서 선택한 출생지 시간대를 브라우저에서 계산에 사용해요. 사주 입력값을 별도 계산 서버에 보내거나 계정에 저장하는 기능은 없어요. 궁합의 상대방 입력과 관계 상태도 현재 화면의 계산에 사용해요.</p>
           <p>결과 이미지를 저장하거나 공유하면 이미지에 표시된 이름과 풀이도 파일에 포함될 수 있어요. 공유 전 내용을 확인하고 다른 사람의 정보를 허락 없이 전달하지 않도록 주의해 주세요.</p>
         </section>
         <section className="space-y-2">
           <h2 className="font-bold">2. 이 브라우저에 남는 정보와 삭제</h2>
-          <p>다음 방문의 재입력을 줄이기 위해 자신의 출생 입력을 로컬 저장소에 보관해요. 자동 만료를 설정하지 않아 직접 삭제하거나 브라우저가 사이트 데이터를 지울 때까지 남을 수 있어요. 선택한 말투는 세션 저장소에 보관하며, 브라우저의 탭·세션 처리 방식에 따라 유지 기간이 달라질 수 있어요. 저장이 차단된 환경에서는 재방문 시 입력이 복원되지 않을 수 있어요.</p>
+          <p>다음 방문의 재입력을 줄이기 위해 자신의 출생 입력과 출생지 시간대 선택값을 로컬 저장소에 보관해요. 자동 만료를 설정하지 않아 직접 삭제하거나 브라우저가 사이트 데이터를 지울 때까지 남을 수 있어요. 선택한 말투는 세션 저장소에 보관하며, 브라우저의 탭·세션 처리 방식에 따라 유지 기간이 달라질 수 있어요. 저장이 차단된 환경에서는 재방문 시 입력이 복원되지 않을 수 있어요.</p>
           <p>결과 화면의 ‘다른 사람 정보로 보기’는 저장된 출생 입력을 지워요. 아래 버튼은 이 사이트가 사용하는 출생 입력과 말투 저장값을 함께 삭제해요. 이미 내려받은 이미지, 다른 기기의 저장값과 광고 쿠키는 별도로 삭제해야 해요.</p>
           <ClearSavedData />
         </section>

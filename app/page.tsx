@@ -7,6 +7,7 @@ export const metadata: Metadata = {
     languages: {
       ko: "https://www.sajudalyeok.co.kr/",
       en: "https://www.sajudalyeok.co.kr/en",
+      "x-default": "https://www.sajudalyeok.co.kr/",
     },
   },
 };

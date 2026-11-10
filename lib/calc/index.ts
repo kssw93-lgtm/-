@@ -1,6 +1,7 @@
 import { validateBirthInput } from "./input-validation";
 import { normalizeToSolarDate, KasiLunarCalendarSource, type LunarCalendarSource } from "./calendar-convert";
 import { normalizeBirthInstant } from "./timezone-normalize";
+import { resolveLocalBirthDateTime, toKstCalendarDate } from "./timezone-convert";
 import { computeYearPillar } from "./year-pillar";
 import { computeMonthPillar } from "./month-pillar";
 import { computeDayPillar } from "./day-pillar";
@@ -43,7 +44,7 @@ export function computeSaju(input: BirthInput, options: ComputeSajuOptions = {})
   const lunarSource = options.lunarSource ?? DEFAULT_LUNAR_SOURCE;
 
   // 1. 양력/음력 → 표준 양력 날짜
-  const solarDate = normalizeToSolarDate(input, lunarSource);
+  let solarDate = normalizeToSolarDate(input, lunarSource);
 
   if (
     solarDate.year < SUPPORTED_BIRTH_YEAR_RANGE.min ||
@@ -55,19 +56,46 @@ export function computeSaju(input: BirthInput, options: ComputeSajuOptions = {})
     );
   }
 
-  // 2. 시간대 정규화 (표준시 이력 82번 반영)
-  const normalized = normalizeBirthInstant({
-    year: solarDate.year,
-    month: solarDate.month,
-    day: solarDate.day,
-    hour: input.hour,
-    minute: input.minute,
-  });
+  // 2. 시간대 정규화. 기존 한국어 흐름은 대한민국 표준시 이력(82번)을 유지하고,
+  // 영어 흐름은 출생지의 IANA 시간대와 당시 DST 규칙을 적용한 뒤 KST 기준으로 계산한다.
+  let normalized: { utcMillis: number | null };
+  let comparisonUtcMillis: number;
+  if (input.timeZone && input.timeZone !== "Asia/Seoul") {
+    // 시간을 모르면 현지 정오를 날짜 정규화의 기준으로 삼는다. 시주는 계속 제외한다.
+    const resolved = resolveLocalBirthDateTime({
+      year: solarDate.year,
+      month: solarDate.month,
+      day: solarDate.day,
+      hour: input.hour ?? 12,
+      minute: input.hour === null ? 0 : input.minute,
+      timeZone: input.timeZone,
+    });
+    solarDate = toKstCalendarDate(resolved.utcMillis);
+    normalized = { utcMillis: input.hour === null ? null : resolved.utcMillis };
+    comparisonUtcMillis = resolved.utcMillis;
+  } else {
+    normalized = normalizeBirthInstant({
+      year: solarDate.year,
+      month: solarDate.month,
+      day: solarDate.day,
+      hour: input.hour,
+      minute: input.minute,
+    });
 
-  // 년/월주 경계 비교용 시각: 시간 미상이면 로컬 정오를 중립값으로 사용(year-pillar.ts 참조)
-  const comparisonUtcMillis =
-    normalized.utcMillis ??
-    Date.UTC(solarDate.year, solarDate.month - 1, solarDate.day, 12, 0) - 9 * 60 * 60 * 1000;
+    // 년/월주 경계 비교용 시각: 시간 미상이면 로컬 정오를 중립값으로 사용(year-pillar.ts 참조)
+    comparisonUtcMillis =
+      normalized.utcMillis ??
+      Date.UTC(solarDate.year, solarDate.month - 1, solarDate.day, 12, 0) - 9 * 60 * 60 * 1000;
+  }
+
+  if (
+    solarDate.year < SUPPORTED_BIRTH_YEAR_RANGE.min ||
+    solarDate.year > SUPPORTED_BIRTH_YEAR_RANGE.max
+  ) {
+    throw new Error(
+      `현재 서비스는 ${SUPPORTED_BIRTH_YEAR_RANGE.min}~${SUPPORTED_BIRTH_YEAR_RANGE.max}년 출생자만 지원합니다.`
+    );
+  }
 
   // 3. 년주
   const { pillar: yearPillar } = computeYearPillar(

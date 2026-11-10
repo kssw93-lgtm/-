@@ -19,7 +19,10 @@ export function generateMetadata({ params }: { params: { topic: string } }): Met
   return {
     title,
     description: topic.description,
-    alternates: { canonical: path },
+    alternates: {
+      canonical: path,
+      languages: { ko: `https://www.sajudalyeok.co.kr${path}`, en: `https://www.sajudalyeok.co.kr/en${path}` },
+    },
     openGraph: { images: OG_IMAGES, title, description: topic.description, url: path },
   };
 }
