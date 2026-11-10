@@ -11,10 +11,13 @@ export default function SiteFooter() {
   if (isEnglish) {
     return (
       <footer className="no-print mt-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-white/10 px-6 py-5 text-[11px] text-white/35">
-        <Link href="/en#calculator" className="hover:text-white/70 hover:underline">Free Saju calculator</Link>
+        <Link href="/en" className="hover:text-white/70 hover:underline">Free Saju readings</Link>
         <Link href="/en/what-is-saju" className="hover:text-white/70 hover:underline">What is Saju?</Link>
+        <Link href="/en/tarot" className="hover:text-white/70 hover:underline">Three-card Tarot</Link>
+        <Link href="/en/about" className="hover:text-white/70 hover:underline">About</Link>
+        <Link href="/en/faq" className="hover:text-white/70 hover:underline">FAQ</Link>
         <Link href="/en/privacy" className="hover:text-white/70 hover:underline">Privacy</Link>
-        <Link href="/" lang="ko" className="hover:text-white/70 hover:underline">한국어 사이트</Link>
+        <Link href="/" lang="ko" className="hover:text-white/70 hover:underline">Korean site</Link>
         <span className="w-full text-center text-white/20">© 2026 Saju Dalyeok · Korean Saju</span>
       </footer>
     );

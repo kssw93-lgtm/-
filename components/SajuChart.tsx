@@ -3,7 +3,10 @@
 import { branchById, stemById } from "@/lib/calc/data";
 import { computeStrengthScore, strengthBand, computeRootednessSummary, type Gyeokguk } from "@/lib/interpretation";
 import twelveStageMeaningJson from "@/data/twelve-stage-meaning.json";
-import type { ElementId, SajuResult, TwelveStageId } from "@/lib/calc/types";
+import type { BranchId, ElementId, SajuResult, TwelveStageId } from "@/lib/calc/types";
+import { localizeEnglishText } from "@/lib/i18n/english-content";
+import { useSiteLocale } from "@/lib/i18n/site-locale";
+import { t } from "@/lib/i18n/messages";
 
 const STAGE_META = twelveStageMeaningJson as Record<TwelveStageId, { name: string; hanja: string; desc: string }>;
 const PILLAR_TO_STAGE_KEY = {
@@ -26,6 +29,17 @@ const BRANCH_LABEL: Record<string, string> = {
   zi: "자", chou: "축", yin: "인", mao: "묘", chen: "진", si: "사",
   wu: "오", wei: "미", shen: "신", you: "유", xu: "술", hai: "해",
 };
+const BRANCH_LABEL_EN: Record<string, string> = {
+  zi: "Rat", chou: "Ox", yin: "Tiger", mao: "Rabbit", chen: "Dragon", si: "Snake",
+  wu: "Horse", wei: "Goat", shen: "Monkey", you: "Rooster", xu: "Dog", hai: "Pig",
+};
+const STEM_LABEL_EN: Record<string, string> = {
+  jia: "Jia", yi: "Yi", bing: "Bing", ding: "Ding", wu: "Wu",
+  ji: "Ji", geng: "Geng", xin: "Xin", ren: "Ren", gui: "Gui",
+};
+const BRANCH_HANJA_LABEL_EN = Object.fromEntries(
+  Object.entries(BRANCH_LABEL_EN).map(([id, label]) => [branchById(id as BranchId).hanja, label]),
+);
 
 function elementCounts(saju: SajuResult): Record<ElementId, number> {
   const counts: Record<ElementId, number> = { wood: 0, fire: 0, earth: 0, metal: 0, water: 0 };
@@ -37,6 +51,8 @@ function elementCounts(saju: SajuResult): Record<ElementId, number> {
 
 /** 실제 계산된 사주 원국을 그대로 보여주는 카드. 해석 텍스트와 달리 전부 결정론적 계산값이다. */
 export default function SajuChart({ saju, gyeokguk }: { saju: SajuResult; gyeokguk: Gyeokguk }) {
+  const locale = useSiteLocale();
+  const isEnglish = locale === "en";
   const counts = elementCounts(saju);
   const maxCount = Math.max(1, ...Object.values(counts));
   const strength = computeStrengthScore(saju);
@@ -50,44 +66,44 @@ export default function SajuChart({ saju, gyeokguk }: { saju: SajuResult; gyeokg
   return (
     <div className="flex flex-col gap-5 rounded-2xl bg-white/5 p-5">
       <div>
-        <p className="mb-2 text-xs font-medium text-white/50">내 사주 원국</p>
+        <p className="mb-2 text-xs font-medium text-white/50">{t(locale, "내 사주 원국")}</p>
         <div className="grid grid-cols-4 gap-2 text-center">
           {(["yearPillar", "monthPillar", "dayPillar", "hourPillar"] as const).map((key) => {
             const pillar = saju.pillars[key];
             return (
               <div key={key} className="rounded-xl bg-white/5 py-3">
-                <p className="text-[11px] text-white/40">{PILLAR_LABEL[key]}</p>
+                <p className="text-[11px] text-white/40">{t(locale, PILLAR_LABEL[key])}</p>
                 {pillar ? (
                   <>
                     <p
                       className="text-xl font-bold"
                       style={{ color: ELEMENT_COLOR[stemById(pillar.stem).element] }}
                     >
-                      {stemById(pillar.stem).hanja}
+                      {isEnglish ? STEM_LABEL_EN[pillar.stem] : stemById(pillar.stem).hanja}
                     </p>
                     <p
                       className="text-xl font-bold"
                       style={{ color: ELEMENT_COLOR[branchById(pillar.branch).element] }}
                     >
-                      {branchById(pillar.branch).hanja}
+                      {isEnglish ? BRANCH_LABEL_EN[pillar.branch] : branchById(pillar.branch).hanja}
                     </p>
                   </>
                 ) : (
-                  <p className="py-2 text-xs text-white/30">모름</p>
+                  <p className="py-2 text-xs text-white/30">{t(locale, "모름")}</p>
                 )}
               </div>
             );
           })}
         </div>
-        <p className="mt-2 text-[10px] text-white/30">십이운성 (일간이 각 자리에서 갖는 기운의 세기)</p>
+        <p className="mt-2 text-[10px] text-white/30">{t(locale, "십이운성 (일간이 각 자리에서 갖는 기운의 세기)")}</p>
         <div className="mt-1 grid grid-cols-4 gap-2 text-center">
           {(["yearPillar", "monthPillar", "dayPillar", "hourPillar"] as const).map((key) => {
             const stageKey = PILLAR_TO_STAGE_KEY[key];
             const entry = saju.twelveStages.find((s) => s.pillar === stageKey);
             const meta = entry ? STAGE_META[entry.stageId] : null;
             return (
-              <p key={key} className="text-[11px] text-white/50" title={meta?.desc}>
-                {meta ? `${meta.name}(${meta.hanja})` : "-"}
+              <p key={key} className="text-[11px] text-white/50" title={isEnglish && meta ? localizeEnglishText(meta.desc) : meta?.desc}>
+                {meta ? (isEnglish ? localizeEnglishText(meta.name) : `${meta.name}(${meta.hanja})`) : "-"}
               </p>
             );
           })}
@@ -95,11 +111,11 @@ export default function SajuChart({ saju, gyeokguk }: { saju: SajuResult; gyeokg
       </div>
 
       <div>
-        <p className="mb-2 text-xs font-medium text-white/50">오행 분포 ({pillarKeys.length * 2}글자 기준)</p>
+        <p className="mb-2 text-xs font-medium text-white/50">{t(locale, "오행 분포")} ({pillarKeys.length * 2} {t(locale, "글자 기준")})</p>
         <div className="flex flex-col gap-1.5">
           {(Object.keys(counts) as ElementId[]).map((el) => (
             <div key={el} className="flex items-center gap-2">
-              <span className="w-4 text-xs text-white/60">{ELEMENT_LABEL[el]}</span>
+              <span className="w-12 text-xs text-white/60">{isEnglish ? ({ wood: "Wood", fire: "Fire", earth: "Earth", metal: "Metal", water: "Water" } as const)[el] : ELEMENT_LABEL[el]}</span>
               <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-white/10">
                 <div
                   className="h-full rounded-full transition-all"
@@ -117,9 +133,9 @@ export default function SajuChart({ saju, gyeokguk }: { saju: SajuResult; gyeokg
 
       <div className="rounded-xl bg-white/5 px-4 py-3">
         <div className="mb-2 flex items-center justify-between">
-          <p className="text-xs text-white/50">일간 강약</p>
+          <p className="text-xs text-white/50">{t(locale, "일간 강약")}</p>
           <p className="text-xs text-white/40">
-            득령 {strength.deukryeong} · 득지 {strength.deukji} · 득세 {strength.deukse} = {strength.total}/98
+            {t(locale, "득령")} {strength.deukryeong} · {t(locale, "득지")} {strength.deukji} · {t(locale, "득세")} {strength.deukse} = {strength.total}/98
           </p>
         </div>
         <div className="relative h-2 w-full rounded-full bg-gradient-to-r from-sky-400 via-emerald-400 to-rose-400">
@@ -129,20 +145,20 @@ export default function SajuChart({ saju, gyeokguk }: { saju: SajuResult; gyeokg
           />
         </div>
         <div className="mt-1 flex justify-between text-[10px] text-white/40">
-          <span>태약</span>
-          <span>신약</span>
-          <span>중화</span>
-          <span>신강</span>
-          <span>태강</span>
+          <span>{t(locale, "태약")}</span>
+          <span>{t(locale, "신약")}</span>
+          <span>{t(locale, "중화")}</span>
+          <span>{t(locale, "신강")}</span>
+          <span>{t(locale, "태강")}</span>
         </div>
-        <p className="mt-1 text-center text-base font-bold">{band.label}</p>
+          <p className="mt-1 text-center text-base font-bold">{isEnglish ? t(locale, band.label) : band.label}</p>
       </div>
 
       <div className="rounded-xl bg-white/5 px-4 py-3">
         <div className="mb-2 flex items-center justify-between">
-          <p className="text-xs text-white/50">통근(通根) — 일간이 뿌리내린 자리</p>
+          <p className="text-xs text-white/50">{t(locale, "통근(通根) — 일간이 뿌리내린 자리")}</p>
           <p className="text-xs text-white/40">
-            {rootedness.rootedCount}/{rootedness.totalCount}곳
+            {rootedness.rootedCount}/{rootedness.totalCount} {isEnglish ? t(locale, "곳") : "곳"}
           </p>
         </div>
         <div className="flex gap-2">
@@ -153,34 +169,34 @@ export default function SajuChart({ saju, gyeokguk }: { saju: SajuResult; gyeokg
                 p.rooted ? "bg-[color:var(--color-gold)]/20 ring-1 ring-[color:var(--color-gold)]/50" : "bg-white/5"
               }`}
             >
-              <p className="text-[10px] text-white/40">{p.pillarLabel}</p>
+              <p className="text-[10px] text-white/40">{t(locale, p.pillarLabel)}</p>
               <p className={`text-sm font-bold ${p.rooted ? "text-[color:var(--color-gold-light)]" : "text-white/30"}`}>
-                {p.branchHanja}
+                {isEnglish ? BRANCH_HANJA_LABEL_EN[p.branchHanja] ?? p.branchHanja : p.branchHanja}
               </p>
             </div>
           ))}
         </div>
-        <p className="mt-2 text-xs leading-relaxed text-white/60">{rootedness.text}</p>
+        <p className="mt-2 text-xs leading-relaxed text-white/60">{isEnglish ? localizeEnglishText(rootedness.text) : rootedness.text}</p>
       </div>
 
       <div className="rounded-xl bg-white/5 px-4 py-3">
         <div className="flex items-center justify-between">
-          <p className="text-xs text-white/50">격국</p>
-          <p className="text-lg font-bold text-[color:var(--color-gold-light)]">{gyeokguk.name}</p>
+          <p className="text-xs text-white/50">{t(locale, "격국")}</p>
+          <p className="text-lg font-bold text-[color:var(--color-gold-light)]">{isEnglish ? localizeEnglishText(gyeokguk.name) : gyeokguk.name}</p>
         </div>
-        <p className="mt-1 text-sm text-white/70">&ldquo;{gyeokguk.subtitle}&rdquo;</p>
+        <p className="mt-1 text-sm text-white/70">&ldquo;{isEnglish ? localizeEnglishText(gyeokguk.subtitle) : gyeokguk.subtitle}&rdquo;</p>
       </div>
 
       <div className="flex items-center justify-between rounded-xl bg-white/5 px-4 py-3 text-sm">
-        <span className="text-white/50">공망</span>
+        <span className="text-white/50">{t(locale, "공망")}</span>
         <span className="font-medium">
-          {saju.voidBranches.map((b) => BRANCH_LABEL[b]).join("")}({saju.voidBranches.map((b) => branchById(b).hanja).join("")})
+          {saju.voidBranches.map((b) => (isEnglish ? BRANCH_LABEL_EN[b] : BRANCH_LABEL[b])).join(" · ")}{!isEnglish && ` (${saju.voidBranches.map((b) => branchById(b).hanja).join("")})`}
         </span>
       </div>
 
       <div>
         <p className="mb-2 text-xs font-medium text-white/50">
-          대운 ({saju.luckDirection === "forward" ? "순행" : "역행"})
+          {t(locale, "대운")} ({t(locale, saju.luckDirection === "forward" ? "순행" : "역행")})
         </p>
         <div className="flex gap-2 overflow-x-auto pb-1">
           {saju.majorLuck.slice(0, 6).map((lp) => {
@@ -192,8 +208,8 @@ export default function SajuChart({ saju, gyeokguk }: { saju: SajuResult; gyeokg
                   isCurrent ? "bg-[color:var(--color-gold)] text-[#241a08]" : "bg-white/5"
                 }`}
               >
-                <span className="text-[10px] opacity-70">{lp.startAgeDisplay}세~</span>
-                <span className="text-base font-bold">{stemById(lp.pillar.stem).hanja}{branchById(lp.pillar.branch).hanja}</span>
+                <span className="text-[10px] opacity-70">{isEnglish ? `${localizeEnglishText(String(lp.startAgeDisplay))}+` : `${lp.startAgeDisplay}세~`}</span>
+                <span className="text-base font-bold">{isEnglish ? `${STEM_LABEL_EN[lp.pillar.stem]} · ${BRANCH_LABEL_EN[lp.pillar.branch]}` : `${stemById(lp.pillar.stem).hanja}${branchById(lp.pillar.branch).hanja}`}</span>
               </div>
             );
           })}

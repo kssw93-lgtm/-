@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRewardedAd } from "@/lib/rewarded-ad";
+import { useSiteLocale } from "@/lib/i18n/site-locale";
+import { t } from "@/lib/i18n/messages";
 import { grantAccessPass, isResultUnlocked, markResultUnlocked, startAdCooldown } from "@/lib/result-unlock";
 
 const AD_UNIT_PATH = process.env.NEXT_PUBLIC_AD_MANAGER_REWARDED_UNIT_PATH;
@@ -32,6 +34,7 @@ interface Props {
  * 이중 안전장치다.
  */
 export default function ResultUnlockGate({ resultKey, onUnlocked, onCancel }: Props) {
+  const isEnglish = useSiteLocale() === "en";
   const [consented, setConsented] = useState(false);
   const [failOpenMessage, setFailOpenMessage] = useState<string | null>(null);
   const ad = useRewardedAd(AD_UNIT_PATH);
@@ -68,7 +71,7 @@ export default function ResultUnlockGate({ resultKey, onUnlocked, onCancel }: Pr
 
     if (ad.status === "unavailable" && !failOpenMessage) {
       startAdCooldown();
-      setFailOpenMessage("현재 광고를 불러올 수 없어 이번 풀이는 바로 보여드릴게요.");
+      setFailOpenMessage(isEnglish ? "The ad is unavailable right now, so we're opening this reading for you." : "현재 광고를 불러올 수 없어 이번 풀이는 바로 보여드릴게요.");
       failOpenTimerRef.current = setTimeout(resolveUnlocked, FAIL_OPEN_DISPLAY_MS);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,20 +108,20 @@ export default function ResultUnlockGate({ resultKey, onUnlocked, onCancel }: Pr
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
         <span className="text-3xl">📺</span>
-        <p className="text-base font-bold text-white/90">광고를 끝까지 봐야 풀이를 확인할 수 있어요</p>
-        <p className="text-xs text-white/40">중간에 닫으신 것 같아요. 다시 시도해 주세요.</p>
+        <p className="text-base font-bold text-white/90">{isEnglish ? "Watch the full ad to unlock your reading" : "광고를 끝까지 봐야 풀이를 확인할 수 있어요"}</p>
+        <p className="text-xs text-white/40">{isEnglish ? "The ad closed before it finished. Please try again." : "중간에 닫으신 것 같아요. 다시 시도해 주세요."}</p>
         <div className="flex w-full max-w-xs flex-col gap-2">
           <button
             onClick={handleRetry}
             className="w-full rounded-full bg-gradient-to-r from-[color:var(--color-gold)] to-[color:var(--color-gold-light)] px-8 py-4 text-base font-bold text-[#241a08] transition hover:brightness-110 active:scale-95"
           >
-            다시 시도
+            {isEnglish ? "Try again" : "다시 시도"}
           </button>
           <button
             onClick={onCancel}
             className="w-full rounded-full bg-white/10 px-6 py-3 text-sm font-medium text-white/70 transition hover:bg-white/20"
           >
-            닫기
+            {t(isEnglish ? "en" : "ko", "닫기")}
           </button>
         </div>
       </div>
@@ -130,20 +133,20 @@ export default function ResultUnlockGate({ resultKey, onUnlocked, onCancel }: Pr
       <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/20 border-t-[color:var(--color-gold)]" />
         <p className="text-sm text-white/60">
-          {ad.status === "showing" ? "광고를 보여드리고 있어요…" : "광고를 준비하고 있어요…"}
+          {isEnglish ? ad.status === "showing" ? "Showing your ad…" : "Preparing your ad…" : ad.status === "showing" ? "광고를 보여드리고 있어요…" : "광고를 준비하고 있어요…"}
         </p>
       </div>
     );
   }
 
-  const buttonLabel = ad.status === "loading" ? "광고 준비 중…" : "광고 시청";
+  const buttonLabel = isEnglish ? ad.status === "loading" ? "Preparing ad…" : "Watch ad" : ad.status === "loading" ? "광고 준비 중…" : "광고 시청";
   const buttonDisabled = ad.status === "loading";
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
       <span className="text-3xl">🔮</span>
-      <p className="text-lg font-bold text-white/90">풀이 보기</p>
-      <p className="text-sm leading-relaxed text-white/60">짧은 광고를 한 번 보면 8시간 동안 모든 풀이를 바로 확인할 수 있어요.</p>
+      <p className="text-lg font-bold text-white/90">{isEnglish ? "Unlock your reading" : "풀이 보기"}</p>
+      <p className="text-sm leading-relaxed text-white/60">{isEnglish ? "Watch one short ad to unlock all readings for 8 hours." : "짧은 광고를 한 번 보면 8시간 동안 모든 풀이를 바로 확인할 수 있어요."}</p>
       <div className="flex w-full max-w-xs flex-col gap-2">
         <button
           onClick={handleWatchAd}
@@ -156,7 +159,7 @@ export default function ResultUnlockGate({ resultKey, onUnlocked, onCancel }: Pr
           onClick={onCancel}
           className="w-full rounded-full bg-white/10 px-6 py-3 text-sm font-medium text-white/70 transition hover:bg-white/20"
         >
-          닫기
+          {isEnglish ? "Close" : "닫기"}
         </button>
       </div>
       {!IS_PRODUCTION && (
@@ -164,7 +167,7 @@ export default function ResultUnlockGate({ resultKey, onUnlocked, onCancel }: Pr
           onClick={resolveUnlocked}
           className="mt-2 rounded-full border border-dashed border-white/20 px-4 py-2 text-[11px] text-white/40 transition hover:border-white/40 hover:text-white/60"
         >
-          🧪 개발용 — 광고 없이 결과 보기
+          {isEnglish ? "🧪 Developer preview — open without an ad" : "🧪 개발용 — 광고 없이 결과 보기"}
         </button>
       )}
     </div>

@@ -27,9 +27,9 @@ export default function PrivacyPage() {
         </section>
         <section className="space-y-2">
           <h2 className="font-bold">3. Google 광고와 제3자 쿠키</h2>
-          <p>사이트에는 Google AdSense 연결과 광고 요청 코드가 있어요. 실제 광고 게재 여부는 Google의 검토·광고 공급·이용 환경에 따라 달라져요. 광고가 게재되는 페이지에서 Google과 광고 파트너는 쿠키를 저장하거나 읽고 웹 비콘 등을 사용해 방문·기기 관련 정보를 수집·이용·공유할 수 있어요. 현재의 광고 코드 존재를 계정 승인 완료나 모든 방문자에 대한 광고 노출을 뜻하는 것으로 보지는 않아요.</p>
+          <p>사이트는 디스플레이 광고용 Google AdSense와 풀이 해제용 Google Ad Manager 보상형 광고를 연동할 수 있어요. 실제 광고 게재 여부는 Google의 검토·광고 공급·이용 환경과 광고 단위 설정에 따라 달라져요. 광고가 게재되는 페이지에서 Google과 광고 파트너는 쿠키를 저장하거나 읽고 웹 비콘 등을 사용해 방문·기기 관련 정보를 수집·이용·공유할 수 있어요. 현재의 광고 코드 존재를 계정 승인 완료나 모든 방문자에 대한 광고 노출을 뜻하는 것으로 보지는 않아요.</p>
           <p><a href="https://policies.google.com/technologies/partner-sites?hl=ko" className="text-[color:var(--color-gold-light)] underline">Google 파트너 사이트에서의 데이터 사용 방식</a>과 <a href="https://policies.google.com/technologies/ads?hl=ko" className="text-[color:var(--color-gold-light)] underline">광고 기술 안내</a>에서 처리 방식을 확인할 수 있어요. <a href="https://myadcenter.google.com/" className="text-[color:var(--color-gold-light)] underline">Google 내 광고 센터</a>에서는 맞춤 광고 설정을 관리할 수 있어요. 맞춤 광고 해제와 모든 쿠키 삭제는 같은 기능이 아니에요.</p>
-          <p>사주 입력·개인 결과·오류 화면에는 광고를 요청하지 않도록 구성해요. 광고 동의 메시지가 제공되는 지역과 환경에서는 해당 메시지의 선택 기능을 이용해 주세요. 브라우저에서도 쿠키를 차단하거나 삭제할 수 있어요.</p>
+          <p>출생 정보 입력·오류 화면에는 디스플레이 광고를 요청하지 않으며, 풀이 결과와 일부 공개 콘텐츠 페이지에는 디스플레이 광고가 표시될 수 있어요. 보상형 광고 단위가 활성화된 경우 새 풀이를 열기 전에 광고 시청을 요청할 수 있고, 광고를 불러오지 못하면 해당 풀이는 계속 확인할 수 있어요. 광고 동의 메시지가 제공되는 지역과 환경에서는 해당 메시지의 선택 기능을 이용해 주세요. 브라우저에서도 쿠키를 차단하거나 삭제할 수 있어요.</p>
         </section>
         <section className="space-y-2">
           <h2 className="font-bold">4. 방문 통계·접속 정보·외부 서비스</h2>

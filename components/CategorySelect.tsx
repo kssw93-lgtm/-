@@ -5,6 +5,8 @@ import FreeAdsNotice from "./FreeAdsNotice";
 import SajuDial from "./SajuDial";
 import { ARTICLES } from "@/lib/content/articles";
 import type { Category } from "@/lib/session";
+import { localizedPath, useSiteLocale } from "@/lib/i18n/site-locale";
+import { t } from "@/lib/i18n/messages";
 
 interface Props {
   onSelect: (category: Category) => void;
@@ -22,6 +24,8 @@ const CATEGORIES: { id: Category; emoji: string; label: string; desc: string; ac
 
 /** S2. 카테고리 선택 화면 (화면 흐름 설계서 03번) */
 export default function CategorySelect({ onSelect, onSelectCompatibility }: Props) {
+  const locale = useSiteLocale();
+  const isEnglish = locale === "en";
   return (
     <div className="relative flex flex-1 flex-col items-center gap-8 overflow-hidden px-6 py-10">
       <div className="pointer-events-none absolute left-1/2 top-0 h-[360px] w-[360px] -translate-x-1/2 -translate-y-1/3 opacity-25">
@@ -30,12 +34,12 @@ export default function CategorySelect({ onSelect, onSelectCompatibility }: Prop
 
       <div className="relative z-10 text-center">
         <span className="rounded-full border border-[color:var(--color-gold)]/40 bg-black/30 px-4 py-1 text-xs tracking-[0.15em] text-[color:var(--color-gold-light)]">
-          運勢 선택
+          {isEnglish ? "CHOOSE A READING" : "運勢 선택"}
         </span>
         <p className="font-brand mt-4 text-2xl font-bold text-[color:var(--color-gold-light)]">
-          어떤 운세가 궁금하세요?
+          {t(locale, "어떤 운세가 궁금하세요?")}
         </p>
-        <p className="mt-2 text-sm text-white/50">하나를 고르면 사주를 기반으로 바로 풀이해드려요</p>
+        <p className="mt-2 text-sm text-white/50">{t(locale, "하나를 고르면 사주를 기반으로 바로 풀이해드려요")}</p>
       </div>
 
       <div className="relative z-10 grid w-full grid-cols-2 gap-3">
@@ -61,8 +65,8 @@ export default function CategorySelect({ onSelect, onSelectCompatibility }: Prop
           >
             {OVERALL_CATEGORY.emoji}
           </span>
-          <span className="text-base font-bold">{OVERALL_CATEGORY.label}</span>
-          <span className="text-xs leading-snug text-white/50">{OVERALL_CATEGORY.desc}</span>
+          <span className="text-base font-bold">{t(locale, OVERALL_CATEGORY.label)}</span>
+          <span className="text-xs leading-snug text-white/50">{t(locale, OVERALL_CATEGORY.desc)}</span>
         </button>
 
         <button
@@ -72,8 +76,8 @@ export default function CategorySelect({ onSelect, onSelectCompatibility }: Prop
           <span className="flex h-14 w-14 items-center justify-center rounded-full border border-[color:var(--color-gold)]/40 bg-black/30 text-2xl">
             💞
           </span>
-          <span className="text-base font-bold">궁합</span>
-          <span className="text-xs leading-snug text-white/50">둘의 사주를 함께 풀어봐요</span>
+          <span className="text-base font-bold">{t(locale, "궁합")}</span>
+          <span className="text-xs leading-snug text-white/50">{isEnglish ? "Explore both birth charts together" : "둘의 사주를 함께 풀어봐요"}</span>
         </button>
 
         {CATEGORIES.map((c) => (
@@ -97,8 +101,8 @@ export default function CategorySelect({ onSelect, onSelectCompatibility }: Prop
             >
               {c.emoji}
             </span>
-            <span className="text-sm font-bold">{c.label}</span>
-            <span className="text-[10.5px] leading-tight text-white/45">{c.desc}</span>
+            <span className="text-sm font-bold">{t(locale, c.label)}</span>
+            <span className="text-[10.5px] leading-tight text-white/45">{t(locale, c.desc)}</span>
           </button>
         ))}
       </div>
@@ -106,45 +110,48 @@ export default function CategorySelect({ onSelect, onSelectCompatibility }: Prop
       {/* 사주 계산 카테고리와 구분되는 별개 기능(타로 3장 뽑기)이라 위 그리드에 섞지 않고,
           전체 폭 배너로 따로 눈에 띄게 둔다. */}
       <Link
-        href="/tarot"
+        href={localizedPath("/tarot", locale)}
         className="relative z-10 flex w-full items-center gap-4 rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-r from-[color:var(--color-gold)]/15 to-white/[0.02] px-5 py-4 transition hover:border-[color:var(--color-gold)]/60"
       >
         <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border border-[color:var(--color-gold)]/40 bg-black/30 text-2xl">
           🔮
         </span>
         <div className="flex-1 text-left">
-          <p className="text-sm font-bold text-white/90">타로카드 보기</p>
+          <p className="text-sm font-bold text-white/90">{t(locale, "타로카드 보기")}</p>
           <p className="mt-0.5 text-xs leading-snug text-white/50">
-            연애·궁합·시험·취업·금전 중 골라서 카드 3장으로 바로 확인해요
+            {isEnglish ? "Choose a topic and draw three Tarot cards." : "연애·궁합·시험·취업·금전 중 골라서 카드 3장으로 바로 확인해요"}
           </p>
         </div>
         <span className="text-white/30">→</span>
       </Link>
 
-      <div className="relative z-10 w-full">
+      {!isEnglish && <div className="relative z-10 w-full">
         <div className="mb-3 flex items-center justify-between">
-          <p className="text-sm font-bold text-white/80">📖 알아두면 더 잘 맞는 사주 상식</p>
-          <Link href="/learn" className="text-[11px] text-[color:var(--color-gold-light)]/70 hover:underline">
-            더보기 →
+          <p className="text-sm font-bold text-white/80">📖 {isEnglish ? "Saju basics" : "알아두면 더 잘 맞는 사주 상식"}</p>
+          <Link href={localizedPath("/learn", locale)} className="text-[11px] text-[color:var(--color-gold-light)]/70 hover:underline">
+            {isEnglish ? "More →" : "더보기 →"}
           </Link>
         </div>
         <div className="flex gap-2.5 overflow-x-auto pb-1">
           {ARTICLES.slice(0, 4).map((a) => (
             <Link
               key={a.slug}
-              href={`/learn/${a.slug}`}
+              href={localizedPath(`/learn/${a.slug}`, locale)}
               className="flex w-[168px] flex-shrink-0 flex-col gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-3 transition hover:border-[color:var(--color-gold)]/50"
             >
-              <p className="text-[13px] font-bold leading-snug text-white/90">{a.title}</p>
-              <p className="line-clamp-2 text-[11px] leading-snug text-white/45">{a.summary}</p>
+              <p className="text-[13px] font-bold leading-snug text-white/90">{isEnglish ? "Saju learning guide" : a.title}</p>
+              <p className="line-clamp-2 text-[11px] leading-snug text-white/45">{isEnglish ? "Learn how to read the symbols and patterns in your chart." : a.summary}</p>
             </Link>
           ))}
         </div>
-      </div>
+      </div>}
+      {isEnglish && <Link href="/en/what-is-saju" className="relative z-10 w-full rounded-2xl border border-white/10 bg-white/[0.035] p-4 text-sm text-white/70 hover:border-[color:var(--color-gold)]/40">
+        📖 Learn how a Saju chart works <span className="ml-1 text-[color:var(--color-gold-light)]">→</span>
+      </Link>}
 
       <div className="relative z-10 mt-auto flex w-full flex-col gap-3">
         <p className="text-center text-[11px] text-white/30">
-          모든 결과는 실제 사주 계산(만세력)을 기반으로 만들어져요
+          {isEnglish ? "All readings are based on a calculated Saju chart." : "모든 결과는 실제 사주 계산(만세력)을 기반으로 만들어져요"}
         </p>
         <FreeAdsNotice />
       </div>

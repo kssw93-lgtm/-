@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import type { CoreSummary, Gyeokguk, LuckColorDisplay } from "@/lib/interpretation";
+import { useSiteLocale } from "@/lib/i18n/site-locale";
+import { t } from "@/lib/i18n/messages";
 
 interface Props {
   displayName: string;
@@ -24,6 +26,8 @@ interface Props {
  * 지키기 위해 잠금 없이 바로 연다.
  */
 export default function TalismanCard({ displayName, luckColor, coreSummary, gyeokguk }: Props) {
+  const locale = useSiteLocale();
+  const isEnglish = locale === "en";
   const cardRef = useRef<HTMLDivElement>(null);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "done">("idle");
 
@@ -34,7 +38,7 @@ export default function TalismanCard({ displayName, luckColor, coreSummary, gyeo
       const { default: html2canvas } = await import("html2canvas");
       const canvas = await html2canvas(cardRef.current, { scale: 2, backgroundColor: null });
       const link = document.createElement("a");
-      link.download = `${displayName || "나"}-개운부적.png`;
+      link.download = `${displayName || (isEnglish ? "you" : "나")}-${isEnglish ? "lucky-charm" : "개운부적"}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
       setSaveState("done");
@@ -80,7 +84,7 @@ export default function TalismanCard({ displayName, luckColor, coreSummary, gyeo
           </div>
 
           <p className="font-brand mt-2 text-[11px] font-black tracking-[0.5em]" style={{ color: "#8f1c14" }}>
-            開運符
+            {isEnglish ? "LUCK CHARM" : "開運符"}
           </p>
 
           <div className="mx-auto mt-4 flex min-h-[190px] items-center justify-center">
@@ -103,23 +107,23 @@ export default function TalismanCard({ displayName, luckColor, coreSummary, gyeo
             className="pointer-events-none absolute bottom-5 right-5 flex h-9 w-9 rotate-[-8deg] items-center justify-center rounded-[2px] text-[10px] font-black text-white"
             style={{ background: "#8f1c14" }}
           >
-            吉運
+            {isEnglish ? "LUCK" : "吉運"}
           </div>
 
           <p className="mt-2 text-[9px] tracking-[0.15em]" style={{ color: "#8f1c14", opacity: 0.6 }}>
-            天機漏泄
+            {isEnglish ? "SAJU DALYEOK" : "天機漏泄"}
           </p>
         </div>
       </div>
 
       <div className="w-full max-w-xs rounded-2xl bg-white/5 p-4 text-center">
         <p className="font-brand text-sm font-bold text-[color:var(--color-gold-light)]">
-          {displayName}님을 위한 개운 부적
+          {isEnglish ? (displayName === "Your" ? "Your lucky charm" : `${displayName}'s lucky charm`) : `${displayName}님을 위한 개운 부적`}
         </p>
         {luckColor && (
           <p className="mt-1 text-sm text-white/80">
-            행운의 컬러 <span className="font-semibold text-[color:var(--color-gold-light)]">{luckColor.color}</span> ·
-            행운의 숫자{" "}
+            {isEnglish ? "Lucky color " : "행운의 컬러 "}<span className="font-semibold text-[color:var(--color-gold-light)]">{luckColor.color}</span> ·
+            {isEnglish ? "Lucky numbers " : "행운의 숫자 "}
             <span className="font-semibold text-[color:var(--color-gold-light)]">{luckColor.numbers.join(", ")}</span>
           </p>
         )}
@@ -131,7 +135,7 @@ export default function TalismanCard({ displayName, luckColor, coreSummary, gyeo
           ))}
         </div>
         <p className="mt-3 text-xs leading-relaxed text-white/40">
-          이 색과 숫자를 오늘 하루 곁에 두어보세요. 재미로 보는 개운 아이템이에요 :)
+          {isEnglish ? "Keep this color and number in mind today. A lighthearted good-luck token for fun." : "이 색과 숫자를 오늘 하루 곁에 두어보세요. 재미로 보는 개운 아이템이에요 :)"}
         </p>
       </div>
 
@@ -140,7 +144,7 @@ export default function TalismanCard({ displayName, luckColor, coreSummary, gyeo
         disabled={saveState === "saving"}
         className="w-full max-w-xs rounded-full border border-[color:var(--color-gold)]/50 px-6 py-3 text-sm font-bold text-[color:var(--color-gold-light)] transition enabled:hover:bg-[color:var(--color-gold)]/10 enabled:active:scale-95 disabled:opacity-60"
       >
-        {saveState === "saving" ? "이미지 만드는 중…" : saveState === "done" ? "저장 완료! 📥" : "🖼 이미지로 저장"}
+        {saveState === "saving" ? (isEnglish ? "Creating image…" : "이미지 만드는 중…") : saveState === "done" ? (isEnglish ? "Saved! 📥" : "저장 완료! 📥") : (isEnglish ? "🖼 Save as image" : "🖼 이미지로 저장")}
       </button>
     </div>
   );

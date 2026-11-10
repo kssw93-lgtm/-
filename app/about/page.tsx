@@ -51,7 +51,7 @@ export default function AboutPage() {
         <p>
           <strong className="text-[color:var(--color-gold-light)]">무료로 운영하는 대신 광고가 포함될 수 있어요.</strong>{" "}
           운영비를 위한 Google 애드센스 연결 코드가 있으며, 실제 게재 여부는 심사와 광고 공급 상태에 따라 달라져요.
-          결과와 부적 카드는 광고 시청이나 클릭 없이 확인할 수 있어요.
+          일부 상세 풀이에는 보상형 광고 단위가 활성화된 경우 광고 시청을 요청할 수 있어요. 광고를 불러오지 못하면 해당 풀이는 계속 확인할 수 있어요.
         </p>
         <p>
           <strong className="text-[color:var(--color-gold-light)]">말투도 골라볼 수 있어요.</strong> 같은 사주 해석이라도 딱딱하게

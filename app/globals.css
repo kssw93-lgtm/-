@@ -92,3 +92,6 @@ body {
     gap: 1rem !important;
   }
 }
+html[lang="en"] .site-shell {
+  max-width: 56rem;
+}

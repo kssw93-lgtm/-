@@ -42,6 +42,8 @@ import {
   type WorkRelationships,
   type LoveDeepDive,
 } from "@/lib/interpretation";
+import { localizedPath, useSiteLocale } from "@/lib/i18n/site-locale";
+import { t } from "@/lib/i18n/messages";
 
 interface Props {
   name: string;
@@ -85,6 +87,17 @@ interface Props {
 }
 
 const CURRENT_MONTH = new Date().getMonth() + 1;
+const STEM_HANJA_EN: Record<string, string> = { 甲: "Jia", 乙: "Yi", 丙: "Bing", 丁: "Ding", 戊: "Wu", 己: "Ji", 庚: "Geng", 辛: "Xin", 壬: "Ren", 癸: "Gui" };
+const BRANCH_HANJA_EN: Record<string, string> = { 子: "Rat", 丑: "Ox", 寅: "Tiger", 卯: "Rabbit", 辰: "Dragon", 巳: "Snake", 午: "Horse", 未: "Goat", 申: "Monkey", 酉: "Rooster", 戌: "Dog", 亥: "Pig" };
+
+function formatPillar(value: string, isEnglish: boolean): string {
+  if (!isEnglish) return value;
+  const characters = [...value];
+  if (characters.length !== 2) return value;
+  const stem = STEM_HANJA_EN[characters[0]];
+  const branch = BRANCH_HANJA_EN[characters[1]];
+  return stem && branch ? `${stem} · ${branch}` : value;
+}
 
 /** S5. 결과 화면 (화면 흐름 설계서 06번) — 해석 텍스트 + 실제 계산된 원국을 함께 보여준다. */
 export default function ResultScreen({
@@ -127,7 +140,9 @@ export default function ResultScreen({
   onOtherFortune,
   onResetPerson,
 }: Props) {
-  const displayName = name.trim() || "당신";
+  const locale = useSiteLocale();
+  const isEnglish = locale === "en";
+  const displayName = name.trim() || (isEnglish ? "Your" : "당신");
   const [freeSection, ...gatedSections] = sections;
   const styleMeta = getToneStyleMeta(toneStyle);
   const currentGrade = lifeGrades.find((g) => g.isCurrent) ?? lifeGrades[0] ?? null;
@@ -139,7 +154,7 @@ export default function ResultScreen({
   async function handleShare() {
     if (typeof navigator !== "undefined" && "share" in navigator) {
       try {
-        await navigator.share({ title: "사주달력", text: resultText });
+        await navigator.share({ title: isEnglish ? "Saju Dalyeok" : "사주달력", text: resultText });
         return;
       } catch {
         // 사용자가 공유를 취소한 경우 등 — 아래 복사 폴백으로 진행
@@ -147,7 +162,7 @@ export default function ResultScreen({
     }
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       await navigator.clipboard.writeText(resultText);
-      alert("결과 텍스트를 클립보드에 복사했어요.");
+      alert(isEnglish ? "Reading copied to clipboard." : "결과 텍스트를 클립보드에 복사했어요.");
     }
   }
 
@@ -160,7 +175,7 @@ export default function ResultScreen({
           </span>
         )}
         <h1 className="text-2xl font-bold">
-          {displayName}님의 {CATEGORY_LABEL[category]}
+          {isEnglish ? `${displayName === "Your" ? "Your" : `${displayName}'s`} ${t(locale, CATEGORY_LABEL[category])}` : `${displayName}님의 ${CATEGORY_LABEL[category]}`}
         </h1>
       </div>
 
@@ -185,14 +200,14 @@ export default function ResultScreen({
       )}
 
       <div className="rounded-2xl bg-white/10 p-5">
-        <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">사주 핵심 요약</p>
+        <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "사주 핵심 요약")}</p>
         <div className="flex flex-col gap-2 text-sm">
           <p>
-            <span className="text-white/50">🔥 강점 </span>
+            <span className="text-white/50">🔥 {t(locale, "강점")} </span>
             {coreSummary.strengths.join(" · ")}
           </p>
           <p>
-            <span className="text-white/50">⚠️ 주의 </span>
+            <span className="text-white/50">⚠️ {t(locale, "주의")} </span>
             {coreSummary.cautions.join(" · ")}
           </p>
           <div className="flex flex-wrap gap-1.5 pt-1">
@@ -221,19 +236,19 @@ export default function ResultScreen({
 
       <div className="rounded-2xl bg-white/10 p-5">
         <div className="mb-2 flex items-center justify-between">
-          <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">오늘의 운세 · {dailyFortune.dateLabel}</p>
-          <p className="text-xl font-bold">{dailyFortune.score}점</p>
+          <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "오늘의 운세")} · {dailyFortune.dateLabel}</p>
+          <p className="text-xl font-bold">{dailyFortune.score}{isEnglish ? " points" : "점"}</p>
         </div>
         <p className="text-base font-semibold">
           {dailyFortune.label} · {dailyFortune.oneliner}
         </p>
         <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
           <div className="rounded-lg bg-white/5 px-3 py-2">
-            <span className="text-white/50">인연 </span>
+            <span className="text-white/50">{isEnglish ? "Love " : "인연 "}</span>
             {dailyFortune.loveTag}
           </div>
           <div className="rounded-lg bg-white/5 px-3 py-2">
-            <span className="text-white/50">재물 </span>
+            <span className="text-white/50">{isEnglish ? "Money " : "재물 "}</span>
             {dailyFortune.moneyTag}
           </div>
         </div>
@@ -249,7 +264,9 @@ export default function ResultScreen({
         <p className="text-base leading-relaxed">{freeSection.text}</p>
         {category === "reunion" && (
           <p className="mt-3 border-t border-white/10 pt-3 text-xs leading-relaxed text-white/40">
-            🔮 재회운은 사주 흐름을 바탕으로 한 참고용 해석이에요. 실제 상대방의 마음이나 연락 여부를 확인하는 게 아니라, 재회를 고민 중일 때 스스로의 태도를 돌아보는 참고 자료로 봐주세요.
+            {isEnglish
+              ? "🔮 This reunion reading is a traditional interpretation for reflection. It cannot reveal another person's feelings or confirm whether they will contact you. Use it to reflect on your own choices while considering reconnection."
+              : "🔮 재회운은 사주 흐름을 바탕으로 한 참고용 해석이에요. 실제 상대방의 마음이나 연락 여부를 확인하는 게 아니라, 재회를 고민 중일 때 스스로의 태도를 돌아보는 참고 자료로 봐주세요."}
           </p>
         )}
       </div>
@@ -257,13 +274,13 @@ export default function ResultScreen({
       {/* 보상형 광고를 막 보고 들어온 화면 첫머리에 디스플레이 광고를 바로 이어 붙이지
           않는다 — 첫 실제 풀이 섹션(freeSection)을 먼저 보여준 뒤, 다음 자연스러운
           경계인 여기에 배치한다. */}
-      <AdSlot label="결과 화면 상단 디스플레이 광고" spaContent />
+      <AdSlot label={isEnglish ? "Top display ad on reading screen" : "결과 화면 상단 디스플레이 광고"} spaContent />
       <SideRailAds spaContent />
 
       <div className="flex flex-col gap-4">
           {datingAdvice && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">지금 관계에서 눈여겨볼 점</p>
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{isEnglish ? "What to notice in your current relationship" : "지금 관계에서 눈여겨볼 점"}</p>
               <p className="text-base leading-relaxed">{datingAdvice}</p>
             </div>
           )}
@@ -271,24 +288,24 @@ export default function ResultScreen({
           {loveDeepDive && (
             <div className="rounded-2xl bg-white/10 p-5">
               <div className="mb-3 flex items-center justify-between">
-                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">연애 심화 분석</p>
+                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "연애 심화 분석")}</p>
                 <ReliabilityBadge tier="interpretive" />
               </div>
               <div className="flex flex-col gap-3">
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">💘 내가 끌리는 이상형</p>
+                  <p className="text-sm font-bold">💘 {t(locale, "내가 끌리는 이상형")}</p>
                   <p className="mt-1 text-sm leading-relaxed text-white/80">{loveDeepDive.idealType}</p>
                 </div>
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">🧲 나를 좋아하기 쉬운 사람</p>
+                  <p className="text-sm font-bold">🧲 {t(locale, "나를 좋아하기 쉬운 사람")}</p>
                   <p className="mt-1 text-sm leading-relaxed text-white/80">{loveDeepDive.attractsYou}</p>
                 </div>
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">⚡ 연애에서 부딪히기 쉬운 지점</p>
+                  <p className="text-sm font-bold">⚡ {t(locale, "연애에서 부딪히기 쉬운 지점")}</p>
                   <p className="mt-1 text-sm leading-relaxed text-white/80">{loveDeepDive.conflictPoint}</p>
                 </div>
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">💍 결혼운</p>
+                  <p className="text-sm font-bold">💍 {t(locale, "결혼운")}</p>
                   <p className="mt-1 text-sm leading-relaxed text-white/80">{loveDeepDive.marriageTendency}</p>
                 </div>
               </div>
@@ -297,15 +314,15 @@ export default function ResultScreen({
 
           {workStyle && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">나의 업무 스타일</p>
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "나의 업무 스타일")}</p>
               <p className="text-base font-bold">{workStyle.style}</p>
               <div className="mt-3 flex flex-col gap-2 text-sm leading-relaxed">
                 <p>
-                  <span className="text-white/50">🟢 잘 맞는 환경 </span>
+                  <span className="text-white/50">🟢 {t(locale, "잘 맞는 환경")} </span>
                   <span className="text-white/80">{workStyle.goodEnv}</span>
                 </p>
                 <p>
-                  <span className="text-white/50">🔴 피하면 좋은 환경 </span>
+                  <span className="text-white/50">🔴 {t(locale, "피하면 좋은 환경")} </span>
                   <span className="text-white/80">{workStyle.badEnv}</span>
                 </p>
               </div>
@@ -314,7 +331,7 @@ export default function ResultScreen({
 
           {gyeokgukCareerFit && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">격국으로 보는 직업 적성</p>
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "격국으로 보는 직업 적성")}</p>
               <p className="text-base font-bold">{gyeokgukCareerFit.fitField}</p>
               <p className="mt-2 text-sm leading-relaxed text-white/80">{gyeokgukCareerFit.desc}</p>
             </div>
@@ -323,7 +340,7 @@ export default function ResultScreen({
           {zodiacCareer && (
             <div className="rounded-2xl bg-white/10 p-5">
               <div className="mb-3 flex items-center justify-between">
-                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">띠·별자리로 보는 직업 적성</p>
+                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "띠·별자리로 보는 직업 적성")}</p>
                 <ReliabilityBadge tier="fun" />
               </div>
               <div className="flex flex-col gap-3">
@@ -341,7 +358,7 @@ export default function ResultScreen({
                 </div>
               </div>
               <p className="mt-3 border-t border-white/10 pt-3 text-xs leading-relaxed text-white/40">
-                🔮 명리학적 해석을 바탕으로 구성한 오락적 콘텐츠이며 실제 미래나 사실을 확정하는 내용은 아닙니다.
+                {t(locale, "명리학적 해석을 바탕으로 구성한 오락적 콘텐츠이며 실제 미래나 사실을 확정하는 내용은 아닙니다.")}
               </p>
             </div>
           )}
@@ -349,20 +366,20 @@ export default function ResultScreen({
           {workRelationships && (
             <div className="rounded-2xl bg-white/10 p-5">
               <div className="mb-3 flex items-center justify-between">
-                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">직장 내 인간관계</p>
+                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "직장 내 인간관계")}</p>
                 <ReliabilityBadge tier="interpretive" />
               </div>
               <div className="flex flex-col gap-3">
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">🧑‍💼 상사와의 관계</p>
+                  <p className="text-sm font-bold">🧑‍💼 {t(locale, "상사와의 관계")}</p>
                   <p className="mt-1 text-sm leading-relaxed text-white/80">{workRelationships.boss}</p>
                 </div>
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">🤝 동료와의 관계</p>
+                  <p className="text-sm font-bold">🤝 {t(locale, "동료와의 관계")}</p>
                   <p className="mt-1 text-sm leading-relaxed text-white/80">{workRelationships.peer}</p>
                 </div>
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">🧑‍🎓 부하직원과의 관계</p>
+                  <p className="text-sm font-bold">🧑‍🎓 {t(locale, "부하직원과의 관계")}</p>
                   <p className="mt-1 text-sm leading-relaxed text-white/80">{workRelationships.subordinate}</p>
                 </div>
               </div>
@@ -371,7 +388,7 @@ export default function ResultScreen({
 
           {incomeSource && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">나에게 유리한 수입 구조</p>
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "나에게 유리한 수입 구조")}</p>
               <div className="flex flex-col gap-1.5 text-sm">
                 {incomeSource.sources.map((s, i) => (
                   <p key={s}>
@@ -381,11 +398,11 @@ export default function ResultScreen({
               </div>
               <div className="mt-3 flex flex-col gap-2 border-t border-white/10 pt-3 text-sm leading-relaxed text-white/80">
                 <p>
-                  <span className="text-white/50">💰 들어오는 흐름 </span>
+                  <span className="text-white/50">💰 {t(locale, "들어오는 흐름")} </span>
                   {incomeSource.flowIn}
                 </p>
                 <p>
-                  <span className="text-white/50">💸 새기 쉬운 지점 </span>
+                  <span className="text-white/50">💸 {t(locale, "새기 쉬운 지점")} </span>
                   {incomeSource.flowOut}
                 </p>
               </div>
@@ -394,7 +411,7 @@ export default function ResultScreen({
 
           {gyeokgukWealthStyle && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">격국으로 보는 재물 스타일</p>
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "격국으로 보는 재물 스타일")}</p>
               <p className="text-base font-bold">{gyeokgukWealthStyle.style}</p>
               <p className="mt-2 text-sm leading-relaxed text-white/80">{gyeokgukWealthStyle.desc}</p>
             </div>
@@ -402,25 +419,25 @@ export default function ResultScreen({
 
           {wealthMonthRanking && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">올해 재물 유리한 달 · 조심할 달</p>
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "올해 재물 유리한 달 · 조심할 달")}</p>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <p className="mb-2 text-xs text-white/50">🟢 유리한 달 TOP3</p>
+                  <p className="mb-2 text-xs text-white/50">🟢 {t(locale, "유리한 달 TOP3")}</p>
                   <div className="flex flex-col gap-2">
                     {wealthMonthRanking.topMonths.map((m) => (
                       <div key={m.month} className="rounded-lg bg-white/5 p-2.5">
-                        <p className="text-sm font-bold">{m.month}월 · {m.tag}</p>
+                        <p className="text-sm font-bold">{isEnglish ? `Month ${m.month} · ${m.tag}` : `${m.month}월 · ${m.tag}`}</p>
                         <p className="mt-0.5 text-xs leading-relaxed text-white/70">{m.desc}</p>
                       </div>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <p className="mb-2 text-xs text-white/50">🔴 조심할 달 TOP3</p>
+                  <p className="mb-2 text-xs text-white/50">🔴 {t(locale, "조심할 달 TOP3")}</p>
                   <div className="flex flex-col gap-2">
                     {wealthMonthRanking.cautionMonths.map((m) => (
                       <div key={m.month} className="rounded-lg bg-white/5 p-2.5">
-                        <p className="text-sm font-bold">{m.month}월 · {m.tag}</p>
+                        <p className="text-sm font-bold">{isEnglish ? `Month ${m.month} · ${m.tag}` : `${m.month}월 · ${m.tag}`}</p>
                         <p className="mt-0.5 text-xs leading-relaxed text-white/70">{m.desc}</p>
                       </div>
                     ))}
@@ -440,17 +457,17 @@ export default function ResultScreen({
           {meetingChannel && (
             <div className="rounded-2xl bg-white/10 p-5">
               <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
-                {category === "reunion" ? "다시 연결되기 쉬운 방식" : "인연이 들어오는 경로"}
+                {isEnglish ? category === "reunion" ? "Ways reconnection may happen" : "Where new connections may begin" : category === "reunion" ? "다시 연결되기 쉬운 방식" : "인연이 들어오는 경로"}
               </p>
               <p className="text-base font-bold">{meetingChannel.type}</p>
               <p className="mt-1 text-sm leading-relaxed text-white/80">{meetingChannel.desc}</p>
               <p className="mt-3 border-t border-white/10 pt-3 text-sm">
-                <span className="text-white/50">🤍 잘 맞는 상대 </span>
+                <span className="text-white/50">🤍 {t(locale, "잘 맞는 상대")} </span>
                 {meetingChannel.matchType}
               </p>
               {weeklyMeetingSuggestion && (
                 <div className="mt-3 rounded-lg bg-white/5 p-3">
-                  <p className="mb-1 text-xs font-semibold text-[color:var(--color-gold-light)]">📅 이번주는 이런 곳 어때요?</p>
+                  <p className="mb-1 text-xs font-semibold text-[color:var(--color-gold-light)]">📅 {isEnglish ? "Try a place like this this week" : "이번주는 이런 곳 어때요?"}</p>
                   <p className="text-sm leading-relaxed text-white/80">{weeklyMeetingSuggestion}</p>
                 </div>
               )}
@@ -460,7 +477,7 @@ export default function ResultScreen({
           {meetingTiming && (
             <div className="rounded-2xl bg-white/10 p-5">
               <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">
-                {category === "reunion" ? "연락하기 좋은 날·다시 만나기 좋은 환경" : "인연을 만나기 좋은 날·장소"}
+                {isEnglish ? category === "reunion" ? "A good day to reach out and a setting to meet again" : "Good days and places to meet someone" : category === "reunion" ? "연락하기 좋은 날·다시 만나기 좋은 환경" : "인연을 만나기 좋은 날·장소"}
               </p>
               <div className="flex flex-col gap-3">
                 <div className="rounded-lg bg-white/5 p-3">
@@ -482,60 +499,60 @@ export default function ResultScreen({
           {zodiacCompat && (
             <div className="rounded-2xl bg-white/10 p-5">
               <div className="mb-3 flex items-center justify-between">
-                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">🐾 띠 궁합</p>
+                <p className="text-xs font-semibold text-[color:var(--color-gold-light)]">🐾 {t(locale, "띠 궁합")}</p>
                 <ReliabilityBadge tier="fun" />
               </div>
               <div className="flex flex-col gap-2">
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">💛 찰떡궁합 {zodiacCompat.animalBest.labels.join(", ")}</p>
+                  <p className="text-sm font-bold">💛 {t(locale, "찰떡궁합")} {zodiacCompat.animalBest.labels.join(", ")}</p>
                   <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.animalBest.desc}</p>
                 </div>
                 {zodiacCompat.animalGood.labels.length > 0 && (
                   <div className="rounded-lg bg-white/5 p-3">
-                    <p className="text-sm font-bold">🟢 잘 맞는 편 {zodiacCompat.animalGood.labels.join(", ")}</p>
+                    <p className="text-sm font-bold">🟢 {t(locale, "잘 맞는 편")} {zodiacCompat.animalGood.labels.join(", ")}</p>
                     <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.animalGood.desc}</p>
                   </div>
                 )}
                 {zodiacCompat.animalEffort.labels.length > 0 && (
                   <div className="rounded-lg bg-white/5 p-3">
-                    <p className="text-sm font-bold">🔴 노력이 필요한 편 {zodiacCompat.animalEffort.labels.join(", ")}</p>
+                    <p className="text-sm font-bold">🔴 {t(locale, "노력이 필요한 편")} {zodiacCompat.animalEffort.labels.join(", ")}</p>
                     <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.animalEffort.desc}</p>
                   </div>
                 )}
               </div>
 
-              <p className="mb-3 mt-5 text-xs font-semibold text-[color:var(--color-gold-light)]">{starSign.symbol} 별자리 궁합</p>
+              <p className="mb-3 mt-5 text-xs font-semibold text-[color:var(--color-gold-light)]">{starSign.symbol} {t(locale, "별자리 궁합")}</p>
               <div className="flex flex-col gap-2">
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">💛 찰떡궁합 {zodiacCompat.starBest.labels.join(", ")}</p>
+                  <p className="text-sm font-bold">💛 {t(locale, "찰떡궁합")} {zodiacCompat.starBest.labels.join(", ")}</p>
                   <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.starBest.desc}</p>
                 </div>
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">🟢 잘 맞는 편 {zodiacCompat.starGood.labels.join(", ")}</p>
+                  <p className="text-sm font-bold">🟢 {t(locale, "잘 맞는 편")} {zodiacCompat.starGood.labels.join(", ")}</p>
                   <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.starGood.desc}</p>
                 </div>
                 <div className="rounded-lg bg-white/5 p-3">
-                  <p className="text-sm font-bold">🔴 노력이 필요한 편 {zodiacCompat.starChallenging.labels.join(", ")}</p>
+                  <p className="text-sm font-bold">🔴 {t(locale, "노력이 필요한 편")} {zodiacCompat.starChallenging.labels.join(", ")}</p>
                   <p className="mt-1 text-xs leading-relaxed text-white/70">{zodiacCompat.starChallenging.desc}</p>
                 </div>
               </div>
               <p className="mt-3 border-t border-white/10 pt-3 text-xs leading-relaxed text-white/40">
-                🔮 명리학적 해석을 바탕으로 구성한 오락적 콘텐츠이며 실제 미래나 사실을 확정하는 내용은 아닙니다.
+                {t(locale, "명리학적 해석을 바탕으로 구성한 오락적 콘텐츠이며 실제 미래나 사실을 확정하는 내용은 아닙니다.")}
               </p>
             </div>
           )}
 
           {/* 주제별 풀이가 끝나고 공통 해설(신살·월별 흐름·대운)이 시작되는 자연스러운 경계 */}
-          <InArticleAdSlot label="결과 화면 중간 인아티클 광고" spaContent />
+          <InArticleAdSlot label={isEnglish ? "In-article ad within reading" : "결과 화면 중간 인아티클 광고"} spaContent />
 
           {sinsal.length > 0 && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">나에게 깃든 별(신살)</p>
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "나에게 깃든 별(신살)")}</p>
               <div className="flex flex-col gap-3">
                 {sinsal.map((s) => (
                   <div key={s.name} className="rounded-lg bg-white/5 p-3">
                     <p className="text-sm font-bold">
-                      {s.name} <span className="font-normal text-white/40">({s.hanja})</span>
+                      {isEnglish ? s.name : <>{s.name} <span className="font-normal text-white/40">({s.hanja})</span></>}
                     </p>
                     <p className="mt-1 text-sm leading-relaxed text-white/80">{s.desc}</p>
                   </div>
@@ -547,7 +564,7 @@ export default function ResultScreen({
           {monthRhythm.length > 0 && (
             <div className="rounded-2xl bg-white/10 p-5">
               <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">
-                올해 월별 {CATEGORY_LABEL[category]} 리듬
+                {isEnglish ? `Monthly ${t(locale, CATEGORY_LABEL[category])} patterns this year` : `올해 월별 ${CATEGORY_LABEL[category]} 리듬`}
               </p>
               <div className="grid grid-cols-3 gap-2">
                 {monthRhythm.map((r) => (
@@ -557,7 +574,7 @@ export default function ResultScreen({
                       r.month === CURRENT_MONTH ? "bg-[color:var(--color-gold)] text-[#241a08]" : "bg-white/5"
                     }`}
                   >
-                    <p className="text-[11px] opacity-70">{r.month}월</p>
+                    <p className="text-[11px] opacity-70">{isEnglish ? `Month ${r.month}` : `${r.month}월`}</p>
                     <p className="text-sm font-bold">{r.label}</p>
                     <p className="mt-0.5 text-[10px] leading-tight opacity-80">{r.tip}</p>
                   </div>
@@ -568,12 +585,12 @@ export default function ResultScreen({
 
           {lifeStages.length > 0 && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">인생의 큰 흐름 (초년·중년·말년)</p>
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "인생의 큰 흐름 (초년·중년·말년)")}</p>
               <div className="flex flex-col gap-2">
                 {lifeStages.map((s) => (
                   <div key={s.stage} className="rounded-lg bg-white/5 p-3">
                     <p className="text-xs font-semibold text-white/60">
-                      {s.label} · {s.pillarHanja}
+                      {s.label} · {formatPillar(s.pillarHanja, isEnglish)}
                     </p>
                     <p className="mt-1 text-sm leading-relaxed">{s.text}</p>
                   </div>
@@ -584,7 +601,7 @@ export default function ResultScreen({
 
           {daeunFlow.length > 0 && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">평생 대운 흐름</p>
+              <p className="mb-3 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "평생 대운 흐름")}</p>
               <div className="flex flex-col gap-2">
                 {daeunFlow.map((d) => (
                   <div
@@ -592,8 +609,8 @@ export default function ResultScreen({
                     className={`rounded-lg p-3 ${d.isCurrent ? "bg-[color:var(--color-gold)]/20 ring-1 ring-[color:var(--color-gold)]" : "bg-white/5"}`}
                   >
                     <p className="text-xs font-semibold text-white/60">
-                      {d.ageLabel} · {d.pillarHanja}
-                      {d.isCurrent && <span className="ml-1 text-[color:var(--color-gold-light)]">(지금)</span>}
+                      {d.ageLabel} · {formatPillar(d.pillarHanja, isEnglish)}
+                      {d.isCurrent && <span className="ml-1 text-[color:var(--color-gold-light)]">({t(locale, "지금")})</span>}
                     </p>
                     <p className="mt-1 text-sm leading-relaxed">{d.text}</p>
                   </div>
@@ -604,14 +621,14 @@ export default function ResultScreen({
 
           {gwiinDaeun.length > 0 && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">✨ 귀인이 드는 대운 시기</p>
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">✨ {t(locale, "귀인이 드는 대운 시기")}</p>
               <p className="text-sm leading-relaxed text-white/80">
-                평생 대운 중 천을귀인 기운이 드는 시기예요. 어려운 순간에 뜻밖의 도움을 받기 쉬운 시기라고 봐요.
+                {isEnglish ? "The periods listed here include the Nobleman Star, traditionally associated with timely help during difficult moments." : "평생 대운 중 천을귀인 기운이 드는 시기예요. 어려운 순간에 뜻밖의 도움을 받기 쉬운 시기라고 봐요."}
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {gwiinDaeun.map((g) => (
                   <span key={g.ageLabel} className="rounded-full bg-[color:var(--color-gold)]/20 px-3 py-1.5 text-sm font-semibold text-[color:var(--color-gold-light)]">
-                    {g.ageLabel} · {g.pillarHanja}
+                    {g.ageLabel} · {formatPillar(g.pillarHanja, isEnglish)}
                   </span>
                 ))}
               </div>
@@ -621,7 +638,7 @@ export default function ResultScreen({
           {johu && (
             <div className="rounded-2xl bg-white/10 p-5">
               <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
-                조후(調候) · {johu.seasonLabel}에 태어난 사주
+                {isEnglish ? `Seasonal balance · born in ${johu.seasonLabel}` : `조후(調候) · ${johu.seasonLabel}에 태어난 사주`}
               </p>
               <p className="text-sm leading-relaxed text-white/80">{johu.text}</p>
             </div>
@@ -629,14 +646,14 @@ export default function ResultScreen({
 
           {luckColor && (
             <div className="rounded-2xl bg-white/10 p-5">
-              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">나에게 필요한 색 (평생 고정)</p>
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "나에게 필요한 색 (평생 고정)")}</p>
               <div className="flex items-center gap-4">
                 <div>
                   <p className="text-lg font-bold">{luckColor.color}</p>
                   <p className="text-sm text-white/60">{luckColor.numbers.join(", ")}</p>
                 </div>
                 <p className="flex-1 text-sm leading-relaxed text-white/80">
-                  지금 원국에 가장 적은 오행을 보완해주는 색과 숫자예요. {luckColor.desc}.
+                  {isEnglish ? `This color and these numbers are associated with the least represented element in your chart. In traditional Saju, they are linked with vitality and growth.` : `지금 원국에 가장 적은 오행을 보완해주는 색과 숫자예요. ${luckColor.desc}.`}
                 </p>
               </div>
             </div>
@@ -645,15 +662,15 @@ export default function ResultScreen({
           {todayLuck && (
             <div className="rounded-2xl bg-white/10 p-5">
               <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
-                오늘의 행운 컬러 · {todayLuck.dateLabel}
+                {t(locale, "오늘의 행운 컬러")} · {todayLuck.dateLabel}
               </p>
               <div className="flex items-center gap-4">
                 <div>
                   <p className="text-lg font-bold">{todayLuck.color}</p>
-                  <p className="text-sm text-white/60">{todayLuck.direction} · 행운의 숫자 {todayLuck.number}</p>
+                  <p className="text-sm text-white/60">{isEnglish ? `${todayLuck.direction} · Lucky number ${todayLuck.number}` : `${todayLuck.direction} · 행운의 숫자 ${todayLuck.number}`}</p>
                 </div>
                 <p className="flex-1 text-sm leading-relaxed text-white/80">
-                  오늘의 일진(日辰) 오행을 기준으로 매일 바뀌는 색·방향이에요. 위 색과는 다른, 오늘 하루만의 기운이에요.
+                  {isEnglish ? "This color and direction change daily based on the Five Elements of today's Daily Pillar. They reflect today's energy and are separate from your chart's supportive color." : "오늘의 일진(日辰) 오행을 기준으로 매일 바뀌는 색·방향이에요. 위 색과는 다른, 오늘 하루만의 기운이에요."}
                 </p>
               </div>
             </div>
@@ -664,7 +681,7 @@ export default function ResultScreen({
           {pastLife && <PastLifeCard pastLife={pastLife} />}
 
           <div className="rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/10 p-5">
-            <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">총평</p>
+            <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">{t(locale, "총평")}</p>
             <p className="text-base leading-relaxed">{categorySummary}</p>
           </div>
 
@@ -673,29 +690,31 @@ export default function ResultScreen({
 
       {isHourExcluded && (
         <p className="text-center text-xs text-white/50">
-          출생시간을 몰라 시주는 제외하고 계산했어요
+          {isEnglish ? "The birth time is unknown, so the Hour Pillar is not included." : "출생시간을 몰라 시주는 제외하고 계산했어요"}
         </p>
       )}
 
       <div className="rounded-2xl border border-[color:var(--color-gold)]/30 bg-[color:var(--color-gold)]/10 p-4 text-center">
         <p className="text-sm leading-relaxed text-white/80">
-          💎 격국·평생 대운 흐름처럼 유료 사주 리포트에서 흔히 따로 파는 항목도, 여기선 처음부터 전부 무료예요.
+          {isEnglish
+            ? "💎 Sections often sold separately in paid Saju reports, such as chart structure and major luck cycles, are included here at no charge."
+            : "💎 격국·평생 대운 흐름처럼 유료 사주 리포트에서 흔히 따로 파는 항목도, 여기선 처음부터 전부 무료예요."}
         </p>
       </div>
 
       {/* 화면별 광고 배치 원칙 09번: 결과 화면에 디스플레이 광고 1개 (결과 텍스트를 가리지 않는 위치) */}
-      <AdSlot label="결과 화면 하단 디스플레이 광고" spaContent />
+      <AdSlot label={isEnglish ? "Bottom display ad on reading screen" : "결과 화면 하단 디스플레이 광고"} spaContent />
       <FreeAdsNotice />
 
       <Link
-        href="/tarot-guide"
+        href={isEnglish ? "/en/tarot" : localizedPath("/tarot-guide", locale)}
         className="no-print flex items-center gap-3 rounded-2xl border border-[color:var(--color-gold)]/20 bg-white/5 p-4 transition hover:border-[color:var(--color-gold)]/50"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/baekho-dosa.svg" alt="백호도사" width={36} height={47} className="rounded-md" />
+        <img src="/baekho-dosa.svg" alt={isEnglish ? "White Tiger Reader" : "백호도사"} width={36} height={47} className="rounded-md" />
         <div className="flex-1">
-          <p className="text-sm font-semibold text-[color:var(--color-gold-light)]">내 타로 카드가 궁금하다면?</p>
-          <p className="text-xs text-white/50">백호도사의 타로 백과사전 보러가기</p>
+          <p className="text-sm font-semibold text-[color:var(--color-gold-light)]">{isEnglish ? "Curious about your Tarot cards?" : "내 타로 카드가 궁금하다면?"}</p>
+          <p className="text-xs text-white/50">{isEnglish ? "Explore the Tarot guide" : "백호도사의 타로 백과사전 보러가기"}</p>
         </div>
         <span className="text-white/30">→</span>
       </Link>
@@ -705,29 +724,29 @@ export default function ResultScreen({
           onClick={onOtherFortune}
           className="w-full rounded-full bg-[color:var(--color-gold)] px-8 py-4 text-base font-semibold text-[#241a08] transition hover:brightness-110 active:scale-95"
         >
-          다른 운세도 보기
+          {t(locale, "다른 운세도 보기")}
         </button>
         <div className="flex gap-3">
           <button
             onClick={handlePrint}
             className="flex-1 rounded-full bg-white/10 px-4 py-3 text-sm font-medium transition hover:bg-white/20 active:scale-95"
           >
-            PDF로 저장
+            {isEnglish ? "Save as PDF" : "PDF로 저장"}
           </button>
           <button
             onClick={handleShare}
             className="flex-1 rounded-full bg-white/10 px-4 py-3 text-sm font-medium transition hover:bg-white/20 active:scale-95"
           >
-            공유하기
+            {t(locale, "공유하기")}
           </button>
         </div>
         <button
           onClick={() => {
-            if (confirm("입력한 생년월일 정보를 지우고 다른 사람 정보로 새로 볼까요?")) onResetPerson();
+            if (confirm(isEnglish ? "Clear these birth details and start a reading for someone else?" : "입력한 생년월일 정보를 지우고 다른 사람 정보로 새로 볼까요?")) onResetPerson();
           }}
           className="text-center text-xs text-white/40 underline-offset-4 transition hover:text-white/70 hover:underline"
         >
-          🔄 다른 사람 정보로 보기
+          🔄 {t(locale, "다른 사람 정보로 보기")}
         </button>
       </div>
     </div>
