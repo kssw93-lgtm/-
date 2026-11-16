@@ -1,31 +1,51 @@
 import type { TarotCardGuide } from "./tarot-types";
+import { localizeEnglishText } from "@/lib/i18n/english-content";
 
-/**
- * 78장 카드에 시험·합격운 전용 필드를 전부 새로 쓰는 대신, 카드 고유의 summary(각 카드마다
- * 다른 문장)에 시험 맥락의 짧은 코멘트를 이어붙이는 방식을 쓴다. 코멘트는 카드 id로 순환
- * 선택해 같은 정방향/역방향이라도 문장이 획일적으로 반복되지 않게 한다.
- */
+type Locale = "ko" | "en";
+
 const UPRIGHT_SPINS: Array<(k1: string, k2: string) => string> = [
-  (k1) => `지금은 '${k1}'의 기운이 강하니, 그동안 쌓아온 노력이 결과로 이어질 가능성이 높아요.`,
-  (k1, k2) => `'${k1}·${k2}'의 흐름이 시험장에서 좋은 집중력으로 나타날 수 있어요.`,
-  (k1) => `준비한 만큼 자신감 있게 임하면 '${k1}'의 기운이 힘을 실어줄 거예요.`,
-  (_k1, k2) => `'${k2}'의 기세를 타고 있으니, 막판까지 페이스를 유지하는 게 중요해요.`,
-  (k1) => `지금 이 순간 '${k1}'의 기운이 시험 결과에도 긍정적인 신호로 작용해요.`,
+  (k1) => `이번 카드의 '${k1}'를 현재 준비에 대입해 보세요. 지금까지 이어온 점검을 차분히 계속하는 데 도움이 될 수 있어요.`,
+  (k1, k2) => `'${k1}·${k2}'를 답안이나 면접에서 어떻게 보여줄지 미리 정리해 보세요.`,
+  (k1) => `준비한 내용을 차분히 전달하는 연습에 '${k1}'를 활용해 보세요.`,
+  (_k1, k2) => `'${k2}'와 관련된 강점을 살릴 수 있도록 남은 범위와 시간을 현실적으로 나눠 보세요.`,
+  (k1) => `'${k1}'를 결과 예측이 아니라 현재 준비를 점검할 단서로 사용해 보세요.`,
 ];
 
 const REVERSED_SPINS: Array<(k1: string, k2: string) => string> = [
-  (k1) => `'${k1}'의 흐름 때문에 집중이 흐트러지기 쉬우니 마지막 점검을 다시 해보세요.`,
-  (_k1, k2) => `'${k2}'의 기운을 조심해야 해요 — 컨디션 관리나 시간 배분에 신경 쓰세요.`,
-  (k1) => `'${k1}'의 기운이 결과를 갉아먹지 않도록, 자만보다는 꼼꼼한 재확인이 필요해요.`,
-  (_k1, k2) => `'${k2}'의 영향으로 실수가 나올 수 있으니 서두르지 말고 차분히 풀어가세요.`,
-  (k1) => `지금은 '${k1}'의 흐름을 경계할 때예요 — 계획보다 늦어지고 있다면 우선순위를 다시 정하세요.`,
+  (k1) => `'${k1}'와 관련해 마지막 점검 목록에서 빠진 항목이 있는지 살펴보세요.`,
+  (_k1, k2) => `'${k2}'와 관련해 컨디션이나 시간 배분을 다시 확인해 보세요.`,
+  (k1) => `'${k1}'의 약점을 탓하기보다 답안·서류·준비물 중 확인할 부분을 찾아보세요.`,
+  (_k1, k2) => `'${k2}'를 의식해 서두르지 말고, 문제를 한 단계씩 검토해 보세요.`,
+  (k1) => `계획이 예상과 다르다면 '${k1}'를 기준으로 우선순위를 다시 정해 보세요.`,
 ];
 
-export function composeExamReading(card: TarotCardGuide, orientation: "upright" | "reversed"): string {
+const EN_UPRIGHT_SPINS: Array<(k1: string, k2: string) => string> = [
+  (k1) => `Use “${k1}” as a prompt to review your current preparation. It may help you continue the checks you have already started.`,
+  (k1, k2) => `Plan how you could demonstrate “${k1}” and “${k2}” in an answer or interview.`,
+  (k1) => `Use “${k1}” as a cue to practice presenting what you have prepared calmly.`,
+  (_k1, k2) => `Make a realistic plan for the remaining material and time, drawing on the strength represented by “${k2}.”`,
+  (k1) => `Treat “${k1}” as a prompt to review your preparation, not as a prediction of the result.`,
+];
+
+const EN_REVERSED_SPINS: Array<(k1: string, k2: string) => string> = [
+  (k1) => `Use “${k1}” as a cue to check whether anything is missing from your final review list.`,
+  (_k1, k2) => `Review your condition and time plan in light of “${k2}.”`,
+  (k1) => `Rather than blaming yourself for a weakness linked to “${k1},” check your answers, documents, or materials for anything that needs attention.`,
+  (_k1, k2) => `Keep “${k2}” in mind, take your time, and work through each question one step at a time.`,
+  (k1) => `If your plan changes, use “${k1}” as a prompt to revisit your priorities.`,
+];
+
+/** Build a card-specific study prompt without predicting pass/fail outcomes. */
+export function composeExamReading(card: TarotCardGuide, orientation: "upright" | "reversed", locale: Locale = "ko"): string {
   const keywords = card.keywords[orientation];
-  const k1 = keywords[0];
-  const k2 = keywords[1] ?? keywords[0];
-  const spins = orientation === "upright" ? UPRIGHT_SPINS : REVERSED_SPINS;
+  const rawK1 = keywords[0];
+  const rawK2 = keywords[1] ?? rawK1;
+  const k1 = locale === "en" ? localizeEnglishText(rawK1) : rawK1;
+  const k2 = locale === "en" ? localizeEnglishText(rawK2) : rawK2;
+  const spins = orientation === "upright"
+    ? (locale === "en" ? EN_UPRIGHT_SPINS : UPRIGHT_SPINS)
+    : (locale === "en" ? EN_REVERSED_SPINS : REVERSED_SPINS);
   const spin = spins[card.id % spins.length];
-  return `${card.summary} ${spin(k1, k2)}`;
+  const summary = locale === "en" ? localizeEnglishText(card.summary) : card.summary;
+  return `${summary} ${spin(k1, k2)}`;
 }

@@ -24,7 +24,13 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return {
     title,
     description,
-    alternates: { canonical: path },
+    alternates: {
+      canonical: path,
+      languages: {
+        ko: `https://www.sajudalyeok.co.kr${path}`,
+        en: `https://www.sajudalyeok.co.kr/en/tarot-guide/${c.slug}`,
+      },
+    },
     openGraph: { images: OG_IMAGES, title, description, url: path },
   };
 }
@@ -143,6 +149,16 @@ export default function TarotCardPage({ params }: { params: { slug: string } }) 
               <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
                 {label} · {r.title}
               </p>
+              {key === "money" && (
+                <p className="mb-3 rounded-lg bg-black/20 p-3 text-xs leading-relaxed text-white/55">
+                  타로는 투자·수입·수익을 예측하거나 금융 조언을 제공하지 않아요. 실제 결정은 확인 가능한 정보와 전문가의 조언을 기준으로 해주세요.
+                </p>
+              )}
+              {key === "health" && (
+                <p className="mb-3 rounded-lg bg-black/20 p-3 text-xs leading-relaxed text-white/55">
+                  타로는 건강 상태를 진단하거나 회복을 예측하지 않아요. 증상이나 치료 관련 판단은 의료 전문가와 상의해 주세요.
+                </p>
+              )}
               <div className="flex flex-col gap-2 text-sm leading-relaxed">
                 <p>
                   <span className="text-white/50">🔼 정방향 </span>

@@ -12,6 +12,7 @@ const ENGLISH_TO_KOREAN: Record<string, string> = {
   "/en/faq": "/faq",
   "/en/privacy": "/privacy",
   "/en/tarot": "/tarot",
+  "/en/tarot-guide": "/tarot-guide",
 };
 
 const KOREAN_TO_ENGLISH = Object.fromEntries(
@@ -31,6 +32,8 @@ export function languageSwitchPath(pathname: string): string {
 
   if (path.startsWith("/en/tarot/")) return path.replace(/^\/en/, "");
   if (path.startsWith("/tarot/")) return `/en${path}`;
+  if (path.startsWith("/en/tarot-guide/")) return path.replace(/^\/en/, "");
+  if (path.startsWith("/tarot-guide/")) return `/en${path}`;
 
   if (path.startsWith("/en/learn/")) return ENGLISH_TO_KOREAN[path] ?? "/learn";
   if (path.startsWith("/learn/")) return KOREAN_TO_ENGLISH[path] ?? "/en/learn";

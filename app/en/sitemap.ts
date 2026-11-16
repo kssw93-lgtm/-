@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
+import { TAROT_CARDS } from "@/lib/content/tarot";
 import { TAROT_TOPICS } from "@/lib/content/tarot-topics";
 import { ENGLISH_GUIDES } from "@/lib/i18n/english-guides";
 
 const BASE_URL = "https://www.sajudalyeok.co.kr";
 const CONTENT_LAST_MODIFIED = new Date("2026-11-10");
+const TAROT_GUIDE_LAST_MODIFIED = new Date("2026-11-16");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -42,6 +44,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: CONTENT_LAST_MODIFIED,
       changeFrequency: "weekly" as const,
       priority: 0.7,
+    })),
+    {
+      url: `${BASE_URL}/en/tarot-guide`,
+      lastModified: TAROT_GUIDE_LAST_MODIFIED,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    ...TAROT_CARDS.map((card) => ({
+      url: `${BASE_URL}/en/tarot-guide/${card.slug}`,
+      lastModified: TAROT_GUIDE_LAST_MODIFIED,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     })),
     {
       url: `${BASE_URL}/en/about`,

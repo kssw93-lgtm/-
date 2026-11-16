@@ -6,6 +6,7 @@ import { TAROT_CARDS } from "@/lib/content/tarot";
 import type { TarotCardGuide } from "@/lib/content/tarot-types";
 import type { TarotTopic } from "@/lib/content/tarot-topics";
 import { getTopicReadingText } from "@/lib/content/tarot-topic-reading";
+import { composeTarotSpreadSummary } from "@/lib/content/tarot-spread-summary";
 import AdSlot from "@/components/AdSlot";
 import { loadEnglishContent, localizeEnglishText } from "@/lib/i18n/english-content";
 import { useSiteLocale } from "@/lib/i18n/site-locale";
@@ -158,6 +159,8 @@ export default function TarotTopicDraw({ topic }: { topic: TarotTopic }) {
     );
   }
 
+  const spreadSummary = composeTarotSpreadSummary(topic.slug, picks, isEnglish ? "en" : "ko");
+
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-3 gap-3">
@@ -182,17 +185,42 @@ export default function TarotTopicDraw({ topic }: { topic: TarotTopic }) {
       </div>
 
       <div className="flex flex-col gap-3">
-        {picks.map(({ card, orientation }, i) => (
-          <div key={card.slug} className="rounded-2xl bg-white/10 p-4">
-            <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
-              {displayTopic.positions[i].label} · {isEnglish ? localizeEnglishText(card.nameKo) : card.nameKo}
-            </p>
-            <p className="text-sm leading-relaxed text-white/85">
-              {isEnglish ? localizeEnglishText(getTopicReadingText(topic, topic.positions[i], card, orientation)) : getTopicReadingText(topic, topic.positions[i], card, orientation)}
-            </p>
-          </div>
-        ))}
+        {picks.map(({ card, orientation }, i) => {
+          const position = topic.positions[i];
+          const reading = getTopicReadingText(topic, position, card, orientation, isEnglish ? "en" : "ko");
+          return (
+            <div key={card.slug} className="rounded-2xl bg-white/10 p-4">
+              <p className="mb-2 text-xs font-semibold text-[color:var(--color-gold-light)]">
+                {displayTopic.positions[i].label} · {isEnglish ? localizeEnglishText(card.nameKo) : card.nameKo}
+              </p>
+              {position.field === "note" && (topic.slug === "love" || topic.slug === "compat") && (
+                <p className="mb-2 rounded-lg bg-black/20 p-2.5 text-xs leading-relaxed text-white/55">
+                  {isEnglish
+                    ? "This is a symbolic perspective for reflection, not a way to know someone's private thoughts."
+                    : "상대의 실제 속마음을 확인하는 자리가 아니에요. 카드 상징에서 떠올릴 수 있는 관점으로 참고하고, 실제 마음은 대화로 확인해 주세요."}
+                </p>
+              )}
+              <p className="text-sm leading-relaxed text-white/85">
+                {reading}
+              </p>
+            </div>
+          );
+        })}
       </div>
+
+      <section className="rounded-2xl border border-[color:var(--color-gold)]/25 bg-[color:var(--color-gold)]/[0.06] p-5">
+        <h2 className="text-sm font-semibold text-[color:var(--color-gold-light)]">
+          {isEnglish ? "Reading the three cards together" : "세 장을 함께 읽는 흐름"}
+        </h2>
+        <ul className="mt-3 space-y-2 text-sm leading-relaxed text-white/75">
+          {spreadSummary.patterns.map((pattern) => <li key={pattern}>· {pattern}</li>)}
+        </ul>
+        <p className="mt-4 rounded-lg bg-black/20 p-3 text-sm leading-relaxed text-white/85">
+          <span className="font-semibold text-[color:var(--color-gold-light)]">{isEnglish ? "A question to take with you" : "함께 생각해볼 질문"} · </span>
+          {spreadSummary.reflectionQuestion}
+        </p>
+        <p className="mt-3 text-xs leading-relaxed text-white/45">{spreadSummary.limitation}</p>
+      </section>
 
       <div className="rounded-2xl border border-[color:var(--color-gold)]/30 bg-gradient-to-b from-[color:var(--color-gold)]/15 to-white/5 p-5">
         <div className="mb-3 flex items-center gap-3">
