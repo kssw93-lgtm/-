@@ -25,6 +25,9 @@ export function EnglishTarotIndex() {
           );
         })}
       </div>
+      <Link href="/en/tarot-guide" className="rounded-2xl border border-[color:var(--color-gold)]/25 bg-[color:var(--color-gold)]/[0.06] p-4 text-center text-sm text-[color:var(--color-gold-light)] hover:border-[color:var(--color-gold)]/50">
+        Browse meanings and symbols for all 78 Tarot cards →
+      </Link>
       <p className="text-center text-xs leading-5 text-white/40">For reflection and entertainment. A Tarot reading cannot establish facts or guarantee future events.</p>
     </main>
   );

@@ -1,3 +1,5 @@
+import { ENGLISH_TAROT_COPY } from "./english-tarot-copy";
+
 type ContentMap = Record<string, string>;
 
 let CONTENT_MAP: ContentMap = {};
@@ -567,6 +569,7 @@ function polishEnglish(source: string, translated: string): string {
 
 /** Translate static JSON content and assembled reading text without making a request at runtime. */
 export function localizeEnglishText(source: string): string {
+  if (ENGLISH_TAROT_COPY[source]) return ENGLISH_TAROT_COPY[source];
   if (EDITORIAL_OVERRIDES[source]) return EDITORIAL_OVERRIDES[source];
   let embedded = translateEmbeddedSajuPhrases(source);
   if (embedded !== source) {

@@ -4,11 +4,18 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { TAROT_CARDS } from "@/lib/content/tarot";
 import InFeedAdSlot from "@/components/InFeedAdSlot";
+import TarotReadingBasics from "@/components/TarotReadingBasics";
 
 export const metadata: Metadata = {
   title: "타로 카드 백과사전 · 전체 78장(메이저+마이너 아르카나) | 사주달력",
   description: "메이저 아르카나 22장과 마이너 아르카나 56장, 총 78장 전체의 의미와 정방향·역방향 키워드, 연애·금전·직업·건강 해석을 백호도사와 함께 알아보세요.",
-  alternates: { canonical: "/tarot-guide" },
+  alternates: {
+    canonical: "/tarot-guide",
+    languages: {
+      ko: "https://www.sajudalyeok.co.kr/tarot-guide",
+      en: "https://www.sajudalyeok.co.kr/en/tarot-guide",
+    },
+  },
   openGraph: {
     images: OG_IMAGES,
     title: "타로 카드 백과사전 · 전체 78장(메이저+마이너 아르카나) | 사주달력",
@@ -48,6 +55,8 @@ export default function TarotGuideIndexPage() {
           "카드 한 장 한 장에는 다 뜻이 있느니라. 천천히 살펴보거라." — 백호도사
         </p>
       </div>
+
+      <TarotReadingBasics locale="ko" />
 
       {SECTIONS.map((section) => (
         <div key={section.title} className="flex flex-col gap-3">

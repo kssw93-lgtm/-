@@ -7,7 +7,7 @@ export interface TarotReading {
   title: string;
   upright: string;
   reversed: string;
-  /** love=상대방 속마음, money=실천 팁, career=이직/실행 추천 시기 */
+  /** love=관계를 돌아보는 관점, money=실천 팁, career=행동 전 점검 사항 */
   note: string;
 }
 
